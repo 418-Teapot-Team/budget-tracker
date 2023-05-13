@@ -2,12 +2,12 @@ FROM golang:1.19
 
 WORKDIR /dockerapp
 
-COPY . .
+COPY .. .
 
 RUN go mod download
 
 RUN go build -o /main
 
-EXPOSE 80
+EXPOSE 8080
 
 CMD ["/main"]
