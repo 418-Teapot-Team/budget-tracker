@@ -15,7 +15,7 @@ ADD . $WORKDIR
 RUN go get ./...
 RUN go get -u golang.org/x/lint/golint
 
-RUN go mod tidy
+RUN go mod tidy -compat=1.17
 RUN CGO_ENABLED=0 go build -i -v -o release/app
 
 FROM alpine
