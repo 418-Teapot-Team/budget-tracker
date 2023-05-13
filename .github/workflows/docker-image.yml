@@ -9,7 +9,7 @@ on:
 jobs:
 
   build:
-
+    context: .
     runs-on: ubuntu-latest
 
     steps:
