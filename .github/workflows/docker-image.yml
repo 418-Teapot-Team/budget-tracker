@@ -10,6 +10,7 @@ jobs:
 
   build:
     context: .
+    dockerfile: budget-tracker/Dockerfile
     runs-on: ubuntu-latest
 
     steps:
