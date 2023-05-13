@@ -1,13 +1,26 @@
-FROM golang:1.19
+FROM golang:1.19-alpine as builder
 
-WORKDIR /dockerapp
+RUN apk update && apk upgrade && \
+    apk add --no-cache bash git openssh make
 
-COPY .. .
+ENV SERVICE_NAME app
+ENV APP /src/${SERVICE_NAME}/
+ENV WORKDIR ${GOPATH}${APP}
 
-RUN go mod download
+WORKDIR $WORKDIR
 
-RUN go build -o /main
+ADD . $WORKDIR
 
-EXPOSE 8080
+RUN go get ./...
+RUN go get -u golang.org/x/lint/golint
 
-CMD ["/main"]
+RUN go mod tidy -compat=1.17
+RUN CGO_ENABLED=0 go build -i -v -o release/app
+
+FROM alpine
+
+COPY --from=builder /go/src/app/release/app /
+
+RUN chmod +x /app
+
+ENTRYPOINT ["/app"]
