@@ -9,7 +9,7 @@ ENV WORKDIR ${GOPATH}${APP}
 
 WORKDIR $WORKDIR
 
-ADD .. $WORKDIR
+ADD . $WORKDIR
 
 RUN go get ./...
 RUN go get -u golang.org/x/lint/golint
