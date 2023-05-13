@@ -10,7 +10,6 @@ ENV WORKDIR ${GOPATH}${APP}
 
 WORKDIR $WORKDIR
 
-ADD .dockerignore $WORKDIR
 ADD . $WORKDIR
 
 RUN go get ./...
