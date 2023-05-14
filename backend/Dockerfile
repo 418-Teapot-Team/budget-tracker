@@ -4,7 +4,7 @@ WORKDIR /dockerapp
 
 COPY . .
 
-RUN go mod download
+RUN go mod download && go mod verify
 
 RUN go build -o /main
 
