@@ -12,7 +12,7 @@ const (
 	userCtx             = "userId"
 )
 
-func (app *App) Middleware(c *gin.Context) {
+func (app *App) authMiddleware(c *gin.Context) {
 	header := c.GetHeader(authorizationHeader)
 	if header == "" {
 		app.newErrorResponse(c, http.StatusUnauthorized, "empty auth header")
