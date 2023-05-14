@@ -3,10 +3,12 @@ package main
 import (
 	budget "budget-tracker"
 	"budget-tracker/internal/app"
+	"budget-tracker/internal/client"
 	"budget-tracker/internal/config"
 	"budget-tracker/pkg/repository"
 	"budget-tracker/pkg/service"
 	"context"
+	"fmt"
 	"github.com/BoryslavGlov/logrusx"
 	"github.com/subosito/gotenv"
 	"log"
@@ -35,7 +37,12 @@ func main() {
 
 	repo := repository.NewRepository(db)
 	authService := service.NewService(repo)
-	api := app.NewApi(authService, logg)
+	cl := client.NewClient()
+
+	_, err = cl.GetOfficialRate()
+	fmt.Println(err)
+
+	api := app.NewApi(authService, logg, cl)
 
 	routers := app.Routers(api)
 	srv := new(budget.Server)
