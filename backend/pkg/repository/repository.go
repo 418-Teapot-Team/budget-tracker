@@ -29,7 +29,7 @@ func (db *authSql) CreateUser(user *budget.User) (err error) {
 }
 
 func (db *authSql) GetUser(email, password string) (user budget.User, err error) {
-	err = db.db.Model(&budget.User{Email: email, Password: password}).First(&user).Error
+	err = db.db.Where("email = ?", email).Where("password_hash = ?", password).Find(&user).Error
 	if err != nil {
 		return user, err
 	}
