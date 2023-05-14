@@ -8,7 +8,6 @@ import (
 	"budget-tracker/pkg/repository"
 	"budget-tracker/pkg/service"
 	"context"
-	"fmt"
 	"github.com/BoryslavGlov/logrusx"
 	"github.com/subosito/gotenv"
 	"log"
@@ -38,9 +37,6 @@ func main() {
 	repo := repository.NewRepository(db)
 	authService := service.NewService(repo)
 	cl := client.NewClient()
-
-	_, err = cl.GetOfficialRate()
-	fmt.Println(err)
 
 	api := app.NewApi(authService, logg, cl)
 
