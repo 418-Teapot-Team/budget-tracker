@@ -18,7 +18,7 @@ func (app *App) authMiddleware(c *gin.Context) {
 		app.newErrorResponse(c, http.StatusUnauthorized, "empty auth header")
 		return
 	}
-	headersParts := strings.Split(header, "")
+	headersParts := strings.Split(header, " ")
 	if len(headersParts) != 2 || headersParts[0] != "Bearer" {
 		app.newErrorResponse(c, http.StatusUnauthorized, "invalid auth header")
 	}
