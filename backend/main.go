@@ -23,5 +23,5 @@ func testApi(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/test", testApi)
-	log.Fatal(http.ListenAndServe(":443", nil))
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }

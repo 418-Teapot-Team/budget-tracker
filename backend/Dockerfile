@@ -12,6 +12,6 @@ RUN go mod verify
 
 RUN go build -o /main
 
-EXPOSE 443
+EXPOSE 8080
 
 CMD ["/main"]
