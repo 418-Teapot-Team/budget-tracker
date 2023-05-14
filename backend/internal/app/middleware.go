@@ -18,10 +18,9 @@ func (app *App) authMiddleware(c *gin.Context) {
 		app.newErrorResponse(c, http.StatusUnauthorized, "empty auth header")
 		return
 	}
-	headersParts := strings.Split(header, " ")
+	headersParts := strings.Split(header, "")
 	if len(headersParts) != 2 || headersParts[0] != "Bearer" {
 		app.newErrorResponse(c, http.StatusUnauthorized, "invalid auth header")
-		return
 	}
 
 	if len(headersParts[1]) == 0 {
@@ -32,9 +31,8 @@ func (app *App) authMiddleware(c *gin.Context) {
 	userId, err := app.s.ParseToken(headersParts[1])
 	if err != nil {
 		app.newErrorResponse(c, http.StatusUnauthorized, err.Error())
-		return
 	}
-	c.Set(userCtx, userId.UserId)
+	c.Set(userCtx, userId)
 }
 
 func (app *App) getUserId(c *gin.Context) (int, error) {
