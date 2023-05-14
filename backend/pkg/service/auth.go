@@ -16,7 +16,7 @@ const (
 	tokenExpiration = time.Hour * 48
 )
 
-type tokenClaims struct {
+type TokenClaims struct {
 	jwt.StandardClaims
 	UserId int `json:"user_id"`
 }
@@ -41,7 +41,7 @@ func (s *AuthService) GenerateToken(email, password string) (string, error) {
 		return "", errors.New("user not found")
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &tokenClaims{
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &TokenClaims{
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(tokenExpiration).Unix(),
 			IssuedAt:  time.Now().Unix(),
@@ -50,6 +50,24 @@ func (s *AuthService) GenerateToken(email, password string) (string, error) {
 	})
 
 	return token.SignedString([]byte(signingKey))
+}
+
+func (s *AuthService) ParseToken(accessToken string) (*TokenClaims, error) {
+	token, err := jwt.ParseWithClaims(accessToken, &TokenClaims{}, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, errors.New("invalid signing method")
+		}
+		return []byte(signingKey), nil
+	})
+	if err != nil {
+		return &TokenClaims{}, err
+	}
+	claims, ok := token.Claims.(*TokenClaims)
+	if !ok {
+		return &TokenClaims{}, errors.New("token claims are not of the supposed type")
+	}
+
+	return claims, nil
 }
 
 func generatePasswordHash(password string) string {

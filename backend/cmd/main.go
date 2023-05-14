@@ -7,6 +7,7 @@ import (
 	"budget-tracker/pkg/repository"
 	"budget-tracker/pkg/service"
 	"context"
+	"github.com/BoryslavGlov/logrusx"
 	"github.com/subosito/gotenv"
 	"log"
 	"os"
@@ -20,6 +21,11 @@ func main() {
 		log.Fatal(err)
 	}
 
+	logg, err := logrusx.New("budget-tracker")
+	if err != nil {
+		log.Fatal("error while trying to create logg instance")
+	}
+
 	cfg := config.NewConfig()
 
 	db, err := repository.NewDB(cfg.DatabaseUrl)
@@ -28,8 +34,8 @@ func main() {
 	}
 
 	repo := repository.NewRepository(db)
-	authService := service.NewAuthService(repo)
-	api := app.NewApi(authService)
+	authService := service.NewService(repo)
+	api := app.NewApi(authService, logg)
 
 	routers := app.Routers(api)
 	srv := new(budget.Server)

@@ -2,12 +2,14 @@ package app
 
 import (
 	"budget-tracker/pkg/service"
+	"github.com/BoryslavGlov/logrusx"
 )
 
 type App struct {
-	s *service.AuthService
+	s    *service.Service
+	logg logrusx.Logging
 }
 
-func NewApi(s *service.AuthService) *App {
-	return &App{s: s}
+func NewApi(services *service.Service, logg logrusx.Logging) *App {
+	return &App{s: services, logg: logg}
 }

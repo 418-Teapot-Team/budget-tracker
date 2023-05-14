@@ -6,6 +6,6 @@ type Service struct {
 	AuthService
 }
 
-func NewService(reps *repository.Authorization) {
-
+func NewService(reps *repository.Repository) *Service {
+	return &Service{AuthService{repo: reps.Authorization}}
 }
