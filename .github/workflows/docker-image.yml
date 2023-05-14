@@ -16,4 +16,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Docker Compose
-      run: docker-compose up -d --force-recreate --build -e DATABASE_URI='root:teapot418@tcp(hand-to-hand-db.cykje9rnp6ch.eu-north-1.rds.amazonaws.com:3306)/hand_to_hand' -e PORT='3306'
+      run: docker-compose up -d --force-recreate --build 
