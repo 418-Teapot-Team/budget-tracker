@@ -46,7 +46,7 @@ export default defineStore('auth', {
         this.isLoading = true;
         this.message = '';
         await HttpClient.post('auth/sign-up', {
-          name: payload.name,
+          fullName: payload.fullName,
           email: payload.email,
           password: payload.email,
         });

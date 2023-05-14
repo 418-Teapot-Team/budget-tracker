@@ -68,7 +68,7 @@ export default {
   methods: {
     ...mapActions(useAuthStore, ['login', 'register']),
     regSubmit(values) {
-      this.register({ name: values.name, email: values.email, password: values.password });
+      this.register({ fullName: values.name, email: values.email, password: values.password });
     },
     loginSubmit(values) {
       this.login({ email: values.email, password: values.password });
