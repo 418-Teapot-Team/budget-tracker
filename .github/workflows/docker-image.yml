@@ -19,7 +19,7 @@ jobs:
     #   run: docker build . --file Dockerfile --tag budget-tracker:$(date +%s)
     # - name: docker
     - name: Docker Compose
-      run: docker-compose up
+      run: docker-compose up -d
 
   # EC2-Deploy:
   #   runs-on: ubuntu-latest
