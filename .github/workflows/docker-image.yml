@@ -1,0 +1,19 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  AWS_REGION: eu-north-1
+
+jobs:
+
+  build:
+    runs-on: [self-hosted]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Docker Compose
+      run: docker-compose up -d --force-recreate --build
