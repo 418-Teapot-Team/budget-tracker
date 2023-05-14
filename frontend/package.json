@@ -11,10 +11,12 @@
   },
   "dependencies": {
     "@vee-validate/rules": "^4.9.3",
+    "axios": "^1.4.0",
     "pinia": "^2.0.36",
     "vee-validate": "^4.9.3",
     "vue": "^3.3.2",
-    "vue-router": "^4.2.0"
+    "vue-router": "^4.2.0",
+    "vue-toast-notification": "^3.1.1"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",
