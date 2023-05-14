@@ -4,6 +4,9 @@ WORKDIR /dockerapp
 
 COPY . .
 
+
+RUN go mod init budget-tracker
+
 RUN go mod tidy
 
 RUN go mod download
