@@ -7,7 +7,9 @@ import (
 
 type Authorization interface {
 	CreateUser(user *budget.User) error
-	GetUser(email, password string) (user budget.User, err error)
+	GetUserAuth(email, password string) (user budget.User, err error)
+	GetUserById(userId int) (user budget.User, err error)
+
 }
 
 type Repository struct {

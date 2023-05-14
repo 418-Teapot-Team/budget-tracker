@@ -53,3 +53,24 @@ func (app *App) signIn(c *gin.Context) {
 		"token": token,
 	})
 }
+
+func (app *App) whoAmI(c *gin.Context) {
+	userId, err := app.getUserId(c)
+	if err != nil {
+		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	user, err := app.s.AuthService.GetUserById(userId)
+	if err != nil || user.Id == 0 {
+		app.newErrorResponse(c, http.StatusNotFound, "user not found")
+		return
+	}
+
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"userId":   user.Id,
+		"fullName": user.FullName,
+		"email":    user.Email,
+	})
+}
+
