@@ -37,6 +37,7 @@ func (s *AuthService) CreateUser(user *budget.User) error {
 
 func (s *AuthService) GenerateToken(email, password string) (string, error) {
 	user, _ := s.repo.GetUserAuth(email, generatePasswordHash(password))
+
 	if user.Id == 0 {
 		return "", errors.New("bad credentials")
 	}

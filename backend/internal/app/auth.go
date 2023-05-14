@@ -73,3 +73,4 @@ func (app *App) whoAmI(c *gin.Context) {
 		"email":    user.Email,
 	})
 }
+

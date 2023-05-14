@@ -13,18 +13,11 @@
     <div class="w-full flex justify-center items-center">
       <div class="w-80 lg:w-96">
         <div class="flex flex-row justify-center gap-2 mb-10">
-          <button
-            class="bg-black border-2 border-black text-white p-2 text-center w-full rounded-xl"
-          >
-            Вхід
-          </button>
-          <button
-            class="border-2 border-black text-black p-2 text-center w-full rounded-xl transition duration-300 hover:bg-black hover:text-white"
-          >
-            Реєстрація
-          </button>
+          <app-button text="Вхід" :isOutline="tab !== 'login'" @click="tab = 'login'" />
+          <app-button text="Реєстрація" :isOutline="tab !== 'reg'" @click="tab = 'reg'" />
         </div>
-        <auth-form />
+        <auth-form v-if="tab === 'login'" :isLoading="isLoading" @onSubmit="loginSubmit" />
+        <registration-form v-if="tab === 'reg'" :isLoading="isLoading" @onSubmit="regSubmit" />
       </div>
     </div>
   </section>
@@ -33,11 +26,53 @@
 <script>
 import TeapotIcon from '@/components/Icons/Teapot.vue';
 import AuthForm from '@/components/AuthForm.vue';
+import RegistrationForm from '@/components/RegistrationForm.vue';
+import { mapState, mapActions } from 'pinia';
+import useAuthStore from '@/stores/auth';
+
 export default {
   name: 'Auth',
   components: {
     TeapotIcon,
     AuthForm,
+    RegistrationForm,
+  },
+  data() {
+    return {
+      tab: 'login',
+    };
+  },
+  watch: {
+    isSuccess(val) {
+      if (val === true) {
+        this.$toast.success(this.message);
+      }
+    },
+    isError(val) {
+      if (val === true) {
+        this.$toast.error(this.error.message);
+      }
+    },
+  },
+  computed: {
+    ...mapState(useAuthStore, [
+      'user',
+      'error',
+      'message',
+      'isAuthorized',
+      'isLoading',
+      'isError',
+      'isSuccess',
+    ]),
+  },
+  methods: {
+    ...mapActions(useAuthStore, ['login', 'register']),
+    regSubmit(values) {
+      this.register({ fullName: values.name, email: values.email, password: values.password });
+    },
+    loginSubmit(values) {
+      this.login({ email: values.email, password: values.password });
+    },
   },
 };
 </script>

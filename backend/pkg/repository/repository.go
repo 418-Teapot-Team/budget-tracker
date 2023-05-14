@@ -29,6 +29,7 @@ func (db *authSql) CreateUser(user *budget.User) (err error) {
 }
 
 func (db *authSql) GetUserAuth(email, password string) (user budget.User, err error) {
+
 	err = db.db.Where("email = ?", email).Where("password_hash = ?", password).Find(&user).Error
 	if err != nil {
 		return user, err

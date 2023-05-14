@@ -38,6 +38,7 @@ func main() {
 	authService := service.NewService(repo)
 	cl := client.NewClient()
 
+
 	api := app.NewApi(authService, logg, cl)
 
 	routers := app.Routers(api)
