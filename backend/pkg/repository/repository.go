@@ -28,8 +28,16 @@ func (db *authSql) CreateUser(user *budget.User) (err error) {
 	return tx.Commit().Error
 }
 
-func (db *authSql) GetUser(email, password string) (user budget.User, err error) {
+func (db *authSql) GetUserAuth(email, password string) (user budget.User, err error) {
 	err = db.db.Where("email = ?", email).Where("password_hash = ?", password).Find(&user).Error
+	if err != nil {
+		return user, err
+	}
+	return user, nil
+}
+
+func (db *authSql) GetUserById(userId int) (user budget.User, err error) {
+	err = db.db.Where("id = ?", userId).Find(&user).Error
 	if err != nil {
 		return user, err
 	}

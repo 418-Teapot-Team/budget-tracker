@@ -12,10 +12,14 @@ func Routers(app *App) *gin.Engine {
 		auth.POST("/sign-up", app.signUp)
 		auth.POST("/sign-in", app.signIn)
 	}
-	rate := router.Group("/courses")
+	api := router.Group("/api", app.authMiddleware)
 	{
-		rate.GET("/getAll", app.getCourses)
+		api.GET("/getAll", app.getCourses)
+
+		api.GET("who-am-i", app.whoAmI)
+
 	}
+
 	return router
 
 }
