@@ -14,7 +14,7 @@ func Routers(app *App) *gin.Engine {
 	}
 	rate := router.Group("/courses")
 	{
-		rate.GET("/get", app.getCourses)
+		rate.GET("/getAll", app.getCourses)
 	}
 	return router
 
