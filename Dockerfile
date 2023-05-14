@@ -1,27 +1,14 @@
-FROM golang:1.19-alpine as builder
+FROM golang:1.19
 
-RUN apk update && apk upgrade && \
-    apk add --no-cache bash git openssh make
+WORKDIR /usr/src/app
 
-ENV SERVICE_NAME app
-ENV APP /src/${SERVICE_NAME}/
-ENV GOPATH /go
-ENV WORKDIR ${GOPATH}${APP}
+# pre-copy/cache go.mod for pre-downloading dependencies and only redownloading them in subsequent builds if they change
+COPY go.mod go.sum ./
+RUN go mod download && go mod verify
 
-WORKDIR $WORKDIR
+COPY . .
+RUN go build -v -o /usr/local/bin/app ./...
 
-ADD . $WORKDIR
+EXPOSE 8080
 
-RUN go get ./...
-RUN go get -u golang.org/x/lint/golint
-
-RUN go mod tidy -compat=1.17
-RUN go build -i -v -o release/app
-
-FROM alpine
-
-COPY --from=builder /go/src/app/release/app /
-
-RUN chmod +x /app
-
-ENTRYPOINT ["/app"]
+CMD ["app"]
