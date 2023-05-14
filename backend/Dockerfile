@@ -10,7 +10,7 @@ RUN go mod tidy
 RUN go mod download
 RUN go mod verify
 
-RUN go build -o /main
+RUN go build -o /main ./cmd/main.go
 
 EXPOSE 8080
 
