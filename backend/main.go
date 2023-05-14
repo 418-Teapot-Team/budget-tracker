@@ -12,7 +12,7 @@ type St struct {
 
 func testApi(w http.ResponseWriter, r *http.Request) {
 
-	st := St{Name: "Roman"}
+	st := St{Name: "Roman S"}
 
 	b, _ := json.Marshal(st)
 
