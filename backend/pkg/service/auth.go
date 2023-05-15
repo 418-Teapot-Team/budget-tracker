@@ -31,8 +31,12 @@ func (s *AuthService) CreateUser(user *budget.User) error {
 }
 
 func (s *AuthService) GenerateToken(email, password string) (string, error) {
-	user, _ := s.repo.GetUserAuth(email)
-	if user.Password != generatePasswordHash(password) {
+	user, err := s.repo.GetUserAuth(email, generatePasswordHash(password))
+	if err != nil {
+		return "", err
+	}
+
+	if user.Id == 0 {
 		return "", errors.New("bad credentials")
 
 	}
