@@ -31,10 +31,10 @@ func (s *AuthService) CreateUser(user *budget.User) error {
 }
 
 func (s *AuthService) GenerateToken(email, password string) (string, error) {
-	user, _ := s.repo.GetUserAuth(email, generatePasswordHash(password))
-
-	if user.Id == 0 {
+	user, _ := s.repo.GetUserAuth(email)
+	if user.Password != generatePasswordHash(password) {
 		return "", errors.New("bad credentials")
+
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &TokenClaims{
