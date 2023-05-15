@@ -37,6 +37,7 @@ export default defineStore('auth', {
       } catch (e) {
         console.log(e);
         this.error = e?.request?.data;
+        this.isError = true;
       } finally {
         this.isLoading = false;
       }

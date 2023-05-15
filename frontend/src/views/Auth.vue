@@ -47,6 +47,9 @@ export default {
       if (val === true) {
         this.$toast.success(this.message);
       }
+      if (this.isAuthorized === true) {
+        this.$router.push('/');
+      }
     },
     isError(val) {
       if (val === true) {
