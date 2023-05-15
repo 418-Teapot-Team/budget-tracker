@@ -12,7 +12,7 @@
     </div>
     <div class="w-full flex justify-center items-center">
       <div class="w-80 lg:w-96">
-        <div class="flex flex-row justify-center gap-2 mb-10">
+        <div class="flex flex-row justify-center gap-2 mb-6 h-10">
           <app-button text="Sign In" :isOutline="tab !== 'login'" @click="tab = 'login'" />
           <app-button text="Sign Up" :isOutline="tab !== 'reg'" @click="tab = 'reg'" />
         </div>
@@ -49,9 +49,10 @@ export default {
     isSuccess(val) {
       if (val === true) {
         toast.success(this.message);
+        this.tab = 'login';
       }
       if (this.isAuthorized) {
-        this.$route.push('/');
+        this.$router.push('/');
       }
     },
     isError(val) {
@@ -73,11 +74,21 @@ export default {
   },
   methods: {
     ...mapActions(useAuthStore, ['login', 'register']),
-    regSubmit(values) {
-      this.register({ fullName: values.name, email: values.email, password: values.password });
+    async regSubmit({ values, resetForm }) {
+      await this.register({
+        fullName: values.name,
+        email: values.email,
+        password: values.password,
+      });
+      if (this.isSuccess) {
+        resetForm();
+      }
     },
-    loginSubmit(values) {
-      this.login({ email: values.email, password: values.password });
+    async loginSubmit({ values, resetForm }) {
+      await this.login({ email: values.email, password: values.password });
+      if (this.isSuccess) {
+        resetForm();
+      }
     },
   },
 };

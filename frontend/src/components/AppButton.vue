@@ -1,6 +1,6 @@
 <template>
   <button
-    class="border-2 border-black p-2 text-center w-full rounded-xl"
+    class="border-2 border-black h-full text-center w-full rounded-xl flex items-center justify-center"
     :class="
       isOutline
         ? 'transition duration-300 hover:bg-black hover:text-white text-black'
