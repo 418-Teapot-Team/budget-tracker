@@ -14,12 +14,14 @@ func Routers(app *App) *gin.Engine {
 	}
 	api := router.Group("/api", app.authMiddleware)
 	{
-		api.GET("/getAll", app.getCourses)
-
-		api.GET("who-am-i", app.whoAmI)
-
+		api.GET("/get-all", app.getCourses)
+		api.GET("/who-am-i", app.whoAmI)
+		lists := api.Group("/lists")
+		{
+			lists.POST("/", app.createList)
+			lists.DELETE("/", app.deleteList)
+		}
 	}
-
 	return router
 
 }
