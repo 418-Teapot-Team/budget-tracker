@@ -24,13 +24,13 @@ export default defineStore('auth', {
       try {
         this.isSuccess = false;
         this.isLoading = true;
+        this.error = {};
+        this.isError = false;
         this.message = '';
         const { token } = await HttpClient.post('auth/sign-in', {
           email: payload.email,
           password: payload.password,
         });
-        this.error = {};
-        this.isError = false;
         this.message = 'Вітаємо у системі';
         localStorage.setItem('tracker-auth-token', token);
         this.isSuccess = true;
@@ -47,13 +47,13 @@ export default defineStore('auth', {
         this.isSuccess = false;
         this.isLoading = true;
         this.message = '';
+        this.error = {};
+        this.isError = false;
         await HttpClient.post('auth/sign-up', {
           fullName: payload.fullName,
           email: payload.email,
           password: payload.email,
         });
-        this.error = {};
-        this.isError = false;
         this.message = 'Акаунт успішно створено. Увійдіть в акаунт, щоб користуватись системою';
         this.isSuccess = true;
       } catch (e) {
