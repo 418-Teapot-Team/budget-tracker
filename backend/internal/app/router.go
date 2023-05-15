@@ -7,7 +7,7 @@ import (
 func Routers(app *App) *gin.Engine {
 	router := gin.New()
 
-	router.Use(CorsMiddleware())
+	router.Use(CORSMiddleware())
 
 	auth := router.Group("/auth")
 	{
