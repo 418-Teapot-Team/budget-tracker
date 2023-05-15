@@ -29,6 +29,9 @@ import AuthForm from '@/components/AuthForm.vue';
 import RegistrationForm from '@/components/RegistrationForm.vue';
 import { mapState, mapActions } from 'pinia';
 import useAuthStore from '@/stores/auth';
+import { useToast } from 'vue-toastification';
+
+const toast = useToast();
 
 export default {
   name: 'Auth',
@@ -45,12 +48,12 @@ export default {
   watch: {
     isSuccess(val) {
       if (val === true) {
-        this.$toast.success(this.message);
+        toast.success(this.message);
       }
     },
     isError(val) {
       if (val === true) {
-        this.$toast.error(this.error?.message);
+        toast.error(this.error?.message);
       }
     },
   },
