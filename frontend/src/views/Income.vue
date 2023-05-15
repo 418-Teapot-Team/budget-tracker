@@ -27,7 +27,9 @@
           <option value="date">Date</option>
           <option value="val">Value</option>
         </vee-field>
-        <app-button class="w-4/12" text="Filter" type="submit" />
+        <div class="w-4/12">
+          <app-button text="Filter" type="submit" />
+        </div>
       </vee-form>
     </div>
     <!-- table -->
