@@ -7,7 +7,7 @@ import (
 
 type Authorization interface {
 	CreateUser(user *budget.User) error
-	GetUserAuth(email string) (user budget.User, err error)
+	GetUserAuth(email, password string) (user budget.User, err error)
 	GetUserById(userId int) (user budget.User, err error)
 }
 
