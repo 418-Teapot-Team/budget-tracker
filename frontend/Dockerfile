@@ -10,6 +10,8 @@ RUN npm install
 
 COPY . .
 
+RUN echo "APP_BASE_API=http://16.16.208.186:8080/" > .env
+
 RUN npm run build
 
 EXPOSE 80
