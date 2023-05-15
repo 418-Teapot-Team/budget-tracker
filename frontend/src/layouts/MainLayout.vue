@@ -45,7 +45,11 @@
             </div>
           </li>
         </ul>
-        <div class="text-black font-bold text-xl">Welcome, Username!</div>
+        <span
+          class="text-black font-bold text-xl w-72 h-7 text-end text-ellipsis whitespace-nowrap overflow-hidden"
+        >
+          Welcome, Username!
+        </span>
       </div>
       <router-view />
     </div>
