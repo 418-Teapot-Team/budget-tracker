@@ -53,7 +53,7 @@
       </vee-field>
       <ErrorMessage />
     </div>
-    <div class="flex flex-col justify-center gap-1 mb-3">
+    <div class="flex flex-col justify-center gap-1 mb-3 h-10">
       <app-button text="Create Account" v-if="!isLoading" :isOutline="false" type="submit" />
       <div class="w-full flex justify-center items-center" v-else>
         <div class="w-10 h-10">
@@ -81,8 +81,8 @@ export default {
     };
   },
   methods: {
-    onSubmit(values) {
-      this.$emit('onSubmit', values);
+    onSubmit(values, { resetForm }) {
+      this.$emit('onSubmit', { values, resetForm });
     },
   },
 };
