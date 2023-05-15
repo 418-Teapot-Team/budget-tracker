@@ -36,13 +36,14 @@ export default defineStore('auth', {
         this.isSuccess = true;
       } catch (e) {
         console.log(e);
-        this.error = e.request?.data;
+        this.error = e?.request?.data;
       } finally {
         this.isLoading = false;
       }
     },
     async register(payload) {
       try {
+        this.isSuccess = false;
         this.isLoading = true;
         this.message = '';
         await HttpClient.post('auth/sign-up', {

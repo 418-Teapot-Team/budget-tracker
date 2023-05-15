@@ -3,6 +3,6 @@ import Prealoder from '@/components/Preloader.vue';
 export default {
   install(app) {
     app.component('AppButton', AppButton);
-    app.component('Prealoader', Prealoder);
+    app.component('Preloader', Prealoder);
   },
 };

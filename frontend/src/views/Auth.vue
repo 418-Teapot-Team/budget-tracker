@@ -50,7 +50,7 @@ export default {
     },
     isError(val) {
       if (val === true) {
-        this.$toast.error(this.error.message);
+        this.$toast.error(this.error?.message);
       }
     },
   },
