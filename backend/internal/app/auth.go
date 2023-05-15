@@ -4,12 +4,16 @@ import (
 	budget "budget-tracker"
 	"budget-tracker/pkg/repository"
 	"errors"
+	"fmt"
+	"github.com/BoryslavGlov/logrusx"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 func (app *App) signUp(c *gin.Context) {
 	var input budget.User
+
+	app.logg.Info("User trying to sign-in", logrusx.LogField{Key: "request", Value: fmt.Sprintf("%+v", c.Request)})
 
 	if err := c.BindJSON(&input); err != nil {
 		app.newErrorResponse(c, http.StatusBadRequest, "invalid input body")
@@ -73,4 +77,3 @@ func (app *App) whoAmI(c *gin.Context) {
 		"email":    user.Email,
 	})
 }
-
