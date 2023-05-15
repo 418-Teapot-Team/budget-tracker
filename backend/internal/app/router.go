@@ -1,13 +1,17 @@
 package app
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func Routers(app *App) *gin.Engine {
 	router := gin.New()
 
-	router.Use(CorsMiddleware())
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"*"}
+
+	router.Use(cors.New(config))
 
 	auth := router.Group("/auth")
 	{
