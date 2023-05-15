@@ -4,8 +4,6 @@ WORKDIR /dockerapp
 
 COPY . .
 
-RUN echo $PORT
-
 RUN go mod tidy
 
 RUN go mod download
