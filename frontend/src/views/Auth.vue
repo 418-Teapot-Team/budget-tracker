@@ -50,6 +50,9 @@ export default {
       if (val === true) {
         toast.success(this.message);
       }
+      if (this.isAuthorized) {
+        this.$route.push('/');
+      }
     },
     isError(val) {
       if (val === true) {

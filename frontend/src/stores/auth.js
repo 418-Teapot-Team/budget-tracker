@@ -27,12 +27,12 @@ export default defineStore('auth', {
         this.error = {};
         this.isError = false;
         this.message = '';
-        const { token } = await HttpClient.post('auth/sign-in', {
+        const { data } = await HttpClient.post('auth/sign-in', {
           email: payload.email,
           password: payload.password,
         });
         this.message = 'Вітаємо у системі';
-        localStorage.setItem('tracker-auth-token', token);
+        localStorage.setItem('tracker-auth-token', data?.token);
         this.isSuccess = true;
       } catch (e) {
         console.log(e);
