@@ -48,6 +48,7 @@ class HttpClient {
   }
 
   #handleError(error) {
+    console.log(error);
     return Promise.reject(error);
   }
 
