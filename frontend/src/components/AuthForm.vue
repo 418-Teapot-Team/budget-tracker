@@ -28,8 +28,10 @@
     </div>
     <div class="flex flex-col justify-center gap-1 mb-3">
       <app-button v-if="!isLoading" text="Вхід" :isOutline="false" type="submit" />
-      <div class="w-10 h-10 flex justify-center items-center" v-else>
-        <preloader />
+      <div class="w-full flex justify-center items-center" v-else>
+        <div class="w-10 h-10">
+          <Preloader />
+        </div>
       </div>
     </div>
   </vee-form>
