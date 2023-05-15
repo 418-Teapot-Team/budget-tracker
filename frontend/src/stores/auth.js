@@ -36,7 +36,8 @@ export default defineStore('auth', {
         this.isSuccess = true;
       } catch (e) {
         console.log(e);
-        this.error = e?.request?.data;
+        this.error = e?.request?.data || { message: e.message };
+        this.isError = true;
       } finally {
         this.isLoading = false;
       }
@@ -57,7 +58,7 @@ export default defineStore('auth', {
         this.isSuccess = true;
       } catch (e) {
         console.log(e);
-        this.error = e.request?.data;
+        this.error = e?.request?.data || { message: e.message };
         this.isError = true;
       } finally {
         this.isLoading = false;
