@@ -1,21 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Auth from '@/views/Auth.vue';
 import Dashboard from '@/views/Dashboard.vue';
-import Income from '@/views/Income.vue';
-import Expense from '@/views/Expense.vue';
-import Deposit from '@/views/Deposit.vue';
-import Loan from '@/views/Loan.vue';
-import Statistic from '@/views/Statistic.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    {
-      path: '/auth',
-      name: 'auth',
-      meta: { layout: 'empty' },
-      component: Auth,
-    },
     {
       path: '/',
       name: 'dashboard',
@@ -23,34 +12,40 @@ const router = createRouter({
       component: Dashboard,
     },
     {
+      path: '/auth',
+      name: 'auth',
+      meta: { layout: 'empty' },
+      component: Auth,
+    },
+    {
       path: '/income',
       name: 'income',
       meta: { layout: 'main' },
-      component: Income,
+      component: () => import('@/views/Income.vue'),
     },
     {
       path: '/expenses',
       name: 'expenses',
       meta: { layout: 'main' },
-      component: Expense,
+      component: () => import('@/views/Expense.vue'),
     },
     {
       path: '/deposit',
       name: 'deposit',
       meta: { layout: 'main' },
-      component: Deposit,
+      component: () => import('@/views/Deposit.vue'),
     },
     {
       path: '/loans',
       name: 'loans',
       meta: { layout: 'main' },
-      component: Loan,
+      component: () => import('@/views/Loan.vue'),
     },
     {
       path: '/statistic',
       name: 'statistic',
       meta: { layout: 'main' },
-      component: Statistic,
+      component: () => import('@/views/Statistic.vue'),
     },
   ],
 });
