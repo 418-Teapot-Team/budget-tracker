@@ -10,7 +10,7 @@ create table lists
 (
     id         bigint auto_increment primary key,
     user_id    bigint                    not null,
-    type       ENUM ('income','outcome') not null,
+    type       ENUM ('income','expenses') not null,
     category   varchar(255)              not null,
     comment    varchar(255)              null default null,
     amount     float                     not null,

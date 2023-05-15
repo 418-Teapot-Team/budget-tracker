@@ -14,6 +14,7 @@ type Authorization interface {
 type Lists interface {
 	CreateList(input *budget.List) (err error)
 	DeleteList(listId, userId int) (err error)
+	GetList(userId int, budgetType string) (lists []budget.List, err error)
 }
 
 type Repository struct {

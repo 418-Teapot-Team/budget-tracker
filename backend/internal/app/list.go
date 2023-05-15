@@ -59,3 +59,27 @@ func (app *App) deleteList(c *gin.Context) {
 	})
 
 }
+
+func (app *App) getBudgetList(c *gin.Context) {
+
+	budgetType := c.Param("type")
+	if budgetType == "" {
+		app.newErrorResponse(c, http.StatusBadRequest, "please indicate the type of budget")
+	}
+
+	userId, err := app.getUserId(c)
+	if err != nil {
+		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	list, err := app.s.GetList(userId, budgetType)
+	if err != nil {
+		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"result": list,
+	})
+}
