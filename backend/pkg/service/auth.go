@@ -25,11 +25,6 @@ type AuthService struct {
 	repo repository.Authorization
 }
 
-func NewAuthService(repo repository.Authorization) *AuthService {
-	return &AuthService{repo: repo}
-
-}
-
 func (s *AuthService) CreateUser(user *budget.User) error {
 	user.Password = generatePasswordHash(user.Password)
 	return s.repo.CreateUser(user)

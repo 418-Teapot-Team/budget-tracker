@@ -30,9 +30,10 @@ func (app *App) authMiddleware(c *gin.Context) {
 
 	userId, err := app.s.ParseToken(headersParts[1])
 	if err != nil {
-		app.newErrorResponse(c, http.StatusUnauthorized, err.Error())
+		app.newErrorResponse(c, http.StatusForbidden, err.Error())
+		return
 	}
-	c.Set(userCtx, userId)
+	c.Set(userCtx, userId.UserId)
 }
 
 func (app *App) getUserId(c *gin.Context) (int, error) {

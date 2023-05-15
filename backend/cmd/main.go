@@ -34,10 +34,10 @@ func main() {
 	}
 
 	repo := repository.NewRepository(db)
-	authService := service.NewService(repo)
+	services := service.NewService(repo)
 	cl := client.NewClient()
 
-	api := app.NewApi(authService, logg, cl)
+	api := app.NewApi(services, logg, cl)
 
 	routers := app.Routers(api)
 	srv := new(budget.Server)
