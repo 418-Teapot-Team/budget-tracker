@@ -49,12 +49,3 @@ func (app *App) getUserId(c *gin.Context) (int, error) {
 
 	return integer, nil
 }
-
-func CorsMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "DELETE, POST, GET, OPTIONS")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With")
-		c.Next()
-	}
-}
