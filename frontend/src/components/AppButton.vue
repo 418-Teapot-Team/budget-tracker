@@ -4,7 +4,7 @@
     :class="
       isOutline
         ? 'transition duration-300 hover:bg-black hover:text-white text-black'
-        : 'bg-black text-white'
+        : 'bg-black text-white transition duration-300 hover:bg-slate-950 hover:border-slate-950'
     "
     :type="type ?? type"
     @click="onClick"

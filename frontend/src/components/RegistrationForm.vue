@@ -54,7 +54,7 @@
       <ErrorMessage />
     </div>
     <div class="flex flex-col justify-center gap-1 mb-3">
-      <app-button text="Зареєструватись" v-if="!isLoading" :isOutline="false" type="submit" />
+      <app-button text="Create Account" v-if="!isLoading" :isOutline="false" type="submit" />
       <div class="w-full flex justify-center items-center" v-else>
         <div class="w-10 h-10">
           <Preloader />
