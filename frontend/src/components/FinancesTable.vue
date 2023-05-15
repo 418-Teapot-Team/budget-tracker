@@ -6,7 +6,7 @@
         <th class="text-center text-xl font-normal text-black w-3/12">Category</th>
         <th class="text-start pl-2 text-xl font-normal text-black w-3/12">Amount</th>
         <th class="text-start pl-2 text-xl font-normal text-black w-3/12">Comment</th>
-        <th class="text-end pr-2 text-xl font-normal text-black w-1/12">Actions</th>
+        <th class="text-end pr-4 text-xl font-normal text-black w-1/12">Actions</th>
       </thead>
       <tbody class="text-start mt-2">
         <tr class="h-16 bg-white shadow-sm rounded-lg p-2 hover:bg-gray-50">
@@ -142,7 +142,9 @@
       </tbody>
     </table>
     <div class="w-full flex h-10 flex-row justify-center items-center">
-      <app-button text="Load more" class="w-36" />
+      <div class="w-36 h-full">
+        <app-button text="Load more" />
+      </div>
     </div>
   </div>
 </template>
