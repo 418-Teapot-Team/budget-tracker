@@ -3,18 +3,18 @@
     <div
       class="w-1/3 bg-black flex flex-col justify-center items-center gap-5 auth-bg rounded-r-3xl"
     >
-      <TeapotIcon />
+      <TeapotIcon fill="#000" />
       <div class="flex flex-col justify-start gap-1">
         <span class="text-3xl text-white text-center"> Welcome </span>
         <span class="text-xl text-white text-center">to Budget Tracker</span>
       </div>
-      <span class="text-gray-500 text-sm justify-self-end">All rights reserved C 418 Teapot</span>
+      <span class="text-gray-500 text-sm justify-self-end">All rights reserved © 418 Teapot</span>
     </div>
     <div class="w-full flex justify-center items-center">
       <div class="w-80 lg:w-96">
         <div class="flex flex-row justify-center gap-2 mb-10">
-          <app-button text="Вхід" :isOutline="tab !== 'login'" @click="tab = 'login'" />
-          <app-button text="Реєстрація" :isOutline="tab !== 'reg'" @click="tab = 'reg'" />
+          <app-button text="Sign In" :isOutline="tab !== 'login'" @click="tab = 'login'" />
+          <app-button text="Sign Up" :isOutline="tab !== 'reg'" @click="tab = 'reg'" />
         </div>
         <auth-form v-if="tab === 'login'" :isLoading="isLoading" @onSubmit="loginSubmit" />
         <registration-form v-if="tab === 'reg'" :isLoading="isLoading" @onSubmit="regSubmit" />
@@ -29,6 +29,9 @@ import AuthForm from '@/components/AuthForm.vue';
 import RegistrationForm from '@/components/RegistrationForm.vue';
 import { mapState, mapActions } from 'pinia';
 import useAuthStore from '@/stores/auth';
+import { useToast } from 'vue-toastification';
+
+const toast = useToast();
 
 export default {
   name: 'Auth',
@@ -45,12 +48,12 @@ export default {
   watch: {
     isSuccess(val) {
       if (val === true) {
-        this.$toast.success(this.message);
+        toast.success(this.message);
       }
     },
     isError(val) {
       if (val === true) {
-        this.$toast.error(this.error.message);
+        toast.error(this.error?.message);
       }
     },
   },

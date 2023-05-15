@@ -7,7 +7,8 @@ on:
     branches: [ "main" ]
 
 env:
-  AWS_REGION: eu-north-1
+  DATABASE_URI: ${{ secrets.DATABASE_URI }}
+  PORT: ${{ secrets.PORT }}
 
 jobs:
 
@@ -15,7 +16,5 @@ jobs:
     runs-on: [self-hosted]
     steps:
     - uses: actions/checkout@v3
-    - name: Setup Env Variables
-      run: export DATABASE_URI="${{ secrets.DATABASE_URI }}" & export PORT="${{ secrets.PORT }}"
     - name: Docker Compose
       run: docker-compose up -d --force-recreate --build 
