@@ -25,18 +25,16 @@ type AuthService struct {
 	repo repository.Authorization
 }
 
-func NewAuthService(repo repository.Authorization) *AuthService {
-	return &AuthService{repo: repo}
-
-}
-
 func (s *AuthService) CreateUser(user *budget.User) error {
 	user.Password = generatePasswordHash(user.Password)
 	return s.repo.CreateUser(user)
 }
 
 func (s *AuthService) GenerateToken(email, password string) (string, error) {
-	user, _ := s.repo.GetUserAuth(email, generatePasswordHash(password))
+	user, err := s.repo.GetUserAuth(email, generatePasswordHash(password))
+	if err != nil {
+		return "", err
+	}
 
 	if user.Id == 0 {
 		return "", errors.New("bad credentials")

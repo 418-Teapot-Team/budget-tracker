@@ -30,9 +30,10 @@ func (app *App) authMiddleware(c *gin.Context) {
 
 	userId, err := app.s.ParseToken(headersParts[1])
 	if err != nil {
-		app.newErrorResponse(c, http.StatusUnauthorized, err.Error())
+		app.newErrorResponse(c, http.StatusForbidden, err.Error())
+		return
 	}
-	c.Set(userCtx, userId)
+	c.Set(userCtx, userId.UserId)
 }
 
 func (app *App) getUserId(c *gin.Context) (int, error) {
@@ -47,4 +48,21 @@ func (app *App) getUserId(c *gin.Context) (int, error) {
 	}
 
 	return integer, nil
+}
+
+func CORSMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Header("Content-Type", "application/json")
+		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Credentials", "true")
+		c.Header("Access-Control-Allow-Headers", "*")
+		c.Header("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
+	}
 }

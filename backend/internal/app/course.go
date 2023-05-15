@@ -3,6 +3,7 @@ package app
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 )
 
@@ -14,6 +15,7 @@ func (app *App) getCourses(c *gin.Context) {
 
 	off, err := app.client.GetOfficialRate()
 	if err != nil {
+		log.Println(err)
 		app.newErrorResponse(c, http.StatusInternalServerError, "error while trying to get data from nbu.ua")
 		return
 	}
@@ -26,12 +28,10 @@ func (app *App) getCourses(c *gin.Context) {
 	for _, rt := range dark.Data.Point.Rates {
 		if contains(rt.Currency.CodeAlpha, currencies) {
 			var (
-				txt    string
 				ofRate string
 			)
 			for _, of := range off {
 				if of.Cc == rt.Currency.CodeAlpha {
-					txt = of.Txt
 					ofRate = fmt.Sprint(of.Rate)
 				}
 			}
@@ -42,7 +42,6 @@ func (app *App) getCourses(c *gin.Context) {
 				courses{
 					Code:         rt.Currency.CodeAlpha,
 					DarkRate:     darkRate,
-					Txt:          txt,
 					OfficialRate: ofRate,
 				})
 		}
