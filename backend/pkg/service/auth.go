@@ -38,6 +38,7 @@ func (s *AuthService) GenerateToken(email, password string) (string, error) {
 
 	if user.Id == 0 {
 		return "", errors.New("bad credentials")
+
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &TokenClaims{
