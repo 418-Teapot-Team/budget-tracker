@@ -52,7 +52,7 @@ export default defineStore('auth', {
         await HttpClient.post('auth/sign-up', {
           fullName: payload.fullName,
           email: payload.email,
-          password: payload.email,
+          password: payload.password,
         });
         this.message = 'Акаунт успішно створено. Увійдіть в акаунт, щоб користуватись системою';
         this.isSuccess = true;
