@@ -14,7 +14,7 @@
               <span class="text-black">USD</span>
             </div>
             <div class="flex flex-row gap-1">
-              <span class="text-xs text-black opacity-80">Official- 36.5686</span>
+              <span class="text-xs text-black opacity-80">Official - 36.5686</span>
               <span class="text-xs text-black opacity-80">Marketplace - 37.77</span>
             </div>
           </li>
@@ -28,7 +28,7 @@
               <span class="text-black">EUR</span>
             </div>
             <div class="flex flex-row gap-1">
-              <span class="text-xs text-black opacity-80">Official- 39.8287</span>
+              <span class="text-xs text-black opacity-80">Official - 39.8287</span>
               <span class="text-xs text-black opacity-80">Marketplace - 41.35</span>
             </div>
           </li>
@@ -40,7 +40,7 @@
               <span class="text-black">PLN</span>
             </div>
             <div class="flex flex-row gap-1">
-              <span class="text-xs text-black opacity-80">Official- 8.785</span>
+              <span class="text-xs text-black opacity-80">Official - 8.785</span>
               <span class="text-xs text-black opacity-80">Marketplace - 9.0</span>
             </div>
           </li>
