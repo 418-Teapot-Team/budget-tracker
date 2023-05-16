@@ -24,12 +24,16 @@ func (app *Client) GetGoverlaRate() (GoverlaOutput, error) {
 	req := fasthttp.AcquireRequest()
 	res := fasthttp.AcquireResponse()
 
+	app.request.CopyTo(req)
+
 	req.SetRequestURI(goverlaUrl)
 	req.Header.SetMethod(fasthttp.MethodPost)
 	req.Header.SetContentType(applicationJson)
 	req.SetBody(goverlaBody)
 
 	err := app.client.Do(req, res)
+	defer fasthttp.ReleaseResponse(res)
+
 	if err != nil {
 		return output, err
 	}

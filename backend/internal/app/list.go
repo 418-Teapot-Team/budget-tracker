@@ -62,18 +62,32 @@ func (app *App) deleteList(c *gin.Context) {
 
 func (app *App) getBudgetList(c *gin.Context) {
 
-	budgetType := c.Param("type")
-	if budgetType == "" {
-		app.newErrorResponse(c, http.StatusBadRequest, "please indicate the type of budget")
+	orderBy := c.Query("orderBy")
+	if orderBy == "" {
+		orderBy = "created_at"
 	}
 
+	sortedBy := c.Query("reverse")
+	if sortedBy == "" || sortedBy == "false" {
+		sortedBy = " desc"
+	} else if sortedBy == "true" {
+		sortedBy = " asc"
+	} else {
+		app.newErrorResponse(c, http.StatusBadRequest, "invalid query param reverse")
+		return
+	}
+
+	budgetType := c.Param("type")
+	if budgetType != "income" && budgetType != "expences" {
+		budgetType = ""
+	}
 	userId, err := app.getUserId(c)
 	if err != nil {
 		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	list, err := app.s.GetList(userId, budgetType)
+	list, err := app.s.GetList(userId, budgetType, orderBy, sortedBy)
 	if err != nil {
 		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return

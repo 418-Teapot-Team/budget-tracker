@@ -15,11 +15,15 @@ func (app *Client) GetOfficialRate() ([]NbuOfficial, error) {
 	req := fasthttp.AcquireRequest()
 	res := fasthttp.AcquireResponse()
 
-	req.SetRequestURI(nbuUrl)
+	app.request.CopyTo(req)
+	req.SetHost("bank.gov.ua")
+	req.Header.SetRequestURI(nbuUrl)
 	req.Header.SetMethod(fasthttp.MethodGet)
 	req.Header.SetContentType(applicationJson)
 
 	err := app.client.Do(req, res)
+	defer fasthttp.ReleaseResponse(res)
+
 	if err != nil {
 		return nil, err
 	}

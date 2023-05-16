@@ -35,7 +35,13 @@ func (db *listsSql) DeleteList(listId, userId int) (err error) {
 	return tx.Commit().Error
 }
 
-func (db *listsSql) GetList(userId int, budgetType string) (lists []budget.List, err error) {
-	err = db.db.Where("user_id = ?", userId).Where("type = ?", budgetType).Find(&lists).Error
+func (db *listsSql) GetList(userId int, budgetType, orderBy, sortedBy string) (lists []budget.List, err error) {
+	query := db.db.Order(orderBy+sortedBy).Where("user_id = ?", userId)
+
+	if budgetType != "" {
+		query = query.Where("type = ?", budgetType)
+	}
+
+	err = query.Find(&lists).Error
 	return
 }
