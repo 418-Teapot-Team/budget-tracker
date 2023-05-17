@@ -23,6 +23,12 @@ func Routers(app *App) *gin.Engine {
 			lists.GET("/:type", app.getBudgetList)
 			lists.POST("/", app.createList)
 			lists.DELETE("/", app.deleteList)
+			lists.PUT("/", app.editBudgetList)
+		}
+
+		categories := api.Group("/categories")
+		{
+			categories.GET("/", app.getAllCategories)
 		}
 	}
 	return router
