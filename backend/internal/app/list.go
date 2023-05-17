@@ -97,3 +97,22 @@ func (app *App) getBudgetList(c *gin.Context) {
 		"result": list,
 	})
 }
+
+func (app *App) getTopExpenses(c *gin.Context) {
+
+	userId, err := app.getUserId(c)
+	if err != nil {
+		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	list, err := app.s.GetTopExpenses(userId)
+	if err != nil {
+		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"result": list,
+	})
+}
