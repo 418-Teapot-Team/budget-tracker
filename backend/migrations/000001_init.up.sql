@@ -14,6 +14,6 @@ create table lists
     category   varchar(255)               not null,
     comment    varchar(255)               null default null,
     amount     float                      not null,
-    created_at datetime                   not null,
+    created_at datetime                  not null,
     foreign key (user_id) references users (id)
 );
