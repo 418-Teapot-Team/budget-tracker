@@ -24,11 +24,10 @@ func (l *ListsService) GetList(userId int, budgetType, orderBy, sortedBy string)
 	return l.repo.GetList(userId, budgetType, orderBy, sortedBy)
 }
 
-func (l *ListsService) GetTopExpenses(userId int) (lists []budget.List, err error) {
+func (l *ListsService) GetTopExpenses(userId int) (lists []budget.ListsGetter, err error) {
   return l.repo.GetTopExpenses(userId)
 }
 
 func (l *ListsService) EditList(input budget.List) error {
-	return l.repo.EditList(input)
-
+  return l.repo.EditList(input)
 }

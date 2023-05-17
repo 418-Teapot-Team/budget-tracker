@@ -46,7 +46,7 @@ func (db *listsSql) GetList(userId int, budgetType, orderBy, sortedBy string) (l
 	return
 }
 
-func (db *listsSql) GetTopExpenses (userId int) (lists []budget.List, err error) {
+func (db *listsSql) GetTopExpenses (userId int) (lists []budget.ListsGetter, err error) {
   // get four categories and expenses sum where type is expense for last month
   query := db.db.Select("category_id, SUM(amount) amount").
   Where("user_id = ?", userId).
@@ -55,7 +55,7 @@ func (db *listsSql) GetTopExpenses (userId int) (lists []budget.List, err error)
   Order("2 DESC").
   Limit(4);
 
-	err = query.Find(&lists).Error
+  err = query.Preload("Categories").Find(&lists).Error
 	return
 }
 
