@@ -78,6 +78,11 @@ func (app *App) getBudgetList(c *gin.Context) {
 	}
 
 	budgetType := c.Param("type")
+	if budgetType == "" {
+		app.newErrorResponse(c, http.StatusBadRequest, "please indicate the type of budget")
+		return
+	}
+
 	if budgetType != "income" && budgetType != "expences" {
 		budgetType = ""
 	}
@@ -96,4 +101,30 @@ func (app *App) getBudgetList(c *gin.Context) {
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"result": list,
 	})
+}
+
+func (app *App) editBudgetList(c *gin.Context) {
+	var input budget.List
+
+	userid, err := app.getUserId(c)
+	if err != nil {
+		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if err = c.BindJSON(&input); err != nil {
+		app.newErrorResponse(c, http.StatusBadRequest, "invalid input body")
+		return
+	}
+
+	input.UserId = userid
+
+	err = app.s.EditList(input)
+	if err != nil {
+		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, input)
+
 }

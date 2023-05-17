@@ -45,3 +45,7 @@ func (db *listsSql) GetList(userId int, budgetType, orderBy, sortedBy string) (l
 	err = query.Find(&lists).Error
 	return
 }
+
+func (db *listsSql) EditList(input budget.List) (err error) {
+	return db.db.Save(&input).Error
+}

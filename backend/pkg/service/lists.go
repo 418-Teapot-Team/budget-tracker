@@ -23,3 +23,8 @@ func (l *ListsService) DeleteList(listId, userId int) (err error) {
 func (l *ListsService) GetList(userId int, budgetType, orderBy, sortedBy string) (lists []budget.List, err error) {
 	return l.repo.GetList(userId, budgetType, orderBy, sortedBy)
 }
+
+func (l *ListsService) EditList(input budget.List) error {
+	return l.repo.EditList(input)
+
+}
