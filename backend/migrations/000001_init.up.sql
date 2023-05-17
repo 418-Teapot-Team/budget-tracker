@@ -6,14 +6,23 @@ CREATE TABLE users
     password_hash varchar(255) not null
 );
 
-create table lists
+CREATE TABLE lists
+(
+    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id     BIGINT                      NOT NULL,
+    type        ENUM ('income', 'expenses') NOT NULL,
+    category_id BIGINT                      NOT NULL,
+    comment     VARCHAR(255)                NULL DEFAULT NULL,
+    amount      FLOAT                       NOT NULL,
+    created_at  DATETIME                    NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (category_id) REFERENCES categories (id)
+);
+
+create table categories
 (
     id         bigint auto_increment primary key,
-    user_id    bigint                     not null,
-    type       ENUM ('income','expenses') not null,
-    category   varchar(255)               not null,
-    comment    varchar(255)               null default null,
-    amount     float                      not null,
-    created_at datetime                  not null,
-    foreign key (user_id) references users (id)
+    name       varchar(255) unique not null,
+    color_hash varchar(255)        not null,
+    image_link varchar(255)        not null
 );
