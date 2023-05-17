@@ -92,11 +92,7 @@ func (app *App) getBudgetList(c *gin.Context) {
 		return
 	}
 
-	list, err := app.s.GetList(userId, budgetType, orderBy, sortedBy)
-	if err != nil {
-		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
-		return
-	}
+	list, _ := app.s.GetList(userId, budgetType, orderBy, sortedBy)
 
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"result": list,

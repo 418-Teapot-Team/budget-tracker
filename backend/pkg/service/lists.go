@@ -20,7 +20,7 @@ func (l *ListsService) DeleteList(listId, userId int) (err error) {
 	return l.repo.DeleteList(listId, userId)
 }
 
-func (l *ListsService) GetList(userId int, budgetType, orderBy, sortedBy string) (lists []budget.List, err error) {
+func (l *ListsService) GetList(userId int, budgetType, orderBy, sortedBy string) (lists []budget.ListsGetter, err error) {
 	return l.repo.GetList(userId, budgetType, orderBy, sortedBy)
 }
 
