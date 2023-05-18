@@ -8,12 +8,21 @@
           <add-icon />
         </div>
       </div>
-      <filters @onApplyFilters="applyFilters" />
+      <filters @onApplyFilters="applyFilters" :withCategory="true" />
     </div>
+
     <!-- table -->
     <div class="pt-4 w-full">
-      <finances-table :isIncome="true" @onDeleteItem="deleteItem" @onLoadMore="loadMore" />
+      <finances-table
+        :isIncome="true"
+        @onDeleteItem="deleteItem"
+        @onLoadMore="loadMore"
+        @onEditItem="editItem"
+      />
     </div>
+
+    <!-- popup -->
+    <transaction-popup v-if="showIncomePopup" :isEdit="false" @onClose="showIncomePopup = false" />
   </section>
 </template>
 
@@ -21,12 +30,19 @@
 import FinancesTable from '@/components/FinancesTable.vue';
 import AddIcon from '@/components/Icons/AddIcon.vue';
 import Filters from '@/components/Filters.vue';
+import TransactionPopup from '@/components/TransactionPopup.vue';
 export default {
   name: 'Income',
   components: {
     FinancesTable,
+    TransactionPopup,
     AddIcon,
     Filters,
+  },
+  data() {
+    return {
+      showIncomePopup: false,
+    };
   },
   methods: {
     loadMore() {
@@ -37,6 +53,10 @@ export default {
     },
     applyFilters({ category, filter }) {
       console.log(category, filter);
+    },
+    editItem(id) {
+      this.showIncomePopup = true;
+      console.log(id);
     },
   },
 };
