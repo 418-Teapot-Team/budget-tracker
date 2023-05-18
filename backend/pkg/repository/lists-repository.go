@@ -76,3 +76,20 @@ func (db *listsSql) GetCurrentMonthSavings(userId int) (result int64, err error)
 	err = query.Scan(&result).Error
 	return
 }
+
+func (db *listsSql) GetSavingsStats(userId int) (data []budget.FinancialData, err error) {
+	query := db.db.Table("lists").
+		Select("DATE_FORMAT(created_at, '%Y-%m') AS month, SUM(CASE WHEN type = 'income' THEN amount ELSE -amount END) AS income_net").
+		Where("created_at >= ?", time.Now().AddDate(-1, 0, 0)).
+		Where("user_id = ?", userId).
+		Group("month").
+		Order("month")
+
+	err = query.Find(&data).Error
+
+	if err != nil {
+		return data, err
+	}
+
+	return data, nil
+}

@@ -35,3 +35,7 @@ func (l *ListsService) EditList(input budget.List) error {
 func (l *ListsService) GetCurrentMonthSavings(userId int) (incomeNet int64, err error) {
 	return l.repo.GetCurrentMonthSavings(userId)
 }
+
+func (l *ListsService) GetSavingsStats(userId int) (data []budget.FinancialData, err error) {
+	return l.repo.GetSavingsStats(userId)
+}
