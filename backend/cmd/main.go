@@ -9,8 +9,6 @@ import (
 	"budget-tracker/pkg/service"
 	"context"
 	"github.com/BoryslavGlov/logrusx"
-	"github.com/subosito/gotenv"
-
 	// "github.com/subosito/gotenv"
 	"log"
 	"os"
