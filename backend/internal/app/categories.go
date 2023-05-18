@@ -6,6 +6,12 @@ import (
 )
 
 func (app *App) getAllCategories(c *gin.Context) {
+	_, err := app.getUserId(c)
+	if err != nil {
+		app.newErrorResponse(c, http.StatusForbidden, err.Error())
+		return
+	}
+
 	categories, err := app.s.CategoriesService.GetAllCategories()
 	if err != nil {
 		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())

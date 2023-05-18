@@ -18,6 +18,8 @@ func Routers(app *App) *gin.Engine {
 	{
 		api.GET("/get-courses", app.getCourses)
 		api.GET("/who-am-i", app.whoAmI)
+		api.GET("/categories", app.getAllCategories)
+
 		lists := api.Group("/lists")
 		{
 			lists.GET("/:type", app.getBudgetList)
@@ -26,11 +28,6 @@ func Routers(app *App) *gin.Engine {
 			lists.GET("/get-top-expenses", app.getTopExpenses)
 			lists.PUT("/", app.editBudgetList)
 			lists.GET("/current-mon-saved", app.getCurrentMonthSavings)
-		}
-
-		categories := api.Group("/categories")
-		{
-			categories.GET("/", app.getAllCategories)
 		}
 
 		accounts := api.Group("/accounts")
