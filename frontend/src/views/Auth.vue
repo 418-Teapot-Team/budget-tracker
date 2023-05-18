@@ -43,51 +43,41 @@ export default {
   data() {
     return {
       tab: 'login',
+      isLoading: false,
     };
   },
-  watch: {
-    isSuccess(val) {
-      if (val === true) {
-        toast.success(this.message);
-        this.tab = 'login';
-      }
-      if (this.isAuthorized) {
-        this.$router.push('/');
-      }
-    },
-    isError(val) {
-      if (val === true) {
-        toast.error(this.error?.message);
-      }
-    },
-  },
   computed: {
-    ...mapState(useAuthStore, [
-      'user',
-      'error',
-      'message',
-      'isAuthorized',
-      'isLoading',
-      'isError',
-      'isSuccess',
-    ]),
+    ...mapState(useAuthStore, ['user', 'isAuthorized']),
   },
   methods: {
     ...mapActions(useAuthStore, ['login', 'register']),
     async regSubmit({ values, resetForm }) {
-      await this.register({
-        fullName: values.name,
-        email: values.email,
-        password: values.password,
-      });
-      if (this.isSuccess) {
+      try {
+        this.isLoading = true;
+        await this.register({
+          fullName: values.name,
+          email: values.email,
+          password: values.password,
+        });
+        toast.success('Successfully registered. Please log in');
         resetForm();
+      } catch (e) {
+        toast.error(e.message);
+      } finally {
+        this.isLoading = false;
       }
     },
     async loginSubmit({ values, resetForm }) {
-      await this.login({ email: values.email, password: values.password });
-      if (this.isSuccess) {
+      try {
+        this.isLoading = true;
+        await this.login({ email: values.email, password: values.password });
         resetForm();
+        toast.success('Welcome!');
+        this.$router.push('/');
+      } catch (e) {
+        toast.error(e.message);
+      } finally {
+        this.isLoading = false;
       }
     },
   },

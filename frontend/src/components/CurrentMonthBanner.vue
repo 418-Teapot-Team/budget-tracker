@@ -9,7 +9,7 @@
       <StatsUpIcon v-else />
     </div>
     <div class="flex flex-col items-start justify-center gap-2 font-normal">
-      <span class="text-gray-500 text-lg">This month you earned</span>
+      <span class="text-gray-500 text-lg">This month you saved</span>
       <span class="text-white text-4xl font-bold tracking-widest"
         >{{ amount > 0 ? `+${amount}` : amount }}
         <span class="uppercase font-normal tracking-normal text-3xl">uah</span></span
