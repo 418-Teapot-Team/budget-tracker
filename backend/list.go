@@ -33,3 +33,8 @@ type ListsGetter struct {
 	Comment    *string    `json:"comment,omitempty" gorm:"column:comment"`
 	CreatedAt  *time.Time `json:"createdAt,omitempty" gorm:"column:created_at"`
 }
+
+type FinancialData struct {
+	Month     string
+	IncomeNet float64
+}

@@ -2,6 +2,7 @@ package app
 
 import (
 	budget "budget-tracker"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -160,5 +161,26 @@ func (app *App) getCurrentMonthSavings(c *gin.Context) {
 
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"result": list,
+	})
+}
+
+func (app *App) getSavingsStats(c *gin.Context) {
+
+	userId, err := app.getUserId(c)
+	if err != nil {
+		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	data, err := app.s.GetSavingsStats(userId)
+	if err != nil {
+		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	fmt.Println(data)
+
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"result": data,
 	})
 }
