@@ -16,6 +16,12 @@ type GoverlaOutput struct {
 					CodeNumeric int    `json:"codeNumeric"`
 					Typename    string `json:"__typename"`
 				} `json:"currency"`
+				Bid struct {
+					Absolute  int       `json:"absolute"`
+					Relative  int       `json:"relative"`
+					UpdatedAt time.Time `json:"updatedAt"`
+					Typename  string    `json:"__typename"`
+				} `json:"bid"`
 				Ask struct {
 					Absolute  int       `json:"absolute"`
 					Relative  int       `json:"relative"`
