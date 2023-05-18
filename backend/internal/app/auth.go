@@ -16,7 +16,7 @@ func (app *App) signUp(c *gin.Context) {
 	app.logg.Info("User trying to sign-in", logrusx.LogField{Key: "request", Value: fmt.Sprintf("%+v", c.Request)})
 
 	if err := c.BindJSON(&input); err != nil {
-		app.newErrorResponse(c, http.StatusBadRequest, "invalid input body")
+		app.newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
@@ -61,7 +61,7 @@ func (app *App) signIn(c *gin.Context) {
 func (app *App) whoAmI(c *gin.Context) {
 	userId, err := app.getUserId(c)
 	if err != nil {
-		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		app.newErrorResponse(c, http.StatusForbidden, err.Error())
 		return
 	}
 

@@ -6,8 +6,8 @@ import (
 	"net/http"
 )
 
-func (app *App) createList(c *gin.Context) {
-	var input budget.List
+func (app *App) createAccount(c *gin.Context) {
+	var input budget.Account
 
 	userId, err := app.getUserId(c)
 	if err != nil {
@@ -16,11 +16,13 @@ func (app *App) createList(c *gin.Context) {
 	}
 
 	if err = c.BindJSON(&input); err != nil {
-		app.newErrorResponse(c, http.StatusBadRequest, "invalid input body")
+		app.newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	err = app.s.ListsService.CreateList(&input, userId)
+	input.UserID = userId
+
+	err = app.s.AccountsService.CreateAccount(&input)
 	if err != nil {
 		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -31,11 +33,47 @@ func (app *App) createList(c *gin.Context) {
 	})
 }
 
-type deleteInput struct {
-	Id int `json:"id"`
+func (app *App) getAllAccounts(c *gin.Context) {
+
+	userId, err := app.getUserId(c)
+	if err != nil {
+		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	orderBy := c.Query("orderBy")
+	if orderBy == "" {
+		orderBy = "date"
+	}
+
+	account := c.Param("account")
+	if account != "deposit" && account != "credit" {
+		account = ""
+	}
+
+	sortedBy := c.Query("reverse")
+	if sortedBy == "" || sortedBy == "false" {
+		sortedBy = " desc"
+	} else if sortedBy == "true" {
+		sortedBy = " asc"
+	} else {
+		app.newErrorResponse(c, http.StatusBadRequest, "invalid query param reverse")
+		return
+	}
+
+	list, err := app.s.AccountsService.GetAll(userId, account, orderBy, sortedBy)
+	if err != nil {
+		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"result": list,
+	})
+
 }
 
-func (app *App) deleteList(c *gin.Context) {
+func (app *App) deleteAccount(c *gin.Context) {
 	var input deleteInput
 
 	userId, err := app.getUserId(c)
@@ -49,7 +87,7 @@ func (app *App) deleteList(c *gin.Context) {
 		return
 	}
 
-	err = app.s.ListsService.DeleteList(input.Id, userId)
+	err = app.s.AccountsService.DeleteAccount(input.Id, userId)
 	if err != nil {
 		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -60,49 +98,10 @@ func (app *App) deleteList(c *gin.Context) {
 
 }
 
-func (app *App) getBudgetList(c *gin.Context) {
+func (app *App) editAccount(c *gin.Context) {
+	var input budget.Account
 
-	orderBy := c.Query("orderBy")
-	if orderBy == "" {
-		orderBy = "created_at"
-	}
-
-	sortedBy := c.Query("reverse")
-	if sortedBy == "" || sortedBy == "false" {
-		sortedBy = " desc"
-	} else if sortedBy == "true" {
-		sortedBy = " asc"
-	} else {
-		app.newErrorResponse(c, http.StatusBadRequest, "invalid query param reverse")
-		return
-	}
-
-	budgetType := c.Param("type")
-	if budgetType == "" {
-		app.newErrorResponse(c, http.StatusBadRequest, "please indicate the type of budget")
-		return
-	}
-
-	if budgetType != "income" && budgetType != "expenses" {
-		budgetType = ""
-	}
 	userId, err := app.getUserId(c)
-	if err != nil {
-		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	list, _ := app.s.ListsService.GetList(userId, budgetType, orderBy, sortedBy)
-
-	c.JSON(http.StatusOK, map[string]interface{}{
-		"result": list,
-	})
-}
-
-func (app *App) editBudgetList(c *gin.Context) {
-	var input budget.List
-
-	userid, err := app.getUserId(c)
 	if err != nil {
 		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -113,9 +112,9 @@ func (app *App) editBudgetList(c *gin.Context) {
 		return
 	}
 
-	input.UserId = userid
+	input.UserID = userId
 
-	err = app.s.ListsService.EditList(input)
+	err = app.s.AccountsService.EditAccount(input)
 	if err != nil {
 		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -123,23 +122,4 @@ func (app *App) editBudgetList(c *gin.Context) {
 
 	c.JSON(http.StatusOK, input)
 
-}
-
-func (app *App) getTopExpenses(c *gin.Context) {
-
-	userId, err := app.getUserId(c)
-	if err != nil {
-		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	list, err := app.s.ListsService.GetTopExpenses(userId)
-	if err != nil {
-		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	c.JSON(http.StatusOK, map[string]interface{}{
-		"result": list,
-	})
 }
