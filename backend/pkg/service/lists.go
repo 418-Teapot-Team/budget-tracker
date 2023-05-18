@@ -25,9 +25,13 @@ func (l *ListsService) GetList(userId int, budgetType, orderBy, sortedBy string)
 }
 
 func (l *ListsService) GetTopExpenses(userId int) (lists []budget.ListsGetter, err error) {
-  return l.repo.GetTopExpenses(userId)
+	return l.repo.GetTopExpenses(userId)
 }
 
 func (l *ListsService) EditList(input budget.List) error {
-  return l.repo.EditList(input)
+	return l.repo.EditList(input)
+}
+
+func (l *ListsService) GetCurrentMonthSavings(userId int) (incomeNet int64, err error) {
+	return l.repo.GetCurrentMonthSavings(userId)
 }
