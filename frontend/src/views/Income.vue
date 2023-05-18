@@ -31,6 +31,9 @@ import FinancesTable from '@/components/FinancesTable.vue';
 import AddIcon from '@/components/Icons/AddIcon.vue';
 import Filters from '@/components/Filters.vue';
 import TransactionPopup from '@/components/TransactionPopup.vue';
+import useTransitionStore from '@/stores/transactions';
+import { mapActions } from 'pinia';
+
 export default {
   name: 'Income',
   components: {
@@ -45,6 +48,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(useTransitionStore, ['getTransactions', 'getCategories']),
     loadMore() {
       console.log('load more');
     },
@@ -58,6 +62,10 @@ export default {
       this.showIncomePopup = true;
       console.log(id);
     },
+  },
+  mounted() {
+    this.getCategories();
+    this.getTransactions({ type: 'income' });
   },
 };
 </script>

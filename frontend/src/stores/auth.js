@@ -3,68 +3,28 @@ import { httpClient as HttpClient } from '../utils/HttpClient';
 export default defineStore('auth', {
   state: () => ({
     user: {},
-    error: {},
-    isError: false,
-    isLoading: false,
-    message: '',
-    isSuccess: false,
+    isAuthorized: !!localStorage.getItem('tracker-auth-token'),
   }),
-  getters: {
-    isAuthorized() {
-      const token = localStorage.getItem('tracker-auth-token');
-      if (token && token.trim() !== '') {
-        return true;
-      } else {
-        return false;
-      }
-    },
-  },
+
   actions: {
     async login(payload) {
-      try {
-        this.isSuccess = false;
-        this.isLoading = true;
-        this.error = {};
-        this.isError = false;
-        this.message = '';
-        const { data } = await HttpClient.post('auth/sign-in', {
-          email: payload.email,
-          password: payload.password,
-        });
-        this.message = 'Вітаємо у системі';
-        localStorage.setItem('tracker-auth-token', data?.token);
-        this.isSuccess = true;
-      } catch (e) {
-        console.log(e);
-        this.error = e?.request?.data || { message: e.message };
-        this.isError = true;
-      } finally {
-        this.isLoading = false;
-      }
+      const { data } = await HttpClient.post('auth/sign-in', {
+        email: payload.email,
+        password: payload.password,
+      });
+      localStorage.setItem('tracker-auth-token', data?.token);
     },
     async register(payload) {
-      try {
-        this.isSuccess = false;
-        this.isLoading = true;
-        this.message = '';
-        this.error = {};
-        this.isError = false;
-        await HttpClient.post('auth/sign-up', {
-          fullName: payload.fullName,
-          email: payload.email,
-          password: payload.password,
-        });
-        this.message = 'Акаунт успішно створено. Увійдіть в акаунт, щоб користуватись системою';
-        this.isSuccess = true;
-      } catch (e) {
-        console.log(e);
-        this.error = e?.request?.data || { message: e.message };
-        this.isError = true;
-      } finally {
-        this.isLoading = false;
-      }
+      await HttpClient.post('auth/sign-up', {
+        fullName: payload.fullName,
+        email: payload.email,
+        password: payload.password,
+      });
     },
-    // #TODO: get user info
-    async whoAmI() {},
+
+    async whoAmI() {
+      const { data } = await HttpClient.get('api/who-am-i');
+      this.user = data;
+    },
   },
 });
