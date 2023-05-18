@@ -124,3 +124,22 @@ func (app *App) editBudgetList(c *gin.Context) {
 	c.JSON(http.StatusOK, input)
 
 }
+
+func (app *App) getTopExpenses(c *gin.Context) {
+
+	userId, err := app.getUserId(c)
+	if err != nil {
+		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	list, err := app.s.GetTopExpenses(userId)
+	if err != nil {
+		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"result": list,
+	})
+}

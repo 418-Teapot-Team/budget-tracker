@@ -20,14 +20,15 @@ type List struct {
 	Category  int       `json:"category" gorm:"column:category_id"`
 	Amount    float64   `json:"amount" gorm:"column:amount"`
 	Comment   *string   `json:"comment,omitempty" gorm:"column:comment"`
-	CreatedAt time.Time `json:"created_at,omitempty" gorm:"column:created_at"`
+	CreatedAt *time.Time `json:"created_at,omitempty" gorm:"column:created_at"`
 }
 
 type ListsGetter struct {
 	Id         int        `json:"id,omitempty" gorm:"column:id"`
 	UserId     int        `json:"-" gorm:"column:user_id"`
-	Type       string     `json:"type" gorm:"column:type"`
-	Categories Categories `json:"category" gorm:"foreignKey:id;references:Id"`
+	Type       string     `json:"type,omitempty" gorm:"column:type"`
+  Category   int        `json:"category_id" gorm:"column:category_id"` 
+	Categories Categories `json:"category" gorm:"foreignKey:Category;references:Id"`
 	Amount     float64    `json:"amount" gorm:"column:amount"`
 	Comment    *string    `json:"comment,omitempty" gorm:"column:comment"`
 	CreatedAt  time.Time  `json:"created_at,omitempty" gorm:"column:created_at"`

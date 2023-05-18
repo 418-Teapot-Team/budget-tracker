@@ -46,6 +46,19 @@ func (db *listsSql) GetList(userId int, budgetType, orderBy, sortedBy string) (l
 	return
 }
 
+func (db *listsSql) GetTopExpenses(userId int) (lists []budget.ListsGetter, err error) {
+  query := db.db.Select("category_id , sum(amount) amount").
+    Where("user_id = ?", userId).
+    Where("type = 'expenses'").
+    Group("category_id").
+    Order("2 DESC").
+    Limit(4)
+
+  err = query.Preload("Categories").Find(&lists).Error
+
+  return
+}
+
 func (db *listsSql) EditList(input budget.List) (err error) {
 	return db.db.Save(&input).Error
 }

@@ -11,7 +11,7 @@ type ListsService struct {
 }
 
 func (l *ListsService) CreateList(input *budget.List, userId int) (err error) {
-	input.CreatedAt = time.Now()
+	*input.CreatedAt = time.Now()
 	input.UserId = userId
 	return l.repo.CreateList(input)
 }
@@ -24,7 +24,10 @@ func (l *ListsService) GetList(userId int, budgetType, orderBy, sortedBy string)
 	return l.repo.GetList(userId, budgetType, orderBy, sortedBy)
 }
 
-func (l *ListsService) EditList(input budget.List) error {
-	return l.repo.EditList(input)
+func (l *ListsService) GetTopExpenses(userId int) (lists []budget.ListsGetter, err error) {
+  return l.repo.GetTopExpenses(userId)
+}
 
+func (l *ListsService) EditList(input budget.List) error {
+  return l.repo.EditList(input)
 }
