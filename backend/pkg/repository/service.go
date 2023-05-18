@@ -24,10 +24,18 @@ type Categories interface {
 	GetAllCategories() (categories []budget.Categories, err error)
 }
 
+type Accounts interface {
+	CreateAccount(input *budget.Account) (err error)
+	GetAllAccounts(userId int, account, orderBy, sortedBy string) (list []budget.Account, err error)
+	DeleteAccount(listId, userId int) (err error)
+	EditAccount(input budget.Account) (err error)
+}
+
 type Repository struct {
 	Authorization
 	Lists
 	Categories
+	Accounts
 }
 
 func NewRepository(db *gorm.DB) *Repository {
@@ -35,5 +43,6 @@ func NewRepository(db *gorm.DB) *Repository {
 		Authorization: newAuthorizationSQL(db),
 		Lists:         newListsSQL(db),
 		Categories:    newCategorySQl(db),
+		Accounts:      newAccountsSQL(db),
 	}
 }

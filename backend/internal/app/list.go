@@ -45,7 +45,7 @@ func (app *App) deleteList(c *gin.Context) {
 	}
 
 	if err = c.BindJSON(&input); err != nil {
-		app.newErrorResponse(c, http.StatusBadRequest, "invalid input body")
+		app.newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
@@ -83,7 +83,7 @@ func (app *App) getBudgetList(c *gin.Context) {
 		return
 	}
 
-	if budgetType != "income" && budgetType != "expences" {
+	if budgetType != "income" && budgetType != "expenses" {
 		budgetType = ""
 	}
 	userId, err := app.getUserId(c)
@@ -92,7 +92,7 @@ func (app *App) getBudgetList(c *gin.Context) {
 		return
 	}
 
-	list, _ := app.s.GetList(userId, budgetType, orderBy, sortedBy)
+	list, _ := app.s.ListsService.GetList(userId, budgetType, orderBy, sortedBy)
 
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"result": list,
@@ -109,13 +109,13 @@ func (app *App) editBudgetList(c *gin.Context) {
 	}
 
 	if err = c.BindJSON(&input); err != nil {
-		app.newErrorResponse(c, http.StatusBadRequest, "invalid input body")
+		app.newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
 	input.UserId = userid
 
-	err = app.s.EditList(input)
+	err = app.s.ListsService.EditList(input)
 	if err != nil {
 		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -133,7 +133,7 @@ func (app *App) getTopExpenses(c *gin.Context) {
 		return
 	}
 
-	list, err := app.s.GetTopExpenses(userId)
+	list, err := app.s.ListsService.GetTopExpenses(userId)
 	if err != nil {
 		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return

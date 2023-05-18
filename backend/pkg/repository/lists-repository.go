@@ -44,6 +44,11 @@ func (db *listsSql) GetList(userId int, budgetType, orderBy, sortedBy string) (l
 	}
 
 	err = query.Preload("Categories").Find(&lists).Error
+
+	if len(lists) == 0 {
+
+	}
+
 	return
 }
 
