@@ -32,7 +32,12 @@
             class="bg-grey"
           />
         </div>
-        <income-chart :values="data" :bottomLabels="labels" />
+        <transactions-chart
+          :values="data"
+          :bottomLabels="labels"
+          title="Incomes overview"
+          class="h-full"
+        />
       </div>
       <!-- -->
       <div class="w-4/12 pl-14">
@@ -45,14 +50,14 @@
 <script>
 import CurrentMonthBanner from '@/components/CurrentMonthBanner.vue';
 import PopularCategoryStats from '@/components/PopularCategoryStats.vue';
-import IncomeChart from '@/components/IncomeChart.vue';
+import TransactionsChart from '@/components/TransactionsChart.vue';
 import LastTransactions from '@/components/LastTransactions.vue';
 export default {
   name: 'Dashboard',
   components: {
     CurrentMonthBanner,
     PopularCategoryStats,
-    IncomeChart,
+    TransactionsChart,
     LastTransactions,
   },
   data() {

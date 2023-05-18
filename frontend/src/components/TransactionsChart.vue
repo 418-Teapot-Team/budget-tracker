@@ -1,6 +1,6 @@
 <template>
-  <div class="h-full w-full bg-white rounded-2xl shadow-sm pt-3 p-6 relative flex flex-col">
-    <span class="xl:text-sm 2xl:text-xl self-center">Incomes overview</span>
+  <div class="w-full bg-white rounded-2xl shadow-sm pt-3 p-6 relative flex flex-col">
+    <span class="xl:text-sm 2xl:text-xl self-center">{{ title }}</span>
     <Line :data="dataset" :options="options" class="pb-2" />
   </div>
 </template>
@@ -8,7 +8,7 @@
 <script>
 import { Line } from 'vue-chartjs';
 export default {
-  name: 'IncomeChart',
+  name: 'TransactionsChart',
 
   components: {
     // eslint-disable-next-line vue/no-reserved-component-names
@@ -17,6 +17,7 @@ export default {
   props: {
     bottomLabels: Array,
     values: Array,
+    title: String,
   },
   computed: {
     dataset() {

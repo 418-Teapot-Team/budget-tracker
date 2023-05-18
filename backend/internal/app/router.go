@@ -25,6 +25,7 @@ func Routers(app *App) *gin.Engine {
 			lists.DELETE("/", app.deleteList)
 			lists.GET("/get-top-expenses", app.getTopExpenses)
 			lists.PUT("/", app.editBudgetList)
+			lists.GET("/current-mon-saved", app.getCurrentMonthSavings)
 		}
 
 		categories := api.Group("/categories")
