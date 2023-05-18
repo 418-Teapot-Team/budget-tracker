@@ -20,10 +20,9 @@ import (
 
 func main() {
 
-	//if err := gotenv.Load(); err != nil {
-	//	log.Fatal(err)
-	//}
-
+	if err := gotenv.Load(); err != nil {
+		log.Fatal(err)
+	}
 
 	logg, err := logrusx.New("budget-tracker")
 	if err != nil {

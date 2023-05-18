@@ -23,6 +23,7 @@ create table categories
 (
     id         bigint auto_increment primary key,
     name       varchar(255) unique not null,
+    type       varchar(255)        not null,
     color_hash varchar(255)        not null,
     image_link varchar(255)        not null
 );
