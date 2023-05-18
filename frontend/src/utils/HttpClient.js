@@ -11,7 +11,7 @@ const injectToken = (config) => {
   try {
     const token = localStorage.getItem('tracker-auth-token');
     if (token !== null) {
-      config.headers.Authorization = `${token}`;
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   } catch (error) {
@@ -48,8 +48,16 @@ class HttpClient {
   }
 
   #handleError(error) {
-    console.log(error);
-    return Promise.reject(error);
+    const errorData = {
+      code: error.status,
+      message: error?.response?.data?.message ? error?.response?.data?.message : error.message,
+      status: error.statusText,
+    };
+    console.log(error.status == 403);
+    if (error.status == 403) {
+      localStorage.removeItem('tracker-auth-token');
+    }
+    return Promise.reject(errorData);
   }
 
   request(config) {

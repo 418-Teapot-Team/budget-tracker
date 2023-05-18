@@ -21,7 +21,6 @@ export default {
   },
   computed: {
     dataset() {
-      console.log(this.bottomLabels, this.values);
       return {
         labels: this.bottomLabels,
         datasets: [
