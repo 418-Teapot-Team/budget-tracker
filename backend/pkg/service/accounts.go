@@ -19,15 +19,16 @@ func (as *AccountsService) CreateAccount(input *budget.Account) (err error) {
 }
 
 type listOutput struct {
-	Id           int     `json:"id"`
-	Type         string  `json:"type"`
-	Name         string  `json:"name"`
-	MonthAmount  int     `json:"monthAmount"`
-	CurrentMonth int     `json:"currentMonth"`
-	Percent      float64 `json:"percent"`
-	Sum          float64 `json:"sum"`
-	MonthPayment float64 `json:"monthPayment"`
-	Payed        float64 `json:"payed"`
+	Id           int        `json:"id"`
+	Type         string     `json:"type"`
+	Name         string     `json:"name"`
+	MonthAmount  int        `json:"monthAmount"`
+	CurrentMonth int        `json:"currentMonth"`
+	Percent      float64    `json:"percent"`
+	Sum          float64    `json:"sum"`
+	MonthPayment float64    `json:"monthPayment"`
+	Payed        float64    `json:"payed"`
+	CreatedAt    *time.Time `json:"createdAt" binding:"required"`
 }
 
 func (as *AccountsService) GetAll(userId int, account, orderBy, sortedBy string) ([]listOutput, error) {
@@ -65,6 +66,7 @@ func (as *AccountsService) GetAll(userId int, account, orderBy, sortedBy string)
 			Sum:          finance.Sum,
 			MonthPayment: mounthPayment,
 			Payed:        float64(currentMonthInt) * mounthPayment,
+			CreatedAt:    &finance.CreatedAt,
 		})
 	}
 

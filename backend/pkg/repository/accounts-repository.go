@@ -25,7 +25,7 @@ func (db *accountsSql) CreateAccount(input *budget.Account) (err error) {
 }
 
 func (db *accountsSql) GetAllAccounts(userId int, account, orderBy, sortedBy string) (list []budget.Account, err error) {
-	query := db.db.Select("id, type, name, month_amount, percent, date, sum, DATE_FORMAT(date, '%Y-%m-%d') date, created_at").
+	query := db.db.Select("id, type, name, month_amount, percent, sum, DATE_FORMAT(date, '%Y-%m-%d') date, created_at").
 		Order(orderBy+sortedBy).Where("user_id = ?", userId)
 	if account != "" {
 		query = query.Where("type = ?", account)
