@@ -16,9 +16,10 @@ func Routers(app *App) *gin.Engine {
 	}
 	api := router.Group("/api", app.authMiddleware)
 	{
+
 		api.GET("/get-courses", app.getCourses)
 		api.GET("/who-am-i", app.whoAmI)
-		api.GET("/categories", app.getAllCategories)
+		api.GET("/get-categories", app.getAllCategories)
 
 		lists := api.Group("/lists")
 		{
