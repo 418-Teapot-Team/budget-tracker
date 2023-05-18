@@ -14,7 +14,7 @@ var goverlaBody = []byte(`{
     "variables": {
         "alias": "goverla-ua"
     },
-    "query": "query Point($alias: Alias!) {\n  point(alias: $alias) {\n    id\n    rates {\n      id\n      currency {\n        alias\n        name\n        exponent\n        codeAlpha\n        codeNumeric\n        __typename\n      }\n         ask {\n        absolute\n        relative\n        updatedAt\n        __typename\n      }\n      __typename\n    }\n    updatedAt\n    __typename\n  }\n}\n"
+    "query": "query Point($alias: Alias!) {\n  point(alias: $alias) {\n    id\n    rates {\n      id\n      currency {\n        alias\n        name\n        exponent\n        codeAlpha\n        codeNumeric\n        __typename\n      }\n      bid {\n        absolute\n        relative\n        updatedAt\n        __typename\n      }\n      ask {\n        absolute\n        relative\n        updatedAt\n        __typename\n      }\n      __typename\n    }\n    updatedAt\n    __typename\n  }\n}\n"
 }`)
 
 func (app *Client) GetGoverlaRate() (GoverlaOutput, error) {
