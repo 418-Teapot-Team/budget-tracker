@@ -23,13 +23,22 @@ func Routers(app *App) *gin.Engine {
 			lists.GET("/:type", app.getBudgetList)
 			lists.POST("/", app.createList)
 			lists.DELETE("/", app.deleteList)
-            lists.GET("/get-top-expenses", app.getTopExpenses)
+			lists.GET("/get-top-expenses", app.getTopExpenses)
 			lists.PUT("/", app.editBudgetList)
+			lists.GET("/current-mon-saved", app.getCurrentMonthSavings)
 		}
 
 		categories := api.Group("/categories")
 		{
 			categories.GET("/", app.getAllCategories)
+		}
+
+		accounts := api.Group("/accounts")
+		{
+			accounts.GET("/:account", app.getAllAccounts)
+			accounts.POST("/", app.createAccount)
+			accounts.DELETE("/", app.deleteAccount)
+			accounts.PUT("/", app.editAccount)
 		}
 	}
 	return router

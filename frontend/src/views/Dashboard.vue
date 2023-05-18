@@ -32,7 +32,12 @@
             class="bg-grey"
           />
         </div>
-        <income-chart :values="data" :bottomLabels="labels" />
+        <transactions-chart
+          :values="data"
+          :bottomLabels="labels"
+          title="Incomes overview"
+          class="h-full"
+        />
       </div>
       <!-- -->
       <div class="w-4/12 pl-14">
@@ -45,14 +50,16 @@
 <script>
 import CurrentMonthBanner from '@/components/CurrentMonthBanner.vue';
 import PopularCategoryStats from '@/components/PopularCategoryStats.vue';
-import IncomeChart from '@/components/IncomeChart.vue';
+import TransactionsChart from '@/components/TransactionsChart.vue';
 import LastTransactions from '@/components/LastTransactions.vue';
+import useDashboardStore from '@/stores/dashboard';
+import { mapActions } from 'pinia';
 export default {
   name: 'Dashboard',
   components: {
     CurrentMonthBanner,
     PopularCategoryStats,
-    IncomeChart,
+    TransactionsChart,
     LastTransactions,
   },
   data() {
@@ -66,6 +73,13 @@ export default {
         1632, 4324, 3444, 932, 811, 7432, 5474, 2343, 2443, 1732, 1200, 1100, 1100, 1250, 6548,
       ],
     };
+  },
+  methods: {
+    ...mapActions(useDashboardStore, ['getTopCaregories', 'getCurrentMonthSavings']),
+  },
+  mounted() {
+    this.getTopCaregories();
+    this.getCurrentMonthSavings();
   },
 };
 </script>

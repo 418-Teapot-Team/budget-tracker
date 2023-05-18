@@ -3,53 +3,32 @@
     <app-menu />
     <div id="content" class="max-h-screen overflow-y-auto w-full pt-6">
       <div class="flex flex-row justify-between items-center mb-6">
-        <ul class="flex flex-row gap-8">
+        <ul class="flex flex-row gap-8" v-if="courses?.length">
           <li
             class="flex flex-col justify-start items-start border-r border-black border-opacity-30 w-fit pr-8"
+            v-for="item in courses"
+            :key="item?.code"
           >
             <div class="flex flex-row justify-start items-center gap-1">
               <div class="w-6 h-6">
-                <USAFlagIcon />
+                <USAFlagIcon v-if="item?.code === 'USD'" />
+                <EUFlagIcon v-if="item?.code === 'EUR'" />
+                <PLFlagIcon v-if="item?.code === 'PLN'" />
               </div>
-              <span class="text-black">USD</span>
+              <span class="text-black">{{ item?.code }}</span>
             </div>
             <div class="flex flex-row gap-1">
-              <span class="text-xs text-black opacity-80">Official - 36.5686</span>
-              <span class="text-xs text-black opacity-80">Marketplace - 37.77</span>
-            </div>
-          </li>
-          <li
-            class="flex flex-col justify-start items-start border-r border-black border-opacity-30 w-fit pr-8"
-          >
-            <div class="flex flex-row justify-start items-center gap-1">
-              <div class="w-6 h-6">
-                <EUFlagIcon />
-              </div>
-              <span class="text-black">EUR</span>
-            </div>
-            <div class="flex flex-row gap-1">
-              <span class="text-xs text-black opacity-80">Official - 39.8287</span>
-              <span class="text-xs text-black opacity-80">Marketplace - 41.35</span>
-            </div>
-          </li>
-          <li class="flex flex-col justify-start items-start">
-            <div class="flex flex-row justify-start items-center gap-1">
-              <div class="w-6 h-6">
-                <PLFlagIcon />
-              </div>
-              <span class="text-black">PLN</span>
-            </div>
-            <div class="flex flex-row gap-1">
-              <span class="text-xs text-black opacity-80">Official - 8.785</span>
-              <span class="text-xs text-black opacity-80">Marketplace - 9.0</span>
+              <span class="text-xs text-black opacity-80">Official - {{ item?.officialRate }}</span>
+              <span class="text-xs text-black opacity-80">Market - {{ item?.darkRate }}</span>
             </div>
           </li>
         </ul>
         <span
           class="text-black font-bold text-xl w-72 h-7 text-end text-ellipsis whitespace-nowrap overflow-hidden"
         >
-          Welcome, Username!
+          Welcome, {{ user?.fullName }}!
         </span>
+        <logout-icon class="cursor-pointer" @click="logout" />
       </div>
       <router-view />
     </div>
@@ -61,6 +40,14 @@ import AppMenu from '@/components/AppMenu.vue';
 import USAFlagIcon from '@/components/Icons/USAFlagIcon.vue';
 import EUFlagIcon from '@/components/Icons/EUFlagIcon.vue';
 import PLFlagIcon from '@/components/Icons/PLFlagIcon.vue';
+import { mapState, mapActions } from 'pinia';
+import useAuthStore from '@/stores/auth';
+import useDashboardStore from '@/stores/dashboard';
+import { useToast } from 'vue-toastification';
+import LogoutIcon from '@/components/Icons/LogoutIcon.vue';
+
+const toast = useToast();
+
 export default {
   name: 'MainLayout',
   components: {
@@ -68,6 +55,41 @@ export default {
     USAFlagIcon,
     EUFlagIcon,
     PLFlagIcon,
+    LogoutIcon,
+  },
+  computed: {
+    ...mapState(useAuthStore, ['user']),
+    ...mapState(useDashboardStore, ['courses']),
+    isAuthorized() {
+      if (!localStorage.getItem('tracker-auth-token')) {
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        this.$router.push('/auth');
+      }
+      return localStorage.getItem('tracker-auth-token');
+    },
+  },
+
+  methods: {
+    ...mapActions(useAuthStore, ['whoAmI']),
+    ...mapActions(useDashboardStore, ['getCourses']),
+    logout() {
+      localStorage.removeItem('tracker-auth-token');
+      this.$router.push('/auth');
+    },
+  },
+  mounted() {
+    if (!localStorage.getItem('tracker-auth-token')) {
+      this.$router.push('/auth');
+    }
+    if (localStorage.getItem('tracker-auth-token')) {
+      try {
+        this.whoAmI();
+        this.getCourses();
+      } catch (e) {
+        console.log(123);
+        toast.error(e.message);
+      }
+    }
   },
 };
 </script>

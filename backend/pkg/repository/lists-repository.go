@@ -3,6 +3,7 @@ package repository
 import (
 	budget "budget-tracker"
 	"gorm.io/gorm"
+	"time"
 )
 
 type listsSql struct {
@@ -43,22 +44,34 @@ func (db *listsSql) GetList(userId int, budgetType, orderBy, sortedBy string) (l
 	}
 
 	err = query.Preload("Categories").Find(&lists).Error
+
+	if len(lists) == 0 {
+
+	}
+
 	return
 }
 
 func (db *listsSql) GetTopExpenses(userId int) (lists []budget.ListsGetter, err error) {
-  query := db.db.Select("category_id , sum(amount) amount").
-    Where("user_id = ?", userId).
-    Where("type = 'expenses'").
-    Group("category_id").
-    Order("2 DESC").
-    Limit(4)
+	query := db.db.Select("category_id , sum(amount) amount").
+		Where("user_id = ?", userId).
+		Where("type = 'expenses'").
+		Group("category_id").
+		Order("2 DESC")
 
-  err = query.Preload("Categories").Find(&lists).Error
-
-  return
+	err = query.Preload("Categories").Find(&lists).Error
+	return
 }
 
 func (db *listsSql) EditList(input budget.List) (err error) {
 	return db.db.Save(&input).Error
+}
+
+func (db *listsSql) GetCurrentMonthSavings(userId int) (result int64, err error) {
+	query := db.db.Table("lists").Select("SUM(CASE WHEN type = 'income' THEN amount ELSE -amount END)").
+		Where("MONTH(created_at) = ? AND YEAR(created_at) = ?", time.Now().Month(), time.Now().Year()).
+		Where("user_id = ?", userId)
+
+	err = query.Scan(&result).Error
+	return
 }

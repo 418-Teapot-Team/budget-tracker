@@ -1,6 +1,7 @@
 <template>
-  <vee-form class="flex flxe-row gap-4 w-1/3 h-8" @submit="applyFilters">
+  <vee-form class="flex flxe-row justify-end gap-4 w-1/3 h-8" @submit="applyFilters">
     <vee-field
+      v-if="withCategory"
       class="w-4/12 border-b-2 border-black bg-grey-light transition duration-300 focus:outline-none focus:bg-white text-black"
       name="category"
       as="select"
@@ -28,6 +29,9 @@
 <script>
 export default {
   name: 'Filters',
+  props: {
+    withCategory: Boolean,
+  },
   data() {
     return {
       category: 'default',

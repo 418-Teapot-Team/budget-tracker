@@ -26,3 +26,17 @@ create table categories
     color_hash varchar(255)        not null,
     image_link varchar(255)        not null
 );
+
+create table accounts
+(
+    id           bigint auto_increment primary key,
+    type         ENUM ('deposit','credit') NOT NULL,
+    user_id      BIGINT                    NOT NULL,
+    name         varchar(255)              NOT NULL,
+    month_amount tinyint                   NOT NULL,
+    percent      int                       NOT NULL,
+    date         DATE                      NOT NULL,
+    sum          FLOAT                     NOT NULL,
+    created_at   DATETIME                  NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id)
+);

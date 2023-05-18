@@ -19,6 +19,9 @@
           <td class="pl-2 text-black">Work income</td>
           <td class="pr-6 text-end rounded-r-lg text-black">
             <div class="w-full h-full flex justify-end">
+              <div class="h-8 w-8 cursor-pointer mr-2" @click="editItem('id')">
+                <edit-icon />
+              </div>
               <div class="h-8 w-8 cursor-pointer" @click="deleteItem('id')">
                 <delete-icon />
               </div>
@@ -35,6 +38,9 @@
           <td class="pl-2 text-black">Work income</td>
           <td class="pr-6 text-end rounded-r-lg text-black">
             <div class="w-full h-full flex justify-end">
+              <div class="h-8 w-8 cursor-pointer mr-2" @click="editItem('id')">
+                <edit-icon />
+              </div>
               <div class="h-8 w-8 cursor-pointer" @click="deleteItem('id')">
                 <delete-icon />
               </div>
@@ -51,6 +57,9 @@
           <td class="pl-2 text-black">Work income</td>
           <td class="pr-6 text-end rounded-r-lg text-black">
             <div class="w-full h-full flex justify-end">
+              <div class="h-8 w-8 cursor-pointer mr-2" @click="editItem('id')">
+                <edit-icon />
+              </div>
               <div class="h-8 w-8 cursor-pointer" @click="deleteItem('id')">
                 <delete-icon />
               </div>
@@ -67,6 +76,9 @@
           <td class="pl-2 text-black">Work income</td>
           <td class="pr-6 text-end rounded-r-lg text-black">
             <div class="w-full h-full flex justify-end">
+              <div class="h-8 w-8 cursor-pointer mr-2" @click="editItem('id')">
+                <edit-icon />
+              </div>
               <div class="h-8 w-8 cursor-pointer" @click="deleteItem('id')">
                 <delete-icon />
               </div>
@@ -83,6 +95,9 @@
           <td class="pl-2 text-black">Work income</td>
           <td class="pr-6 text-end rounded-r-lg text-black">
             <div class="w-full h-full flex justify-end">
+              <div class="h-8 w-8 cursor-pointer mr-2" @click="editItem('id')">
+                <edit-icon />
+              </div>
               <div class="h-8 w-8 cursor-pointer" @click="deleteItem('id')">
                 <delete-icon />
               </div>
@@ -99,6 +114,9 @@
           <td class="pl-2 text-black">Work income</td>
           <td class="pr-6 text-end rounded-r-lg text-black">
             <div class="w-full h-full flex justify-end">
+              <div class="h-8 w-8 cursor-pointer mr-2" @click="editItem('id')">
+                <edit-icon />
+              </div>
               <div class="h-8 w-8 cursor-pointer" @click="deleteItem('id')">
                 <delete-icon />
               </div>
@@ -115,70 +133,9 @@
           <td class="pl-2 text-black">Work income</td>
           <td class="pr-6 text-end rounded-r-lg text-black">
             <div class="w-full h-full flex justify-end">
-              <div class="h-8 w-8 cursor-pointer" @click="deleteItem('id')">
-                <delete-icon />
+              <div class="h-8 w-8 cursor-pointer mr-2" @click="editItem('id')">
+                <edit-icon />
               </div>
-            </div>
-          </td>
-        </tr>
-        <tr class="h-16 bg-white shadow-sm rounded-lg p-2 hover:bg-gray-50">
-          <td class="pl-2 rounded-l-lg text-black">16.05.23</td>
-          <td class="text-center text-black">Bussiness</td>
-          <td class="pl-2" :class="isIncome ? 'text-green-500' : 'text-red-500'">
-            {{ isIncome ? '+' : '-' }}
-            340 UAH
-          </td>
-          <td class="pl-2 text-black">Work income</td>
-          <td class="pr-6 text-end rounded-r-lg text-black">
-            <div class="w-full h-full flex justify-end">
-              <div class="h-8 w-8 cursor-pointer" @click="deleteItem('id')">
-                <delete-icon />
-              </div>
-            </div>
-          </td>
-        </tr>
-        <tr class="h-16 bg-white shadow-sm rounded-lg p-2 hover:bg-gray-50">
-          <td class="pl-2 rounded-l-lg text-black">16.05.23</td>
-          <td class="text-center text-black">Bussiness</td>
-          <td class="pl-2" :class="isIncome ? 'text-green-500' : 'text-red-500'">
-            {{ isIncome ? '+' : '-' }}
-            340 UAH
-          </td>
-          <td class="pl-2 text-black">Work income</td>
-          <td class="pr-6 text-end rounded-r-lg text-black">
-            <div class="w-full h-full flex justify-end">
-              <div class="h-8 w-8 cursor-pointer" @click="deleteItem('id')">
-                <delete-icon />
-              </div>
-            </div>
-          </td>
-        </tr>
-        <tr class="h-16 bg-white shadow-sm rounded-lg p-2 hover:bg-gray-50">
-          <td class="pl-2 rounded-l-lg text-black">16.05.23</td>
-          <td class="text-center text-black">Bussiness</td>
-          <td class="pl-2" :class="isIncome ? 'text-green-500' : 'text-red-500'">
-            {{ isIncome ? '+' : '-' }}
-            340 UAH
-          </td>
-          <td class="pl-2 text-black">Work income</td>
-          <td class="pr-6 text-end rounded-r-lg text-black">
-            <div class="w-full h-full flex justify-end">
-              <div class="h-8 w-8 cursor-pointer" @click="deleteItem('id')">
-                <delete-icon />
-              </div>
-            </div>
-          </td>
-        </tr>
-        <tr class="h-16 bg-white shadow-sm rounded-lg p-2 hover:bg-gray-50">
-          <td class="pl-2 rounded-l-lg text-black">16.05.23</td>
-          <td class="text-center text-black">Bussiness</td>
-          <td class="pl-2" :class="isIncome ? 'text-green-500' : 'text-red-500'">
-            {{ isIncome ? '+' : '-' }}
-            340 UAH
-          </td>
-          <td class="pl-2 text-black">Work income</td>
-          <td class="pr-6 text-end rounded-r-lg text-black">
-            <div class="w-full h-full flex justify-end">
               <div class="h-8 w-8 cursor-pointer" @click="deleteItem('id')">
                 <delete-icon />
               </div>
@@ -197,6 +154,7 @@
 
 <script>
 import DeleteIcon from '@/components/Icons/DeleteIcon.vue';
+import EditIcon from '@/components/Icons/EditIcon.vue';
 export default {
   name: 'FinancesTable',
   props: {
@@ -205,6 +163,7 @@ export default {
   },
   components: {
     DeleteIcon,
+    EditIcon,
   },
   methods: {
     deleteItem(id) {
@@ -213,6 +172,9 @@ export default {
     },
     loadMore() {
       this.$emit('onLoadMore');
+    },
+    editItem(id) {
+      this.$emit('onEditItem', id);
     },
   },
 };

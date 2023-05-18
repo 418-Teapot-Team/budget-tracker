@@ -15,16 +15,17 @@ const (
 func (app *App) authMiddleware(c *gin.Context) {
 	header := c.GetHeader(authorizationHeader)
 	if header == "" {
-		app.newErrorResponse(c, http.StatusUnauthorized, "empty auth header")
+		app.newErrorResponse(c, http.StatusForbidden, "empty auth header")
 		return
 	}
 	headersParts := strings.Split(header, " ")
 	if len(headersParts) != 2 || headersParts[0] != "Bearer" {
-		app.newErrorResponse(c, http.StatusUnauthorized, "invalid auth header")
+		app.newErrorResponse(c, http.StatusForbidden, "invalid auth header")
+		return
 	}
 
 	if len(headersParts[1]) == 0 {
-		app.newErrorResponse(c, http.StatusUnauthorized, "token is empty")
+		app.newErrorResponse(c, http.StatusForbidden, "token is empty")
 		return
 	}
 
