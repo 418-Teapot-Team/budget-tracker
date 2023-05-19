@@ -1,14 +1,13 @@
 package app
 
 import (
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
-func RunApp(app *App, port string) {
+func Routers(app *App) *gin.Engine {
 	router := gin.Default()
 
-	router.Use(cors.Default())
+	router.Use(CORSMiddleware())
 
 	auth := router.Group("/auth")
 	{
@@ -42,10 +41,8 @@ func RunApp(app *App, port string) {
 			accounts.POST("/create", app.createAccount)
 			accounts.DELETE("/delete", app.deleteAccount)
 			accounts.PUT("/update", app.editAccount)
-
-			accounts.GET("/total", app.getTotalDeposits)
 		}
 	}
-	router.Run(":" + port)
+	return router
 
 }
