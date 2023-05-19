@@ -100,8 +100,7 @@ func (app *App) getBudgetList(c *gin.Context) {
 		var err error
 		takeAmount, err = strconv.Atoi(takeAmountParam)
 		if err != nil {
-			app.newErrorResponse(c, http.StatusBadRequest, "take must be integer")
-			return
+			takeAmount = 0
 		}
 	}
 
@@ -112,8 +111,7 @@ func (app *App) getBudgetList(c *gin.Context) {
 		var err error
 		skipAmount, err = strconv.Atoi(skipAmountParam)
 		if err != nil {
-			app.newErrorResponse(c, http.StatusBadRequest, "skip must be integer")
-			return
+			skipAmount = 0
 		}
 	}
 
