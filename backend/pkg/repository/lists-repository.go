@@ -64,12 +64,16 @@ func (db *listsSql) GetList(userId int, budgetType, orderBy, sortedBy string, ta
 	return
 }
 
-func (db *listsSql) GetTopCategories(userId int, enum string) (lists []budget.ListsGetter, err error) {
+func (db *listsSql) GetTopCategories(userId int, enum string, takeAmount int) (lists []budget.ListsGetter, err error) {
 	query := db.db.Select("category_id , sum(amount) amount").
 		Where("user_id = ?", userId).
 		Where("type = ?", enum).
 		Group("category_id").
 		Order("2 DESC")
+
+	if takeAmount != 0 {
+		query = query.Limit(takeAmount)
+	}
 
 	err = query.Preload("Categories").Find(&lists).Error
 	return
