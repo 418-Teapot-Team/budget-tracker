@@ -60,7 +60,7 @@ func (as *AccountsService) GetAll(userId int, account, orderBy, sortedBy string)
 			Date:         finance.Date,
 			FinishDate:   _str.FinishDate,
 			GoalSum:      _str.GoalSum,
-			CreatedAt:    &finance.CreatedAt,
+			CreatedAt:    &_str.CreatedAt,
 		})
 	}
 

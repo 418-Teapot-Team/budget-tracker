@@ -48,11 +48,11 @@
         </tr>
       </tbody>
     </table>
-    <div class="w-full flex h-10 flex-row justify-center items-center">
+    <!-- <div class="w-full flex h-10 flex-row justify-center items-center">
       <div class="w-36 h-full">
         <app-button text="Load more" @click="loadMore" v-if="data?.length" />
       </div>
-    </div>
+    </div> -->
     <confirm-popup
       v-if="showConfirmPopup"
       @onClose="showConfirmPopup = false"
