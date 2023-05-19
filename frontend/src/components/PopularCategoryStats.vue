@@ -6,8 +6,12 @@
       >
         <img :src="imageUrl" alt="img" class="bg-white w-full h-full" />
       </div>
-      <div class="flex flex-col justify-center items-center xl:items-start gap-1">
-        <span class="uppercase text-sm xl:text-2xl 2xl:text-3xl text-black">₴{{ amount }}</span>
+      <div class="flex flex-col w-24 xl:w-32 2xl:w-44 justify-center xl:items-start gap-1">
+        <span
+          class="uppercase w-24 xl:w-32 2xl:w-44 text-black text-ellipsis overflow-hidden"
+          :class="amount > 99999 ? 'text-xl' : 'text-sm xl:text-2xl 2xl:text-3xl'"
+          >₴{{ amount.toFixed(2) }}</span
+        >
         <span class="text-gray-400 font-thin text-xs xl:text-sm xl:pl-2">{{ title }}</span>
       </div>
     </div>

@@ -6,145 +6,26 @@
     </div>
     <div class="flex flex-col w-full pt-2 pr-2 gap-6 overflow-y-auto transactions">
       <!-- item -->
-      <div class="flex flex-row">
+      <div class="flex flex-row" v-for="item in data" :key="item.id">
         <div class="flex flex-col w-full">
-          <span class="text-black text-lg">Travel</span>
-          <span class="text-gray-500 text-xs font-thin">25.02.23</span>
+          <span class="text-black text-lg">{{ item?.category?.category }}</span>
+          <span class="text-gray-500 text-xs font-thin">
+            {{
+              new Date(item.createdAt?.Time).getDate() +
+              '.' +
+              (new Date(item.createdAt?.Time).getMonth() < 10
+                ? '0' + new Date(item.createdAt?.Time).getMonth()
+                : new Date(item.createdAt?.Time).getMonth()) +
+              '.' +
+              new Date(item.createdAt?.Time).getFullYear()
+            }}</span
+          >
         </div>
-        <span class="text-lg font-thin text-red-500 self-center justify-end">-345.00</span>
-      </div>
-      <div class="flex flex-row">
-        <div class="flex flex-col w-full">
-          <span class="text-black text-lg">Bussiness</span>
-          <span class="text-gray-500 text-xs font-thin">25.02.23</span>
-        </div>
-        <span class="text-lg font-thin text-green-500 self-center justify-end">+512.45</span>
-      </div>
-      <div class="flex flex-row">
-        <div class="flex flex-col w-full">
-          <span class="text-black text-lg">Travel</span>
-          <span class="text-gray-500 text-xs font-thin">25.02.23</span>
-        </div>
-        <span class="text-lg font-thin text-red-500 self-center justify-end">-345.00</span>
-      </div>
-      <div class="flex flex-row">
-        <div class="flex flex-col w-full">
-          <span class="text-black text-lg">Bussiness</span>
-          <span class="text-gray-500 text-xs font-thin">25.02.23</span>
-        </div>
-        <span class="text-lg font-thin text-green-500 self-center justify-end">+512.45</span>
-      </div>
-      <div class="flex flex-row">
-        <div class="flex flex-col w-full">
-          <span class="text-black text-lg">Travel</span>
-          <span class="text-gray-500 text-xs font-thin">25.02.23</span>
-        </div>
-        <span class="text-lg font-thin text-red-500 self-center justify-end">-345.00</span>
-      </div>
-      <div class="flex flex-row">
-        <div class="flex flex-col w-full">
-          <span class="text-black text-lg">Bussiness</span>
-          <span class="text-gray-500 text-xs font-thin">25.02.23</span>
-        </div>
-        <span class="text-lg font-thin text-green-500 self-center justify-end">+512.45</span>
-      </div>
-      <div class="flex flex-row">
-        <div class="flex flex-col w-full">
-          <span class="text-black text-lg">Travel</span>
-          <span class="text-gray-500 text-xs font-thin">25.02.23</span>
-        </div>
-        <span class="text-lg font-thin text-red-500 self-center justify-end">-345.00</span>
-      </div>
-      <div class="flex flex-row">
-        <div class="flex flex-col w-full">
-          <span class="text-black text-lg">Bussiness</span>
-          <span class="text-gray-500 text-xs font-thin">25.02.23</span>
-        </div>
-        <span class="text-lg font-thin text-green-500 self-center justify-end">+512.45</span>
-      </div>
-      <div class="flex flex-row">
-        <div class="flex flex-col w-full">
-          <span class="text-black text-lg">Travel</span>
-          <span class="text-gray-500 text-xs font-thin">25.02.23</span>
-        </div>
-        <span class="text-lg font-thin text-red-500 self-center justify-end">-345.00</span>
-      </div>
-      <div class="flex flex-row">
-        <div class="flex flex-col w-full">
-          <span class="text-black text-lg">Bussiness</span>
-          <span class="text-gray-500 text-xs font-thin">25.02.23</span>
-        </div>
-        <span class="text-lg font-thin text-green-500 self-center justify-end">+512.45</span>
-      </div>
-      <div class="flex flex-row">
-        <div class="flex flex-col w-full">
-          <span class="text-black text-lg">Travel</span>
-          <span class="text-gray-500 text-xs font-thin">25.02.23</span>
-        </div>
-        <span class="text-lg font-thin text-red-500 self-center justify-end">-345.00</span>
-      </div>
-      <div class="flex flex-row">
-        <div class="flex flex-col w-full">
-          <span class="text-black text-lg">Bussiness</span>
-          <span class="text-gray-500 text-xs font-thin">25.02.23</span>
-        </div>
-        <span class="text-lg font-thin text-green-500 self-center justify-end">+512.45</span>
-      </div>
-      <div class="flex flex-row">
-        <div class="flex flex-col w-full">
-          <span class="text-black text-lg">Travel</span>
-          <span class="text-gray-500 text-xs font-thin">25.02.23</span>
-        </div>
-        <span class="text-lg font-thin text-red-500 self-center justify-end">-345.00</span>
-      </div>
-      <div class="flex flex-row">
-        <div class="flex flex-col w-full">
-          <span class="text-black text-lg">Bussiness</span>
-          <span class="text-gray-500 text-xs font-thin">25.02.23</span>
-        </div>
-        <span class="text-lg font-thin text-green-500 self-center justify-end">+512.45</span>
-      </div>
-      <div class="flex flex-row">
-        <div class="flex flex-col w-full">
-          <span class="text-black text-lg">Travel</span>
-          <span class="text-gray-500 text-xs font-thin">25.02.23</span>
-        </div>
-        <span class="text-lg font-thin text-red-500 self-center justify-end">-345.00</span>
-      </div>
-      <div class="flex flex-row">
-        <div class="flex flex-col w-full">
-          <span class="text-black text-lg">Bussiness</span>
-          <span class="text-gray-500 text-xs font-thin">25.02.23</span>
-        </div>
-        <span class="text-lg font-thin text-green-500 self-center justify-end">+512.45</span>
-      </div>
-      <div class="flex flex-row">
-        <div class="flex flex-col w-full">
-          <span class="text-black text-lg">Travel</span>
-          <span class="text-gray-500 text-xs font-thin">25.02.23</span>
-        </div>
-        <span class="text-lg font-thin text-red-500 self-center justify-end">-345.00</span>
-      </div>
-      <div class="flex flex-row">
-        <div class="flex flex-col w-full">
-          <span class="text-black text-lg">Bussiness</span>
-          <span class="text-gray-500 text-xs font-thin">25.02.23</span>
-        </div>
-        <span class="text-lg font-thin text-green-500 self-center justify-end">+512.45</span>
-      </div>
-      <div class="flex flex-row">
-        <div class="flex flex-col w-full">
-          <span class="text-black text-lg">Travel</span>
-          <span class="text-gray-500 text-xs font-thin">25.02.23</span>
-        </div>
-        <span class="text-lg font-thin text-red-500 self-center justify-end">-345.00</span>
-      </div>
-      <div class="flex flex-row">
-        <div class="flex flex-col w-full">
-          <span class="text-black text-lg">Bussiness</span>
-          <span class="text-gray-500 text-xs font-thin">25.02.23</span>
-        </div>
-        <span class="text-lg font-thin text-green-500 self-center justify-end">+512.45</span>
+        <span
+          class="text-lg font-thin self-center justify-end"
+          :class="item.type === 'expenses' ? 'text-red-500' : 'text-green-500'"
+          >{{ item.type === 'expenses' < 0 ? '-' : '+' }}{{ item.amount }}</span
+        >
       </div>
     </div>
   </div>
@@ -153,12 +34,16 @@
 <script>
 export default {
   name: 'LastTransactions',
+  props: {
+    data: Array,
+  },
 };
 </script>
 
 <style>
 .transactions-wrapper {
   max-height: calc(100vh - 130px);
+  min-height: calc(100vh - 130px);
 }
 
 .transactions {
@@ -168,6 +53,7 @@ export default {
 @media screen and (min-width: 1280px) {
   .transactions-wrapper {
     max-height: calc(100vh - 114px);
+    min-height: calc(100vh - 114px);
   }
 
   .transactions {
@@ -177,6 +63,7 @@ export default {
 @media screen and (min-width: 1536px) {
   .transactions-wrapper {
     max-height: calc(100vh - 120px);
+    min-height: calc(100vh - 120px);
   }
 
   .transactions {

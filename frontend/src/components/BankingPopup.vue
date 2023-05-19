@@ -4,44 +4,44 @@
       <div class="absolute right-3 top-3 w-7 h-7 cursor-pointer" @click="closePopup">
         <close-icon />
       </div>
-      <vee-form class="h-full">
+      <vee-form class="h-full" :validation-schema="schema" @submit="submitForm">
         <div class="flex flex-col justify-center gap-1 mb-3">
           <div class="flex justify-between gap-2">
             <label class="text-black text-left">Title</label>
-            <ErrorMessage name="title" class="text-red-600 text-xs" />
+            <ErrorMessage name="name" class="text-red-600 text-xs" />
           </div>
           <vee-field
-            name="title"
+            name="name"
             type="text"
             placeholder="Title"
             class="block w-full h-10 py-1.5 px-3 border-b-2 border-black bg-grey-light transition duration-300 focus:outline-none focus:bg-white"
-            v-model="initialValues.title"
+            v-model="initialValues.name"
           />
         </div>
         <div class="flex flex-col justify-center gap-1 mb-3">
           <div class="flex justify-between gap-2">
             <label class="text-black text-left">Month count</label>
-            <ErrorMessage name="monthCount" class="text-red-600 text-xs" />
+            <ErrorMessage name="monthAmount" class="text-red-600 text-xs" />
           </div>
           <vee-field
-            name="monthCount"
+            name="monthAmount"
             type="number"
             placeholder="Month count"
             class="block w-full h-10 py-1.5 px-3 border-b-2 border-black bg-grey-light transition duration-300 focus:outline-none focus:bg-white"
-            v-model="initialValues.monthCount"
+            v-model="initialValues.monthAmount"
           />
         </div>
         <div class="flex flex-col justify-center gap-1 mb-3">
           <div class="flex justify-between gap-2">
             <label class="text-black text-left">Percentage</label>
-            <ErrorMessage name="percentage" class="text-red-600 text-xs" />
+            <ErrorMessage name="percent" class="text-red-600 text-xs" />
           </div>
           <vee-field
-            name="percentage"
+            name="percent"
             type="number"
             placeholder="Percentage"
             class="block w-full h-10 py-1.5 px-3 border-b-2 border-black bg-grey-light transition duration-300 focus:outline-none focus:bg-white"
-            v-model="initialValues.percentage"
+            v-model="initialValues.percent"
           />
         </div>
         <div class="flex flex-col justify-center gap-1 mb-3">
@@ -50,7 +50,7 @@
             <ErrorMessage name="date" class="text-red-600 text-xs" />
           </div>
           <vee-field
-            name="percentage"
+            name="date"
             type="date"
             placeholder="Date"
             class="block w-full h-10 py-1.5 px-3 border-b-2 border-black bg-grey-light transition duration-300 focus:outline-none focus:bg-white"
@@ -60,14 +60,14 @@
         <div class="flex flex-col justify-center gap-1 mb-3">
           <div class="flex justify-between gap-2">
             <label class="text-black text-left">Amount</label>
-            <ErrorMessage name="percentage" class="text-red-600 text-xs" />
+            <ErrorMessage name="sum" class="text-red-600 text-xs" />
           </div>
           <vee-field
-            name="amount"
+            name="sum"
             type="number"
             placeholder="Amount"
             class="block w-full h-10 py-1.5 px-3 border-b-2 border-black bg-grey-light transition duration-300 focus:outline-none focus:bg-white"
-            v-model="initialValues.amount"
+            v-model="initialValues.sum"
           />
         </div>
         <div class="h-10">
@@ -90,24 +90,34 @@ export default {
     defaltValues: Object,
   },
   watch: {
-    defaltValues(values) {
-      if (this.isEdit) {
-        this.initialValues.title = values?.title ? values.title : '';
-        this.initialValues.amount = values?.monthCount ? values.monthCount : 0;
-        this.initialValues.comment = values?.percentage ? values.percentage : 0;
-        this.initialValues.date = values?.date ? values.date : '2004-05-22';
-        this.initialValues.amount = values?.amount ? values.amount : 0;
-      }
+    defaltValues: {
+      handler(values) {
+        if (this.isEdit) {
+          this.initialValues.name = values?.name ? values.name : '';
+          this.initialValues.monthAmount = values?.monthAmount ? values.monthAmount : 0;
+          this.initialValues.percent = values?.percent ? values.percent : 0;
+          this.initialValues.date = values?.date ? values.date : '2004-05-22';
+          this.initialValues.sum = values?.sum ? values.sum : 0;
+        }
+      },
+      immediate: true,
     },
   },
   data() {
     return {
       initialValues: {
-        title: '',
-        monthCount: 0,
-        percentage: 0,
-        date: '2004-05-22',
-        amount: 0,
+        name: '',
+        monthAmount: 0,
+        percent: 0,
+        date: '2023-01-12',
+        sum: 0,
+      },
+      schema: {
+        name: 'required|min:3|max:100',
+        monthAmount: 'required|min_value:1',
+        percent: 'required|min_value:0|max_value:100',
+        date: 'required',
+        sum: 'required|min_value:0',
       },
     };
   },
@@ -118,7 +128,7 @@ export default {
     },
     submitForm(values) {
       if (this.isEdit) {
-        this.$emit('onEdit', values);
+        this.$emit('onEdit', { ...values, id: this.defaltValues.id });
       } else {
         this.$emit('onAdd', values);
       }
