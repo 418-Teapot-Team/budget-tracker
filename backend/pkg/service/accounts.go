@@ -136,7 +136,9 @@ func getUpdatedStruct(finance budget.Account) (budget.Account, int) {
 	}
 
 	if finance.Type == "deposit" {
-		alreadyReceived = float64(currentMonthInt) * (mounthPayment + (finance.Sum / 12))
+
+		alreadyReceived = float64(currentMonthInt) * (mounthPayment + finance.Sum/12)
+
 	} else {
 		alreadyReceived = float64(currentMonthInt) * mounthPayment
 	}
