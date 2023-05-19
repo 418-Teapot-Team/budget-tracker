@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"math"
 	"net/http"
+	"sort"
 	"strconv"
 )
 
@@ -187,20 +188,23 @@ func (app *App) getTopCategories(c *gin.Context) {
 		for i := 0; i < lenList; i++ {
 			categoriesToSkip = append(categoriesToSkip, list[i].Category)
 		}
+		sort.Ints(categoriesToSkip)
 
 		for i, curr := 0, 0; i < 4-lenList; i++ {
-			for _, j := range categoriesToSkip {
-				// skipping category if already present
-				if j == curr {
+			// skipping present categories
+			for c := 0; c < len(categoriesToSkip); c++ {
+				if curr+1 == categoriesToSkip[c] {
 					curr++
+					if c+1 == len(categoriesToSkip) || curr+1 != categoriesToSkip[c+1] {
+						break
+					}
 				}
 			}
+
 			list = append(list, budget.ListsGetter{Categories: categories[curr]})
 			curr++
 		}
 	}
-
-	fmt.Println(list)
 
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"result": list,
