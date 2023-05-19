@@ -15,8 +15,7 @@ export default defineStore('dashboard', {
       this.courses = data;
     },
     async getTopCaregories() {
-      const { data } = await HttpClient.get(`api/lists/get-top-categories?type=expenses`);
-      console.log(data);
+      const { data } = await HttpClient.get(`api/lists/get-top-categories?type=expenses&take=4`);
       this.topCategories = data.result;
     },
     async getCurrentMonthSavings() {

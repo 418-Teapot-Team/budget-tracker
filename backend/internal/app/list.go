@@ -177,7 +177,18 @@ func (app *App) getTopCategories(c *gin.Context) {
 		return
 	}
 
-	list, err := app.s.ListsService.GetTopListsCategories(userId, listType)
+	takeAmountParam := c.Query("take")
+	takeAmount := 0
+
+	if takeAmountParam != "" {
+		var err error
+		takeAmount, err = strconv.Atoi(takeAmountParam)
+		if err != nil {
+			takeAmount = 0
+		}
+	}
+
+	list, err := app.s.ListsService.GetTopListsCategories(userId, listType, takeAmount)
 	if err != nil {
 		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return

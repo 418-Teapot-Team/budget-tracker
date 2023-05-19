@@ -10,12 +10,12 @@
         <span class="text-3xl"> {{ data?.name }} </span>
         <div class="flex flex-col justify-start items-end">
           <span class="text-black"
-            >Термін: {{ data?.currentMonth }}/{{ data?.monthAmount }} міс</span
+            >Term: {{ data?.currentMonth }}/{{ data?.monthAmount }} months</span
           >
           <span class="text-black"
-            >Щомісячний платіж: {{ data?.monthPayment?.toFixed(2) }} UAH</span
+            >Monthly loan payment: {{ data?.monthPayment?.toFixed(2) }} UAH</span
           >
-          <span class="text-black">відсоткова ставка {{ data?.percent }}% річних</span>
+          <span class="text-black">Interest rate: {{ data?.percent }}%</span>
         </div>
       </div>
       <div class="w-full">
@@ -27,9 +27,7 @@
         </div>
         <div class="w-full flex flex-row justify-between items-start">
           <span class="text-black"> {{ data?.payed?.toFixed(2) }} UAH </span>
-          <span class="text-black"
-            >Залишилось: {{ (data?.goalSum - data?.payed).toFixed(2) }} UAH</span
-          >
+          <span class="text-black">Remain: {{ (data?.goalSum - data?.payed).toFixed(2) }} UAH</span>
           <span class="text-black"> {{ data?.goalSum?.toFixed(2) }} UAH </span>
         </div>
       </div>

@@ -4,9 +4,13 @@
     <div class="flex flex-row justify-between items-end">
       <div class="flex flex-row justify-start items-end gap-4">
         <div class="flex flex-col gap-2">
-          <span class="text-black text-4xl font-bold">Desposits</span>
+          <span class="text-black text-4xl font-bold">Deposits</span>
           <span class="text-black text-3xl font-bold"
-            >Total: <span class="font-normal">10432 / 71343</span> UAH</span
+            >Total:
+            <span class="font-normal"
+              >{{ depositTotal?.payed?.toFixed(2) }} / {{ depositTotal?.goalSum?.toFixed(2) }}</span
+            >
+            UAH</span
           >
         </div>
         <div class="h-8 w-8 cursor-pointer mb-1" @click="showDepositPopup = true">
@@ -28,11 +32,11 @@
           @onDeleteDeposit="deleteItem"
           @onEditDeposit="editItem"
         />
-        <div class="w-full flex h-10 flex-row justify-center items-center">
+        <!-- <div class="w-full flex h-10 flex-row justify-center items-center">
           <div class="w-36 h-10">
             <app-button text="Load more" @click="loadMore" class="h-full" />
           </div>
-        </div>
+        </div> -->
       </div>
       <empty-list v-else class="mt-10" />
     </div>
@@ -79,7 +83,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(useAccountsStore, ['deposits']),
+    ...mapState(useAccountsStore, ['deposits', 'depositTotal']),
     ...mapState(useFiltersStore, ['filters']),
   },
   methods: {
@@ -88,12 +92,13 @@ export default {
       'createAccount',
       'editAccount',
       'deleteAccount',
+      'getDepositTotal',
     ]),
     async saveItem(values) {
       try {
         const payload = { ...values, type: 'deposit' };
         await this.createAccount(payload);
-        await this.getAccounts({ type: 'deposit' });
+        await this.getInitialData();
         toast.success('New deposit added!');
         this.showDepositPopup = false;
       } catch (e) {
@@ -104,7 +109,7 @@ export default {
       try {
         const payload = { ...values, type: 'deposit' };
         await this.editAccount(payload);
-        await this.getAccounts({ type: 'deposit' });
+        await this.getInitialData();
         toast.success('Deposit changed!');
         this.showDepositPopup = false;
       } catch (e) {
@@ -117,7 +122,7 @@ export default {
     async deleteItem(id) {
       try {
         await this.deleteAccount({ id });
-        await this.getAccounts({ type: 'deposit' });
+        await this.getInitialData();
       } catch (e) {
         toast.error(e?.message);
       }
@@ -152,6 +157,7 @@ export default {
       const reverse = this.$route.query?.reverse === 'true' ? true : false;
       try {
         await this.getAccounts({ type: 'deposit', orderBy, reverse });
+        await this.getDepositTotal();
       } catch (e) {
         toast.error(e?.message);
       }
