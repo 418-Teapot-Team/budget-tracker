@@ -88,7 +88,7 @@ export default {
       try {
         const payload = { ...values, type: 'credit' };
         await this.createAccount(payload);
-        await this.getAccounts({ type: 'credit' });
+        await this.getInitialData();
         toast.success('New loan added!');
         this.showCerditPopup = false;
       } catch (e) {
@@ -99,7 +99,7 @@ export default {
       try {
         const payload = { ...values, type: 'credit' };
         await this.editAccount(payload);
-        await this.getAccounts({ type: 'credit' });
+        await this.getInitialData();
         toast.success('Loan changed!');
         this.showCerditPopup = false;
       } catch (e) {
@@ -112,7 +112,7 @@ export default {
     async deleteItem(id) {
       try {
         await this.deleteAccount({ id });
-        await this.getAccounts({ type: 'credit' });
+        await this.getInitialData();
       } catch (e) {
         toast.error(e?.message);
       }

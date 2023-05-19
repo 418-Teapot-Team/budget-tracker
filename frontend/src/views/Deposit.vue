@@ -98,7 +98,7 @@ export default {
       try {
         const payload = { ...values, type: 'deposit' };
         await this.createAccount(payload);
-        await this.getAccounts({ type: 'deposit' });
+        await this.getInitialData();
         toast.success('New deposit added!');
         this.showDepositPopup = false;
       } catch (e) {
@@ -109,7 +109,7 @@ export default {
       try {
         const payload = { ...values, type: 'deposit' };
         await this.editAccount(payload);
-        await this.getAccounts({ type: 'deposit' });
+        await this.getInitialData();
         toast.success('Deposit changed!');
         this.showDepositPopup = false;
       } catch (e) {
@@ -122,7 +122,7 @@ export default {
     async deleteItem(id) {
       try {
         await this.deleteAccount({ id });
-        await this.getAccounts({ type: 'deposit' });
+        await this.getInitialData();
       } catch (e) {
         toast.error(e?.message);
       }

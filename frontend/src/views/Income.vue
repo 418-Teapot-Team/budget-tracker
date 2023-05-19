@@ -84,7 +84,7 @@ export default {
     async deleteItem(id) {
       try {
         await this.deleteTransaction({ id });
-        await this.getTransactions({ type: 'income' });
+        await this.getInitialData();
       } catch (e) {
         toast.error(e?.message);
       }
@@ -93,7 +93,7 @@ export default {
       try {
         const payload = { ...values, type: 'income' };
         await this.createTransaction(payload);
-        await this.getTransactions({ type: 'income' });
+        await this.getInitialData();
         toast.success('New income added!');
         this.showIncomePopup = false;
       } catch (e) {
@@ -125,7 +125,7 @@ export default {
       try {
         const payload = { ...values, type: 'income' };
         await this.editTransaction(payload);
-        await this.getTransactions({ type: 'income' });
+        await this.getInitialData();
         toast.success('Income changed!');
         this.showIncomePopup = false;
       } catch (e) {

@@ -91,7 +91,7 @@ export default {
     async deleteItem(id) {
       try {
         await this.deleteTransaction({ id });
-        await this.getTransactions({ type: 'expenses' });
+        await this.getInitialData();
       } catch (e) {
         toast.error(e?.message);
       }
@@ -100,7 +100,7 @@ export default {
       try {
         const payload = { ...values, type: 'expenses' };
         await this.editTransaction(payload);
-        await this.getTransactions({ type: 'expenses' });
+        await this.getInitialData();
         toast.success('Expense changed!');
         this.showExpensePopup = false;
       } catch (e) {
@@ -111,7 +111,7 @@ export default {
       try {
         const payload = { ...values, type: 'expenses' };
         await this.createTransaction(payload);
-        await this.getTransactions({ type: 'expenses' });
+        await this.getInitialData();
         toast.success('New expense added!');
         this.showExpensePopup = false;
       } catch (e) {
