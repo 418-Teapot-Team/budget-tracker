@@ -32,6 +32,7 @@ type Accounts interface {
 	GetAllAccounts(userId int, account, orderBy, sortedBy string) (list []budget.Account, err error)
 	DeleteAccount(listId, userId int) (err error)
 	EditAccount(input budget.Account) (err error)
+	GetTotalsDeposits(userId int) (float64, float64)
 }
 
 type Repository struct {

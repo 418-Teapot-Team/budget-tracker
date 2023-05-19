@@ -133,3 +133,7 @@ func getUpdatedStruct(finance budget.Account) (budget.Account, int) {
 	}
 	return update, currentMonthInt
 }
+
+func (as *AccountsService) GetTotalsDeposits(userId int) (float64, float64) {
+	return as.repo.GetTotalsDeposits(userId)
+}
