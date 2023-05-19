@@ -1,6 +1,8 @@
 package budget
 
-import "time"
+import (
+	"database/sql"
+)
 
 const listTable = "lists"
 
@@ -14,24 +16,24 @@ func (ListsGetter) TableName() string {
 }
 
 type List struct {
-	Id        int        `json:"id,omitempty" gorm:"column:id"`
-	UserId    int        `json:"-" gorm:"column:user_id"`
-	Type      string     `json:"type" gorm:"column:type" binding:"required"`
-	Category  int        `json:"category" gorm:"column:category_id" binding:"required"`
-	Amount    float64    `json:"amount" gorm:"column:amount" binding:"required"`
-	Comment   *string    `json:"comment,omitempty" gorm:"column:comment"`
-	CreatedAt *time.Time `json:"createdAt,omitempty" gorm:"column:created_at"`
+	ID         int          `json:"id,omitempty" gorm:"column:id"`
+	UserId     int          `json:"-" gorm:"column:user_id"`
+	Type       string       `json:"type" gorm:"column:type" binding:"required"`
+	CategoryID int          `json:"category" gorm:"column:category_id" binding:"required"`
+	Amount     float64      `json:"amount" gorm:"column:amount" binding:"required"`
+	Comment    *string      `json:"comment,omitempty" gorm:"column:comment"`
+	CreatedAt  sql.NullTime `json:"createdAt,omitempty" gorm:"column:created_at"`
 }
 
 type ListsGetter struct {
-	Id         int        `json:"id,omitempty" gorm:"column:id"`
-	UserId     int        `json:"-" gorm:"column:user_id"`
-	Type       string     `json:"type,omitempty" gorm:"column:type"`
-	Category   int        `json:"categoryId" gorm:"column:category_id"`
-	Categories Categories `json:"category" gorm:"foreignKey:Category;references:Id"`
-	Amount     float64    `json:"amount" gorm:"column:amount"`
-	Comment    *string    `json:"comment,omitempty" gorm:"column:comment"`
-	CreatedAt  *time.Time `json:"createdAt,omitempty" gorm:"column:created_at"`
+	Id         int          `json:"id,omitempty" gorm:"column:id"`
+	UserId     int          `json:"-" gorm:"column:user_id"`
+	Type       string       `json:"type,omitempty" gorm:"column:type"`
+	Category   int          `json:"categoryId" gorm:"column:category_id"`
+	Categories Categories   `json:"category" gorm:"foreignKey:Category;references:Id"`
+	Amount     float64      `json:"amount" gorm:"column:amount"`
+	Comment    *string      `json:"comment,omitempty" gorm:"column:comment"`
+	CreatedAt  sql.NullTime `json:"createdAt,omitempty" gorm:"column:created_at"`
 }
 
 type FinancialData struct {

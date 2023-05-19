@@ -3,6 +3,7 @@ package service
 import (
 	budget "budget-tracker"
 	"budget-tracker/pkg/repository"
+	"database/sql"
 	"time"
 )
 
@@ -11,7 +12,7 @@ type ListsService struct {
 }
 
 func (l *ListsService) CreateList(input *budget.List, userId int) (err error) {
-	*input.CreatedAt = time.Now()
+	input.CreatedAt = sql.NullTime{Time: time.Now(), Valid: true}
 	input.UserId = userId
 	return l.repo.CreateList(input)
 }
