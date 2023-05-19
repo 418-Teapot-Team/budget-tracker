@@ -126,7 +126,7 @@ func (app *App) editBudgetList(c *gin.Context) {
 
 }
 
-func (app *App) getTopExpenses(c *gin.Context) {
+func (app *App) getTopCategories(c *gin.Context) {
 
 	listType := c.Query("type")
 	if listType != "income" && listType != "expenses" {
