@@ -52,10 +52,10 @@ func (db *listsSql) GetList(userId int, budgetType, orderBy, sortedBy string) (l
 	return
 }
 
-func (db *listsSql) GetTopExpenses(userId int) (lists []budget.ListsGetter, err error) {
+func (db *listsSql) GetTopCategories(userId int, enum string) (lists []budget.ListsGetter, err error) {
 	query := db.db.Select("category_id , sum(amount) amount").
 		Where("user_id = ?", userId).
-		Where("type = 'expenses'").
+		Where("type = ?", enum).
 		Group("category_id").
 		Order("2 DESC")
 

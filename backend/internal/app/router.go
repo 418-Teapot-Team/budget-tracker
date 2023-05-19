@@ -1,13 +1,22 @@
 package app
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func Routers(app *App) *gin.Engine {
 	router := gin.New()
 
-	router.Use(CORSMiddleware())
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	config.AddAllowMethods("OPTIONS") // Handle preflight requests
+	router.Use(cors.New(config))
+
+	router.OPTIONS("/*path", func(c *gin.Context) {
+		c.Status(http.StatusOK)
+	})
 
 	auth := router.Group("/auth")
 	{
