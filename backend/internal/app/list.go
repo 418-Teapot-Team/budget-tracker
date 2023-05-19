@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"math"
 	"net/http"
+	"strconv"
 )
 
 func (app *App) createList(c *gin.Context) {
@@ -80,21 +81,47 @@ func (app *App) getBudgetList(c *gin.Context) {
 	}
 
 	budgetType := c.Param("type")
-	if budgetType == "" {
-		app.newErrorResponse(c, http.StatusBadRequest, "please indicate the type of budget")
-		return
-	}
+	//if budgetType == "" {
+	//	app.newErrorResponse(c, http.StatusBadRequest, "please indicate the type of budget")
+	//	return
+	//}
 
-	if budgetType != "income" && budgetType != "expenses" {
+	if budgetType != "income" && budgetType != "expenses" && budgetType != "all" && budgetType != "" {
+		app.newErrorResponse(c, http.StatusNotFound, "possible types: income, expenses, all(\"\")")
+		return
+	} else if budgetType == "all" {
 		budgetType = ""
 	}
+
+	takeAmountParam := c.Query("take")
+	takeAmount := 0
+
+	if takeAmountParam != "" {
+		var err error
+		takeAmount, err = strconv.Atoi(takeAmountParam)
+		if err != nil {
+			takeAmount = 0
+		}
+	}
+
+	skipAmountParam := c.Query("skip")
+	skipAmount := 0
+
+	if takeAmountParam != "" {
+		var err error
+		skipAmount, err = strconv.Atoi(skipAmountParam)
+		if err != nil {
+			skipAmount = 0
+		}
+	}
+
 	userId, err := app.getUserId(c)
 	if err != nil {
 		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	list, _ := app.s.ListsService.GetList(userId, budgetType, orderBy, sortedBy)
+	list, _ := app.s.ListsService.GetList(userId, budgetType, orderBy, sortedBy, takeAmount, skipAmount)
 
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"result": list,
