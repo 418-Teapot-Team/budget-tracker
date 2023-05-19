@@ -56,6 +56,7 @@ import DepositCard from '@/components/DepositCard.vue';
 import BankingPopup from '@/components/BankingPopup.vue';
 import EmptyList from '@/components/EmptyList.vue';
 import useAccountsStore from '@/stores/accounts';
+import useFiltersStore from '@/stores/filters';
 import { mapState, mapActions } from 'pinia';
 import { useToast } from 'vue-toastification';
 
@@ -79,6 +80,7 @@ export default {
   },
   computed: {
     ...mapState(useAccountsStore, ['deposits']),
+    ...mapState(useFiltersStore, ['filters']),
   },
   methods: {
     ...mapActions(useAccountsStore, [
@@ -120,8 +122,18 @@ export default {
         toast.error(e?.message);
       }
     },
-    applyFilters({ category, filter }) {
-      console.log(category, filter);
+    applyFilters({ filter }) {
+      const filterToUrl = this.filters.find((item) => filter === item.value.id);
+
+      this.$router
+        .push({
+          query: {
+            orderBy: filterToUrl ? filterToUrl?.value?.orderBy : 'default',
+            reverse: filterToUrl ? filterToUrl?.value?.reverse : false,
+            filterId: filterToUrl ? filterToUrl?.value?.id : 'default',
+          },
+        })
+        .then(() => this.getInitialData());
     },
     editItem(id) {
       this.itemToEdit = this.deposits?.find((item) => item.id === id);
@@ -133,9 +145,13 @@ export default {
       this.itemToEdit = {};
     },
     async getInitialData() {
+      const orderBy =
+        this.$route.query?.orderBy && this.$route.query?.orderBy !== 'default'
+          ? this.$route.query?.orderBy
+          : '';
+      const reverse = this.$route.query?.reverse === 'true' ? true : false;
       try {
-        await this.getAccounts({ type: 'deposit' });
-        console.log(this.deposits);
+        await this.getAccounts({ type: 'deposit', orderBy, reverse });
       } catch (e) {
         toast.error(e?.message);
       }

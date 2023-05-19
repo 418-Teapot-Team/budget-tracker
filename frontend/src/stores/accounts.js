@@ -6,8 +6,10 @@ export default defineStore('accounts', {
     loans: [],
   }),
   actions: {
-    async getAccounts({ type }) {
-      const { data } = await HttpClient.get(`api/accounts/${type}`);
+    async getAccounts({ type, orderBy = '', reverse = false }) {
+      const { data } = await HttpClient.get(
+        `api/accounts/${type}?orderBy=${orderBy}&reverse=${reverse}`
+      );
       if (type === 'deposit') {
         this.deposits = data.result;
       } else {
