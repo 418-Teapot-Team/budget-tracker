@@ -14,7 +14,7 @@ type Authorization interface {
 type Lists interface {
 	CreateList(input *budget.List) (err error)
 	DeleteList(listId, userId int) (err error)
-	GetTopCategories(userId int, enum string) (lists []budget.ListsGetter, err error)
+	GetTopCategories(userId int, enum string, takeAmount int) (lists []budget.ListsGetter, err error)
 	EditList(input budget.List) (err error)
 	GetList(userId int, budgetType, orderBy, sortedBy string, takeAmount int, skipAmount int, categoryId int) (lists []budget.ListsGetter, err error)
 	GetCurrentMonthSavings(userId int) (result float64, err error)
