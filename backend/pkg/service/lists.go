@@ -24,8 +24,8 @@ func (l *ListsService) GetList(userId int, budgetType, orderBy, sortedBy string)
 	return l.repo.GetList(userId, budgetType, orderBy, sortedBy)
 }
 
-func (l *ListsService) GetTopExpenses(userId int) (lists []budget.ListsGetter, err error) {
-	return l.repo.GetTopExpenses(userId)
+func (l *ListsService) GetTopExpenses(userId int, listType string) (lists []budget.ListsGetter, err error) {
+	return l.repo.GetTopCategories(userId, listType)
 }
 
 func (l *ListsService) EditList(input budget.List) error {

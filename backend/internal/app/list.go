@@ -128,13 +128,20 @@ func (app *App) editBudgetList(c *gin.Context) {
 
 func (app *App) getTopExpenses(c *gin.Context) {
 
+	listType := c.Query("type")
+	if listType != "income" && listType != "expenses" {
+		app.newErrorResponse(c, http.StatusInternalServerError, "define a 'type' query value (income or expense)")
+		return
+
+	}
+
 	userId, err := app.getUserId(c)
 	if err != nil {
 		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	list, err := app.s.ListsService.GetTopExpenses(userId)
+	list, err := app.s.ListsService.GetTopExpenses(userId, listType)
 	if err != nil {
 		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
