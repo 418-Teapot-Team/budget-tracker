@@ -10,26 +10,26 @@ export default defineStore('dashboard', {
   }),
 
   actions: {
-    async getCourses() {
-      const { data } = await HttpClient.get('api/get-courses');
-      this.courses = data;
-    },
-    async getTopCaregories() {
-      const { data } = await HttpClient.get(`api/lists/get-top-categories?type=expenses`);
+    async getTopCaregories({ type, months = 1 }) {
+      const { data } = await HttpClient.get(
+        `api/lists/get-top-categories?type=${type}&monts=${months}`
+      );
       console.log(data);
-      this.topCategories = data.result;
+      if (type === 'income') {
+        this.incomeCategories = data.result;
+      } else {
+        this.expensesCategories = data.result;
+      }
     },
-    async getCurrentMonthSavings() {
-      const { data } = await HttpClient.get('api/lists/current-mon-saved');
-      this.currentMonthSaving = data.result;
+    async getTotalSum({ type, months = 1 }) {
+      const { data } = await HttpClient.get(
+        `api/lists/get-total-amount?type=${type}&months=${months}`
+      );
+      this.total = data.result;
     },
-    async getSavingsStats() {
+    async getStats() {
       const { data } = await HttpClient.get('api/lists/get-saving-stats');
       this.savingStats = data.result;
-    },
-    async getTransactions({ take, skip }) {
-      const { data } = await HttpClient.get(`api/lists/all?take=${take}&skip=${skip}`);
-      this.transactions = data.result;
     },
   },
 });

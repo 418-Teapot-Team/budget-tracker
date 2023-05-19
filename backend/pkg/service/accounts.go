@@ -16,8 +16,8 @@ type AccountsService struct {
 func (as *AccountsService) CreateAccount(input budget.Account) (err error) {
 	_struct, _ := getUpdatedStruct(input)
 
+
 	return as.repo.CreateAccount(&_struct)
-}
 
 type listOutput struct {
 	Id           int        `json:"id"`
@@ -45,7 +45,9 @@ func (as *AccountsService) GetAll(userId int, account, orderBy, sortedBy string)
 
 	for _, finance := range list {
 
+
 		_str, curMonth := getUpdatedStruct(finance)
+
 
 		outputList = append(outputList, listOutput{
 			Id:           finance.ID,

@@ -47,6 +47,8 @@ import Filters from '@/components/Filters.vue';
 import BalanceCard from '@/components/BalanceCard.vue';
 import CategoriesChart from '@/components/CategoriesChart.vue';
 import TransactionsChart from '@/components/TransactionsChart.vue';
+import useStatisticsStore from '@/stores/statistics';
+import { mapState, mapActions } from 'pinia';
 export default {
   name: 'Deposit',
   components: {
@@ -87,6 +89,9 @@ export default {
       ],
     };
   },
+  computed: {},
+  methods: {},
+  mounted() {},
 };
 </script>
 
