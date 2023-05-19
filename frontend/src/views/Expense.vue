@@ -27,7 +27,7 @@
     <transaction-popup
       v-if="showExpensePopup"
       :isEdit="isEdit"
-      @onClose="showExpensePopup = false"
+      @onClose="closePopup"
       :defaltValues="itemToEdit"
       :categories="expensesCategories"
       @onAdd="saveItem"
@@ -120,10 +120,21 @@ export default {
       this.isEdit = true;
       this.showExpensePopup = true;
     },
+    closePopup() {
+      this.showExpensePopup = false;
+      this.itemToEdit = {};
+    },
+    async getInitialData() {
+      try {
+        this.getCategories();
+        this.getTransactions({ type: 'expenses' });
+      } catch (e) {
+        toast.error(e?.message);
+      }
+    },
   },
   mounted() {
-    this.getCategories().catch((err) => toast.error(err?.message));
-    this.getTransactions({ type: 'expenses' }).catch((err) => toast.error(err?.message));
+    this.getInitialData();
   },
 };
 </script>

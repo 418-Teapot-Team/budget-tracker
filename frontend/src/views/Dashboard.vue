@@ -25,7 +25,7 @@
       </div>
       <!-- -->
       <div class="w-4/12 pl-14">
-        <last-transactions />
+        <last-transactions :data="transactions" />
       </div>
     </div>
   </section>
@@ -51,7 +51,12 @@ export default {
     LastTransactions,
   },
   computed: {
-    ...mapState(useDashboardStore, ['currentMonthSaving', 'topCategories', 'savingStats']),
+    ...mapState(useDashboardStore, [
+      'currentMonthSaving',
+      'topCategories',
+      'savingStats',
+      'transactions',
+    ]),
     labels() {
       return this.savingStats?.map((item) => item.Month);
     },
@@ -65,12 +70,14 @@ export default {
       'getTopCaregories',
       'getCurrentMonthSavings',
       'getSavingsStats',
+      'getTransactions',
     ]),
     async getInitialData() {
       try {
         await this.getCurrentMonthSavings();
         await this.getTopCaregories();
         await this.getSavingsStats();
+        await this.getTransactions({ take: 50, skip: 0 });
       } catch (e) {
         toast.error(e?.message);
       }
@@ -78,7 +85,6 @@ export default {
   },
   mounted() {
     this.getInitialData();
-    console.log(this.topCategories);
   },
 };
 </script>

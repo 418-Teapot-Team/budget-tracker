@@ -2,11 +2,11 @@ import { defineStore } from 'pinia';
 import { httpClient as HttpClient } from '../utils/HttpClient';
 export default defineStore('dashboard', {
   state: () => ({
-    courses: [],
-    topCategories: [],
-    currentMonthSaving: 0,
-    savingStats: [],
-    transactions: [],
+    expensesStats: [],
+    expensesCategories: [],
+    total: 0,
+    incomeStats: [],
+    incomeCategories: [],
   }),
 
   actions: {
