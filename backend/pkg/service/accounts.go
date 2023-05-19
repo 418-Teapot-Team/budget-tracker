@@ -17,6 +17,8 @@ type AccountsService struct {
 func (as *AccountsService) CreateAccount(input *budget.Account) (err error) {
 	date, _ := time.Parse(layout, input.Date)
 
+	finishDateStr := date.Add(time.Hour * 24 * 30 * time.Duration(input.MonthAmount)).String()
+
 	currentDate, _ := time.Parse(layout, time.Now().Format(layout))
 
 	duration := currentDate.Sub(date)
@@ -28,8 +30,32 @@ func (as *AccountsService) CreateAccount(input *budget.Account) (err error) {
 
 	}
 
+	var mounthPayment float64
+
+	if input.Type == "deposit" {
+		mounthPayment = input.Sum * (input.Percent / 100) / 12
+	} else if input.Type == "credit" {
+		daysOfCredit := getDaysFromDate(input.Date) // 2023-01-11 // 127
+
+		mounthPayment = (input.Sum*(input.Percent/100)*float64(daysOfCredit)/365 + input.Sum) / float64(input.MonthAmount)
+	}
+
+	goalSum := mounthPayment*float64(input.MonthAmount) + input.Sum
+
 	input.CreatedAt = time.Now()
-	return as.repo.CreateAccount(input)
+	return as.repo.CreateAccount(&budget.Account{
+		ID:              input.ID,
+		UserID:          input.UserID,
+		Name:            input.Name,
+		MonthAmount:     input.MonthAmount,
+		Percent:         input.Percent,
+		Date:            input.Date,
+		AlreadyReceived: float64(currentMonthInt) * mounthPayment,
+		FinishDate:      finishDateStr[:len(layout)],
+		MonthlyPayment:  mounthPayment,
+		Sum:             input.Sum,
+		GoalSum:         goalSum,
+	})
 }
 
 type listOutput struct {
