@@ -68,7 +68,7 @@ func (as *AccountsService) GetAll(userId int, account, orderBy, sortedBy string)
 			Percent:      finance.Percent,
 			Sum:          finance.Sum,
 			MonthPayment: _str.MonthlyPayment,
-			Payed:        float64(curMonth) * _str.MonthlyPayment,
+			Payed:        _str.AlreadyReceived,
 			Date:         finance.Date,
 			FinishDate:   _str.FinishDate,
 			GoalSum:      _str.GoalSum,
