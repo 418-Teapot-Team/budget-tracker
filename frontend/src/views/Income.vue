@@ -8,7 +8,7 @@
           <add-icon />
         </div>
       </div>
-      <filters @onApplyFilters="applyFilters" :withCategory="true" />
+      <filters @onApplyFilters="applyFilters" :withCategory="true" :categories="incomesCtegories" />
     </div>
 
     <!-- table -->
@@ -43,6 +43,7 @@ import EmptyList from '@/components/EmptyList.vue';
 import AddIcon from '@/components/Icons/AddIcon.vue';
 import Filters from '@/components/Filters.vue';
 import TransactionPopup from '@/components/TransactionPopup.vue';
+import useFiltersStore from '@/stores/filters';
 import useTransitionStore from '@/stores/transactions';
 import { mapActions, mapState } from 'pinia';
 import { useToast } from 'vue-toastification';
@@ -67,6 +68,7 @@ export default {
   },
   computed: {
     ...mapState(useTransitionStore, ['incomesCtegories', 'incomes']),
+    ...mapState(useFiltersStore, ['filters']),
   },
   methods: {
     ...mapActions(useTransitionStore, [
@@ -99,7 +101,20 @@ export default {
       }
     },
     applyFilters({ category, filter }) {
-      console.log(category, filter);
+      const categoryToUrl = this.incomesCtegories?.find((item) => category === item.id);
+      const filterToUrl = this.filters.find((item) => filter === item.value.id);
+
+      this.$router
+        .push({
+          query: {
+            category: categoryToUrl ? categoryToUrl?.category : 'All',
+            categoryId: categoryToUrl ? categoryToUrl.id : 'all',
+            orderBy: filterToUrl ? filterToUrl?.value?.orderBy : 'default',
+            reverse: filterToUrl ? filterToUrl?.value?.reverse : false,
+            filterId: filterToUrl ? filterToUrl?.value?.id : 'default',
+          },
+        })
+        .then(() => this.getInitialData());
     },
     editItem(id) {
       this.itemToEdit = this.incomes?.find((item) => item.id === id);
@@ -122,9 +137,18 @@ export default {
       this.itemToEdit = {};
     },
     async getInitialData() {
+      const orderBy =
+        this.$route.query?.orderBy && this.$route.query?.orderBy !== 'default'
+          ? this.$route.query?.orderBy
+          : '';
+      const reverse = this.$route.query?.reverse === 'true' ? true : false;
+      const category =
+        this.$route.query?.categoryId && this.$route.query?.categoryId !== 'all'
+          ? this.$route.query?.categoryId
+          : '';
       try {
         await this.getCategories();
-        await this.getTransactions({ type: 'income' });
+        await this.getTransactions({ type: 'income', orderBy, reverse, category });
       } catch (e) {
         toast.error(e?.message);
       }

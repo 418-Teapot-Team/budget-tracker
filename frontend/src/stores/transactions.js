@@ -9,8 +9,10 @@ export default defineStore('transactions', {
   }),
 
   actions: {
-    async getTransactions({ type }) {
-      const { data } = await HttpClient.get(`api/lists/${type}`);
+    async getTransactions({ type, orderBy = '', reverse = false, category = '' }) {
+      const { data } = await HttpClient.get(
+        `api/lists/${type}?orderBy=${orderBy}&reverse=${reverse}&category=${category}`
+      );
       if (type === 'income') {
         this.incomes = data.result;
       } else {

@@ -26,7 +26,7 @@ export default {
         labels: this.rightLabels,
         datasets: [
           {
-            backgroundColor: this.values.map((item) => item.color),
+            backgroundColor: this.values.map((item) => item.hash),
             data: this.values.map((item) => item.value),
           },
         ],
