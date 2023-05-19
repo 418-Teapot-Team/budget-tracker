@@ -5,7 +5,7 @@ import (
 )
 
 func Routers(app *App) *gin.Engine {
-	router := gin.New()
+	router := gin.Default()
 
 	router.Use(CORSMiddleware())
 
