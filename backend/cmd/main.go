@@ -1,19 +1,14 @@
 package main
 
 import (
-	budget "budget-tracker"
 	"budget-tracker/internal/app"
 	"budget-tracker/internal/client"
 	"budget-tracker/internal/config"
 	"budget-tracker/pkg/repository"
 	"budget-tracker/pkg/service"
-	"context"
 	"github.com/BoryslavGlov/logrusx"
 	// "github.com/subosito/gotenv"
 	"log"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 func main() {
@@ -40,25 +35,25 @@ func main() {
 
 	api := app.NewApi(services, logg, cl)
 
-	routers := app.Routers(api)
-	srv := new(budget.Server)
-
-	go func() {
-		if err = srv.Run(cfg.Port, routers); err != nil {
-			log.Fatalf("error occured while running http server: %s", err.Error())
-		}
-	}()
-
 	log.Print("App Started")
 
-	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
-	<-quit
+	app.RunApp(api, cfg.Port)
+	//srv := new(budget.Server)
+	//
+	//go func() {
+	//	if err = srv.Run(cfg.Port, routers); err != nil {
+	//		log.Fatalf("error occured while running http server: %s", err.Error())
+	//	}
+	//}()
 
-	log.Println("App Shutting Down")
+	//quit := make(chan os.Signal, 1)
+	//signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
+	//<-quit
 
-	if err = srv.Shutdown(context.Background()); err != nil {
-		log.Printf("error occured on server shutting down: %s", err.Error())
-	}
+	//log.Println("App Shutting Down")
+	//
+	//if err = srv.Shutdown(context.Background()); err != nil {
+	//	log.Printf("error occured on server shutting down: %s", err.Error())
+	//}
 
 }
