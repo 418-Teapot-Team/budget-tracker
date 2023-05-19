@@ -49,6 +49,7 @@ func (db *accountsSql) DeleteAccount(listId, userId int) (err error) {
 }
 
 func (db *accountsSql) EditAccount(input budget.Account) (err error) {
+
 	return db.db.Save(&input).Error
 
 }

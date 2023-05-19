@@ -36,9 +36,9 @@ func Routers(app *App) *gin.Engine {
 		accounts := api.Group("/accounts")
 		{
 			accounts.GET("/:account", app.getAllAccounts)
-			accounts.POST("/", app.createAccount)
-			accounts.DELETE("/", app.deleteAccount)
-			accounts.PUT("/", app.editAccount)
+			accounts.POST("/create", app.createAccount)
+			accounts.DELETE("/delete", app.deleteAccount)
+			accounts.PUT("/update", app.editAccount)
 		}
 	}
 	return router
