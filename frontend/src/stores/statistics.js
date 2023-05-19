@@ -28,9 +28,7 @@ export default defineStore('statistics', {
       this.total = data.result;
     },
     async getStats({ type, month = 1 }) {
-      const { data } = await HttpClient.get(
-        `api/lists/get-saving-stats?type=${type}&months=${month}`
-      );
+      const { data } = await HttpClient.get(`api/lists/get-stats?type=${type}&months=${month}`);
 
       if (type === 'income') {
         this.incomeStats = data.result;

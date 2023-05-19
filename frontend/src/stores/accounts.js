@@ -4,6 +4,7 @@ export default defineStore('accounts', {
   state: () => ({
     deposits: [],
     loans: [],
+    depositTotal: {},
   }),
   actions: {
     async getAccounts({ type, orderBy = '', reverse = false }) {
@@ -41,6 +42,10 @@ export default defineStore('accounts', {
       await HttpClient.delete('api/accounts/delete', {
         data: { id: payload.id },
       });
+    },
+    async getDepositTotal() {
+      const { data } = await HttpClient.get('api/account-total');
+      this.depositTotal = data;
     },
   },
 });
