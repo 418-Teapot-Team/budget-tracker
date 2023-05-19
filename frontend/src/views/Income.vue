@@ -121,10 +121,17 @@ export default {
       this.showIncomePopup = false;
       this.itemToEdit = {};
     },
+    async getInitialData() {
+      try {
+        await this.getCategories();
+        await this.getTransactions({ type: 'income' });
+      } catch (e) {
+        toast.error(e?.message);
+      }
+    },
   },
   mounted() {
-    this.getCategories().catch((err) => toast.error(err?.message));
-    this.getTransactions({ type: 'income' }).catch((err) => toast.error(err?.message));
+    this.getInitialData();
   },
 };
 </script>
