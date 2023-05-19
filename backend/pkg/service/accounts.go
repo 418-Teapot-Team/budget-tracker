@@ -3,6 +3,7 @@ package service
 import (
 	budget "budget-tracker"
 	"budget-tracker/pkg/repository"
+	"errors"
 	"fmt"
 	"time"
 )
@@ -14,6 +15,19 @@ type AccountsService struct {
 }
 
 func (as *AccountsService) CreateAccount(input *budget.Account) (err error) {
+	date, _ := time.Parse(layout, input.Date)
+
+	currentDate, _ := time.Parse(layout, time.Now().Format(layout))
+
+	duration := currentDate.Sub(date)
+
+	currentMonthInt := int(duration.Hours() / (24 * 30))
+
+	if currentMonthInt >= input.MonthAmount {
+		return errors.New(fmt.Sprintf("%s is already expired, impossible to create", input.Type))
+
+	}
+
 	input.CreatedAt = time.Now()
 	return as.repo.CreateAccount(input)
 }
@@ -30,6 +44,7 @@ type listOutput struct {
 	Payed        float64    `json:"payed"`
 	Date         string     `json:"startAccountDate"`
 	FinishDate   string     `json:"finishAccountDate"`
+	GoalSum      float64    `json:"goalSum"`
 	CreatedAt    *time.Time `json:"createdAt" binding:"required"`
 }
 
@@ -42,6 +57,7 @@ func (as *AccountsService) GetAll(userId int, account, orderBy, sortedBy string)
 	}
 
 	for _, finance := range list {
+
 		var mounthPayment float64
 		date, _ := time.Parse(layout, finance.Date)
 
@@ -61,6 +77,22 @@ func (as *AccountsService) GetAll(userId int, account, orderBy, sortedBy string)
 			mounthPayment = (finance.Sum*(finance.Percent/100)*float64(daysOfCredit)/365 + finance.Sum) / float64(finance.MonthAmount)
 		}
 
+		goalSum := mounthPayment*float64(finance.MonthAmount) + finance.Sum
+
+		as.repo.EditAccount(budget.Account{
+			ID:              finance.ID,
+			UserID:          finance.UserID,
+			Name:            finance.Name,
+			MonthAmount:     finance.MonthAmount,
+			Percent:         finance.Percent,
+			Date:            finance.Date,
+			AlreadyReceived: float64(currentMonthInt) * mounthPayment,
+			FinishDate:      finishDateStr[:len(layout)],
+			MonthlyPayment:  mounthPayment,
+			Sum:             finance.Sum,
+			GoalSum:         goalSum,
+		})
+
 		outputList = append(outputList, listOutput{
 			Id:           finance.ID,
 			Type:         finance.Type,
@@ -73,6 +105,7 @@ func (as *AccountsService) GetAll(userId int, account, orderBy, sortedBy string)
 			Payed:        float64(currentMonthInt) * mounthPayment,
 			Date:         finance.Date,
 			FinishDate:   finishDateStr[:len(layout)],
+			GoalSum:      goalSum,
 			CreatedAt:    &finance.CreatedAt,
 		})
 	}
