@@ -1,7 +1,7 @@
 <template>
-  <section class="flex flex-row justify-start gap-0 h-screen">
+  <section class="flex flex-row justify-center xl:justify-start gap-0 h-screen">
     <div
-      class="w-1/3 bg-black flex flex-col justify-center items-center gap-5 auth-bg rounded-r-3xl"
+      class="hidden w-1/3 bg-black xl:flex xl:flex-col justify-center items-center gap-5 auth-bg rounded-r-3xl"
     >
       <TeapotIcon fill="#000" />
       <div class="flex flex-col justify-start gap-1">
