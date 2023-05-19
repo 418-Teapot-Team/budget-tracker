@@ -17,7 +17,7 @@ type Lists interface {
 	GetTopCategories(userId int, enum string) (lists []budget.ListsGetter, err error)
 	EditList(input budget.List) (err error)
 	GetList(userId int, budgetType, orderBy, sortedBy string) (lists []budget.ListsGetter, err error)
-	GetCurrentMonthSavings(userId int) (result int64, err error)
+	GetCurrentMonthSavings(userId int) (result float64, err error)
 	GetSavingsStats(userId int) (data []budget.FinancialData, err error)
 }
 

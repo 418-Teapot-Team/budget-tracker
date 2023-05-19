@@ -67,7 +67,7 @@ func (db *listsSql) EditList(input budget.List) (err error) {
 	return db.db.Save(&input).Error
 }
 
-func (db *listsSql) GetCurrentMonthSavings(userId int) (result int64, err error) {
+func (db *listsSql) GetCurrentMonthSavings(userId int) (result float64, err error) {
 	query := db.db.Table("lists").
 		Select("IFNULL(SUM(CASE WHEN type = 'income' THEN amount ELSE -amount END),0)").
 		Where("MONTH(created_at) = ? AND YEAR(created_at) = ?", time.Now().Month(), time.Now().Year()).

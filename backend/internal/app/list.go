@@ -4,6 +4,7 @@ import (
 	budget "budget-tracker"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"math"
 	"net/http"
 )
 
@@ -187,14 +188,14 @@ func (app *App) getCurrentMonthSavings(c *gin.Context) {
 		return
 	}
 
-	list, err := app.s.GetCurrentMonthSavings(userId)
+	incomeNet, err := app.s.GetCurrentMonthSavings(userId)
 	if err != nil {
 		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	c.JSON(http.StatusOK, map[string]interface{}{
-		"result": list,
+		"result": math.Round(incomeNet*100) / 100,
 	})
 }
 

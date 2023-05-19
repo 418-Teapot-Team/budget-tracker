@@ -33,7 +33,7 @@ func (l *ListsService) EditList(input budget.List) error {
 	return l.repo.EditList(input)
 }
 
-func (l *ListsService) GetCurrentMonthSavings(userId int) (incomeNet int64, err error) {
+func (l *ListsService) GetCurrentMonthSavings(userId int) (incomeNet float64, err error) {
 	return l.repo.GetCurrentMonthSavings(userId)
 }
 
