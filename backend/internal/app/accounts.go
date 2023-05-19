@@ -42,7 +42,7 @@ func (app *App) getAllAccounts(c *gin.Context) {
 	}
 
 	orderBy := c.Query("orderBy")
-	if orderBy == "" {
+	if orderBy == "created_at" || orderBy == "" {
 		orderBy = "date"
 	}
 	if orderBy == "amount" {
