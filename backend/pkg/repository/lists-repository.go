@@ -127,7 +127,7 @@ func (db *listsSql) GetStats(userId int, lType string, months int) (data []budge
 		Select("DATE_FORMAT(created_at, \"%d-%m-%y\") as date, sum(amount) as value").
 		//Where("MONTH(created_at) = ? AND YEAR(created_at) = ?", time.Now().Month(), time.Now().Year()).
 		Where("created_at >= DATE_SUB(CURDATE(), INTERVAL ? MONTH)", months).
-		Where("user_id = 19").
+		Where("user_id = ?", userId).
 		Where("type = ?", lType).
 		Group("DATE_FORMAT(created_at, \"%d-%m-%y\")").
 		Order("STR_TO_DATE(date, \"%d-%m-%y\")")
