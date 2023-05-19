@@ -22,7 +22,7 @@ func (app *App) createAccount(c *gin.Context) {
 
 	input.UserID = userId
 
-	err = app.s.AccountsService.CreateAccount(&input)
+	err = app.s.AccountsService.CreateAccount(input)
 	if err != nil {
 		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
