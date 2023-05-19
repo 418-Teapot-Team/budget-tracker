@@ -112,7 +112,7 @@ export default {
     async deleteItem(id) {
       try {
         await this.deleteAccount({ id });
-        await this.getAccounts({ type: 'deposit' });
+        await this.getAccounts({ type: 'credit' });
       } catch (e) {
         toast.error(e?.message);
       }
