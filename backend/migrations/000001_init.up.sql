@@ -8,17 +8,19 @@ CREATE TABLE users
 
 create table accounts
 (
-    id              bigint auto_increment primary key,
-    name            varchar(255)              NOT NULL,
-    type            ENUM ('deposit','credit') NOT NULL,
-    month_amount    tinyint                   NOT NULL,
-    user_id         BIGINT                    NOT NULL,
-    percent         FLOAT                     NOT NULL,
-    date_opened     DATE                      NOT NULL,
-    date_closed     DATE                      NOT NULL,
-    monthly_payment FLOAT                     not null,
-    sum             FLOAT                     NOT NULL,
-    created_at      DATETIME                  NOT NULL,
+    id               bigint auto_increment primary key,
+    name             varchar(255)              NOT NULL,
+    type             ENUM ('deposit','credit') NOT NULL,
+    month_amount     tinyint                   NOT NULL,
+    user_id          BIGINT                    NOT NULL,
+    percent          FLOAT                     NOT NULL,
+    date_opened      DATE                      NOT NULL,
+    date_closed      DATE                      NOT NULL,
+    monthly_payment  FLOAT                     not null,
+    sum              FLOAT                     NOT NULL,
+    created_at       DATETIME                  NOT NULL,
+    already_received float                     not null,
+    goal_sum         float                     not null,
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
