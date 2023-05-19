@@ -23,7 +23,7 @@ type Account struct {
 	Sum             float64   `gorm:"column:sum" json:"sum" binding:"required"`
 	CreatedAt       time.Time `gorm:"column:created_at" json:"createdAt,omitempty"`
 	AlreadyReceived float64   `gorm:"column:already_received" json:"-"`
-	FinishDate      string    `gorm:"column:finish_date" json:"-"`
+	FinishDate      string    `gorm:"column:date_opened" json:"-"`
 	MonthlyPayment  float64   `gorm:"column:monthly_payment" json:"-"`
 	GoalSum         float64   `gorm:"column:goal_sum"`
 }
