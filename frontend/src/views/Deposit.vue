@@ -9,7 +9,7 @@
             >Total: <span class="font-normal">10432 / 71343</span> UAH</span
           >
         </div>
-        <div class="h-8 w-8 cursor-pointer mb-1">
+        <div class="h-8 w-8 cursor-pointer mb-1" @click="showDepositPopup = true">
           <add-icon />
         </div>
       </div>
@@ -33,6 +33,7 @@
     </div>
 
     <!-- popup -->
+    <banking-popup v-if="showDepositPopup" @onClose="showDepositPopup = false" />
   </section>
 </template>
 
@@ -40,12 +41,14 @@
 import AddIcon from '@/components/Icons/AddIcon.vue';
 import Filters from '@/components/Filters.vue';
 import DepositCard from '@/components/DepositCard.vue';
+import BankingPopup from '@/components/BankingPopup.vue';
 export default {
   name: 'Deposit',
   components: {
     AddIcon,
     Filters,
     DepositCard,
+    BankingPopup,
   },
   data() {
     return {

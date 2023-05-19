@@ -4,6 +4,7 @@ import (
 	budget "budget-tracker"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"math"
 	"net/http"
 )
 
@@ -147,6 +148,33 @@ func (app *App) getTopCategories(c *gin.Context) {
 		return
 	}
 
+	if listType == "expenses" && len(list) < 4 {
+		lenList := len(list)
+		categories, err := app.s.CategoriesService.GetAllCategories()
+		if err != nil {
+			app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
+			return
+		}
+
+		var categoriesToSkip []int
+		for i := 0; i < lenList; i++ {
+			categoriesToSkip = append(categoriesToSkip, list[i].Category)
+		}
+
+		for i, curr := 0, 0; i < 4-lenList; i++ {
+			for _, j := range categoriesToSkip {
+				// skipping category if already present
+				if j == curr {
+					curr++
+				}
+			}
+			list = append(list, budget.ListsGetter{Categories: categories[curr]})
+			curr++
+		}
+	}
+
+	fmt.Println(list)
+
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"result": list,
 	})
@@ -160,14 +188,14 @@ func (app *App) getCurrentMonthSavings(c *gin.Context) {
 		return
 	}
 
-	list, err := app.s.GetCurrentMonthSavings(userId)
+	incomeNet, err := app.s.GetCurrentMonthSavings(userId)
 	if err != nil {
 		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	c.JSON(http.StatusOK, map[string]interface{}{
-		"result": list,
+		"result": math.Round(incomeNet*100) / 100,
 	})
 }
 

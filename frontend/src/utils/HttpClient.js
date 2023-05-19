@@ -3,8 +3,8 @@ import axios from 'axios';
 const headers = {
   Accept: 'application/json',
   'Content-Type': 'application/json; charset=utf-8',
+  'X-Requested-With': 'XMLHttpRequest',
   // 'Access-Control-Allow-Credentials': true,
-  // 'X-Requested-With': 'XMLHttpRequest',
 };
 
 const injectToken = (config) => {

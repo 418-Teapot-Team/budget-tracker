@@ -5,31 +5,15 @@
         <div class="flex flex-row justify-between items-center mb-4">
           <span class="text-black text-4xl font-bold">Dashboard</span>
         </div>
-        <current-month-banner :amount="10342" class="mb-6" />
+        <current-month-banner :amount="currentMonthSaving" class="mb-6" />
         <div class="flex flex-row justify-between mb-6">
           <popular-category-stats
-            imageUrl="https://www.svgrepo.com/show/357712/exchange-alt.svg"
-            :amount="2843.43"
-            title="Transfers"
-            class="bg-yellow"
-          />
-          <popular-category-stats
-            imageUrl="https://www.svgrepo.com/show/513464/house.svg"
-            :amount="1287.12"
-            title="Rent"
-            class="bg-blue-light"
-          />
-          <popular-category-stats
-            imageUrl="https://www.svgrepo.com/show/433318/bus2-o.svg"
-            :amount="5234.21"
-            title="Travelling"
-            class="bg-pink"
-          />
-          <popular-category-stats
-            imageUrl="https://www.svgrepo.com/show/443633/education-cap.svg"
-            :amount="532.23"
-            title="Education"
-            class="bg-grey"
+            v-for="item in topCategories"
+            :key="item.category.id"
+            :imageUrl="item.category.imageUrl"
+            :amount="item.amount"
+            :title="item.category.category"
+            :style="`background-color: #${item.category.hash}`"
           />
         </div>
         <transactions-chart
@@ -53,7 +37,11 @@ import PopularCategoryStats from '@/components/PopularCategoryStats.vue';
 import TransactionsChart from '@/components/TransactionsChart.vue';
 import LastTransactions from '@/components/LastTransactions.vue';
 import useDashboardStore from '@/stores/dashboard';
-import { mapActions } from 'pinia';
+import { mapActions, mapState } from 'pinia';
+import { useToast } from 'vue-toastification';
+
+const toast = useToast();
+
 export default {
   name: 'Dashboard',
   components: {
@@ -62,24 +50,35 @@ export default {
     TransactionsChart,
     LastTransactions,
   },
-  data() {
-    return {
-      labels: [
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
-        26, 27, 28, 29, 30,
-      ],
-      data: [
-        1500, 2200, 510, 1832, 2038, 1639, 5433, 1234, 2321, 3212, 1200, 1200, 1500, 1100, 1943,
-        1632, 4324, 3444, 932, 811, 7432, 5474, 2343, 2443, 1732, 1200, 1100, 1100, 1250, 6548,
-      ],
-    };
+  computed: {
+    ...mapState(useDashboardStore, ['currentMonthSaving', 'topCategories', 'savingStats']),
+    labels() {
+      return this.savingStats?.map((item) => item.Month);
+    },
+    data() {
+      return this.savingStats?.map((item) => item.IncomeNet);
+    },
   },
+
   methods: {
-    ...mapActions(useDashboardStore, ['getTopCaregories', 'getCurrentMonthSavings']),
+    ...mapActions(useDashboardStore, [
+      'getTopCaregories',
+      'getCurrentMonthSavings',
+      'getSavingsStats',
+    ]),
+    async getInitialData() {
+      try {
+        await this.getCurrentMonthSavings();
+        await this.getTopCaregories();
+        await this.getSavingsStats();
+      } catch (e) {
+        toast.error(e?.message);
+      }
+    },
   },
   mounted() {
-    this.getTopCaregories();
-    this.getCurrentMonthSavings();
+    this.getInitialData();
+    console.log(this.topCategories);
   },
 };
 </script>

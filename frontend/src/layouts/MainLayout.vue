@@ -5,7 +5,7 @@
       <div class="flex flex-row justify-between items-center mb-6">
         <ul class="flex flex-row gap-8" v-if="courses?.length">
           <li
-            class="flex flex-col justify-start items-start border-r border-black border-opacity-30 w-fit pr-8"
+            class="flex flex-col justify-start items-start border-r border-black border-opacity-30 w-fit pr-8 last:border-r-0"
             v-for="item in courses"
             :key="item?.code"
           >
@@ -18,17 +18,19 @@
               <span class="text-black">{{ item?.code }}</span>
             </div>
             <div class="flex flex-row gap-1">
-              <span class="text-xs text-black opacity-80">Official - {{ item?.officialRate }}</span>
-              <span class="text-xs text-black opacity-80">Market - {{ item?.darkRate }}</span>
+              <span class="text-xs text-black opacity-80">Buy - {{ item?.buyRate }}</span>
+              <span class="text-xs text-black opacity-80">Sell - {{ item?.saleRate }}</span>
             </div>
           </li>
         </ul>
-        <span
-          class="text-black font-bold text-xl w-72 h-7 text-end text-ellipsis whitespace-nowrap overflow-hidden"
-        >
-          Welcome, {{ user?.fullName }}!
-        </span>
-        <logout-icon class="cursor-pointer" @click="logout" />
+        <div class="flex flex-row justify-end gap-2">
+          <span
+            class="text-black font-bold text-xl w-72 h-7 text-end text-ellipsis whitespace-nowrap overflow-hidden"
+          >
+            Welcome, {{ user?.fullName }}!
+          </span>
+          <logout-icon class="cursor-pointer" @click="logout" />
+        </div>
       </div>
       <router-view />
     </div>
@@ -58,17 +60,24 @@ export default {
     LogoutIcon,
   },
   computed: {
-    ...mapState(useAuthStore, ['user']),
+    ...mapState(useAuthStore, ['user', 'isAuthorized']),
     ...mapState(useDashboardStore, ['courses']),
-    isAuthorized() {
-      if (!localStorage.getItem('tracker-auth-token')) {
-        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+  },
+  watch: {
+    isAuthorized: {
+      handler() {
+        if (!!localStorage.getItem('tracker-auth-token') === false) {
+          this.$router.push('/auth');
+        }
+      },
+      immediate: true,
+    },
+    '$route.path'() {
+      if (!!localStorage.getItem('tracker-auth-token') === false) {
         this.$router.push('/auth');
       }
-      return localStorage.getItem('tracker-auth-token');
     },
   },
-
   methods: {
     ...mapActions(useAuthStore, ['whoAmI']),
     ...mapActions(useDashboardStore, ['getCourses']),
@@ -86,7 +95,6 @@ export default {
         this.whoAmI();
         this.getCourses();
       } catch (e) {
-        console.log(123);
         toast.error(e.message);
       }
     }
