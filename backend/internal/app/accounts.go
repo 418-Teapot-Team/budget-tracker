@@ -123,3 +123,19 @@ func (app *App) editAccount(c *gin.Context) {
 	c.JSON(http.StatusOK, input)
 
 }
+
+func (app *App) getTotalDeposits(c *gin.Context) {
+	userId, err := app.getUserId(c)
+	if err != nil {
+		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	payed, goalSum := app.s.AccountsService.GetTotalsDeposits(userId)
+
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"payed":   payed,
+		"goalSum": goalSum,
+	})
+
+}

@@ -41,6 +41,8 @@ func Routers(app *App) *gin.Engine {
 			accounts.POST("/create", app.createAccount)
 			accounts.DELETE("/delete", app.deleteAccount)
 			accounts.PUT("/update", app.editAccount)
+
+			accounts.GET("/total", app.getTotalDeposits)
 		}
 	}
 	return router
