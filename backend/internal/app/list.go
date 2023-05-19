@@ -361,12 +361,6 @@ func (app *App) getStats(c *gin.Context) {
 		result = append(result, average)
 	}
 
-	//output, err := json.Marshal(result)
-	//if err != nil {
-	//	fmt.Println("Error:", err)
-	//	return
-	//}
-
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"result": result,
 	})
