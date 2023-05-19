@@ -12,7 +12,7 @@ export default defineStore('statistics', {
   actions: {
     async getTopCaregories({ type, months = 1 }) {
       const { data } = await HttpClient.get(
-        `api/lists/get-top-categories?type=${type}&montрs=${months}`
+        `api/lists/get-top-categories?type=${type}&months=${months}`
       );
 
       if (type === 'income') {
