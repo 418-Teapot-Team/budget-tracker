@@ -2,7 +2,6 @@ package app
 
 import (
 	budget "budget-tracker"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"math"
 	"net/http"
@@ -272,8 +271,6 @@ func (app *App) getSavingsStats(c *gin.Context) {
 		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-
-	fmt.Println(data)
 
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"result": data,

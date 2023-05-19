@@ -125,11 +125,20 @@ func getUpdatedStruct(finance budget.Account) (budget.Account, int) {
 		mounthPayment = (finance.Sum*(finance.Percent/100)*float64(daysOfCredit)/365 + finance.Sum) / float64(finance.MonthAmount)
 	}
 
-	var goalSum float64
+	var (
+		goalSum         float64
+		alreadyReceived float64
+	)
 	if finance.Type == "deposit" {
 		goalSum = mounthPayment*float64(finance.MonthAmount) + finance.Sum
 	} else {
 		goalSum = mounthPayment * float64(finance.MonthAmount)
+	}
+
+	if finance.Type == "deposit" {
+		alreadyReceived = float64(currentMonthInt) * (mounthPayment + (finance.Sum / 12))
+	} else {
+		alreadyReceived = float64(currentMonthInt) * mounthPayment
 	}
 
 	update := budget.Account{
@@ -140,7 +149,7 @@ func getUpdatedStruct(finance budget.Account) (budget.Account, int) {
 		MonthAmount:     finance.MonthAmount,
 		Percent:         finance.Percent,
 		Date:            finance.Date,
-		AlreadyReceived: float64(currentMonthInt) * mounthPayment,
+		AlreadyReceived: alreadyReceived,
 		FinishDate:      finishDateStr[:len(layout)],
 		MonthlyPayment:  mounthPayment,
 		Sum:             finance.Sum,
