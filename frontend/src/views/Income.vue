@@ -128,12 +128,15 @@ export default {
         await this.getInitialData();
         toast.success('Income changed!');
         this.showIncomePopup = false;
+        this.isEdit = false;
+        this.itemToEdit = {};
       } catch (e) {
         toast.error(e?.message);
       }
     },
     closePopup() {
       this.showIncomePopup = false;
+      this.isEdit = false;
       this.itemToEdit = {};
     },
     async getInitialData() {

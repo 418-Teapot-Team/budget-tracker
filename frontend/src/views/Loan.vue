@@ -102,6 +102,8 @@ export default {
         await this.getInitialData();
         toast.success('Loan changed!');
         this.showCerditPopup = false;
+        this.isEdit = false;
+        this.itemToEdit = {};
       } catch (e) {
         toast.error(e?.message);
       }
@@ -137,6 +139,7 @@ export default {
     },
     closePopup() {
       this.showCerditPopup = false;
+      this.isEdit = false;
       this.itemToEdit = {};
     },
     async getInitialData() {

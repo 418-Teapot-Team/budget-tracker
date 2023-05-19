@@ -103,6 +103,8 @@ export default {
         await this.getInitialData();
         toast.success('Expense changed!');
         this.showExpensePopup = false;
+        this.isEdit = false;
+        this.itemToEdit = {};
       } catch (e) {
         toast.error(e?.message);
       }
@@ -141,6 +143,7 @@ export default {
     },
     closePopup() {
       this.showExpensePopup = false;
+      this.isEdit = false;
       this.itemToEdit = {};
     },
     async getInitialData() {

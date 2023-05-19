@@ -52,15 +52,16 @@ export default {
           icon: 'dashboard',
         },
         {
-          title: 'Income',
-          route: '/income',
-          icon: 'income',
-        },
-        {
           title: 'Expense',
           route: '/expenses',
           icon: 'expenses',
         },
+        {
+          title: 'Income',
+          route: '/income',
+          icon: 'income',
+        },
+
         {
           title: 'Deposits',
           route: '/deposit',

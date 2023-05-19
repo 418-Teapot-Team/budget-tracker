@@ -112,6 +112,8 @@ export default {
         await this.getInitialData();
         toast.success('Deposit changed!');
         this.showDepositPopup = false;
+        this.isEdit = false;
+        this.itemToEdit = {};
       } catch (e) {
         toast.error(e?.message);
       }
@@ -147,6 +149,7 @@ export default {
     },
     closePopup() {
       this.showDepositPopup = false;
+      this.isEdit = false;
       this.itemToEdit = {};
     },
     async getInitialData() {
