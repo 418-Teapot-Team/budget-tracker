@@ -10,16 +10,16 @@
         <span class="text-3xl"> {{ data?.name }} </span>
         <div class="flex flex-col justify-start items-end">
           <span class="text-black"
-            >{{ data?.payed?.toFixed(2) }} / {{ data?.sum?.toFixed(2) }} UAH</span
+            >{{ data?.payed?.toFixed(2) }} / {{ data?.goalSum?.toFixed(2) }} UAH</span
           >
           <span class="text-black">Ставка {{ data?.percent }}% річних</span>
         </div>
       </div>
       <div class="w-full">
-        <div class="w-full h-3 bg-black rounded-full bg-opacity-10 mb-3">
+        <div class="w-full h-3 bg-black rounded-full bg-opacity-10 mb-3 overflow-hidden">
           <div
             class="h-3 bg-black rounded-full"
-            :style="`width: ${(data?.payed / data?.sum) * 100}%;`"
+            :style="`width: ${(data?.payed / data?.goalSum) * 100}%;`"
           ></div>
         </div>
         <div class="w-full flex flex-row justify-between items-start">
