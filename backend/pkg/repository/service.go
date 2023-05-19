@@ -20,6 +20,7 @@ type Lists interface {
 	GetCurrentMonthSavings(userId int) (result float64, err error)
 	GetSavingsStats(userId int) (data []budget.FinancialData, err error)
 	GetTotalAmount(userId int, lType string, months int) (result float64, err error)
+	GetStats(userId int, lType string, months int) (data []budget.FinancialData, err error)
 }
 
 type Categories interface {

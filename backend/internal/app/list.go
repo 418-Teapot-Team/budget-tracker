@@ -286,3 +286,70 @@ func (app *App) getTotalAmount(c *gin.Context) {
 		"result": math.Round(result*100) / 100,
 	})
 }
+
+func calculateAverage(items []budget.FinancialData) budget.FinancialData {
+	var sum float64
+	for _, item := range items {
+		sum += item.Value
+	}
+
+	average := sum / float64(len(items))
+	return budget.FinancialData{Date: items[0].Date, Value: average}
+}
+
+func (app *App) getStats(c *gin.Context) {
+
+	userId, err := app.getUserId(c)
+	if err != nil {
+		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	monthsParam := c.Query("months")
+	months := 1
+
+	if monthsParam != "" {
+		var err error
+		months, err = strconv.Atoi(monthsParam)
+		if err != nil {
+			months = 1
+		}
+	}
+
+	budgetType := c.Query("type")
+	if budgetType != "income" && budgetType != "expenses" {
+		app.newErrorResponse(c, http.StatusNotFound, "Wrong type data. possible types: income, expenses")
+		return
+	}
+
+	items, err := app.s.GetStats(userId, budgetType, months)
+	if err != nil {
+		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	maxItems := 10
+	groupSize := (len(items) + maxItems - 1) / maxItems // Ceiling division
+
+	var result []budget.FinancialData
+	for i := 0; i < len(items); i += groupSize {
+		end := i + groupSize
+		if end > len(items) {
+			end = len(items)
+		}
+
+		group := items[i:end]
+		average := calculateAverage(group)
+		result = append(result, average)
+	}
+
+	//output, err := json.Marshal(result)
+	//if err != nil {
+	//	fmt.Println("Error:", err)
+	//	return
+	//}
+
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"result": result,
+	})
+}
