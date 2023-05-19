@@ -250,3 +250,39 @@ func (app *App) getSavingsStats(c *gin.Context) {
 		"result": data,
 	})
 }
+
+func (app *App) getTotalAmount(c *gin.Context) {
+
+	userId, err := app.getUserId(c)
+	if err != nil {
+		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	monthsParam := c.Query("months")
+	months := 1
+
+	if monthsParam != "" {
+		var err error
+		months, err = strconv.Atoi(monthsParam)
+		if err != nil {
+			months = 1
+		}
+	}
+
+	budgetType := c.Query("type")
+	if budgetType != "income" && budgetType != "expenses" {
+		app.newErrorResponse(c, http.StatusNotFound, "Wrong type data. possible types: income, expenses")
+		return
+	}
+
+	result, err := app.s.GetTotalAmount(userId, budgetType, months)
+	if err != nil {
+		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"result": math.Round(result*100) / 100,
+	})
+}
