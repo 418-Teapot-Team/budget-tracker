@@ -3,6 +3,7 @@ package service
 import (
 	budget "budget-tracker"
 	"budget-tracker/pkg/repository"
+	"errors"
 	"fmt"
 	"time"
 )
@@ -14,7 +15,11 @@ type AccountsService struct {
 }
 
 func (as *AccountsService) CreateAccount(input budget.Account) (err error) {
-	_struct, _ := getUpdatedStruct(input)
+	_struct, currMonth := getUpdatedStruct(input)
+
+	if currMonth > _struct.MonthAmount {
+		return errors.New(fmt.Sprintf("wrong date range, impossible to create this %s", input.Type))
+	}
 
 	return as.repo.CreateAccount(&_struct)
 }
@@ -85,7 +90,11 @@ func (as *AccountsService) DeleteAccount(listId, userId int) (err error) {
 }
 
 func (as *AccountsService) EditAccount(finance budget.Account) (err error) {
-	_str, _ := getUpdatedStruct(finance)
+	_str, currMonth := getUpdatedStruct(finance)
+	if currMonth > _str.MonthAmount {
+		return errors.New(fmt.Sprintf("wrong date range, impossible to update this %s", finance.Type))
+	}
+
 	return as.repo.EditAccount(_str)
 }
 
@@ -99,7 +108,7 @@ func getUpdatedStruct(finance budget.Account) (budget.Account, int) {
 
 	duration := currentDate.Sub(date)
 
-	currentMonthInt := int(duration.Hours() / (24 * 30))
+	currentMonthInt := int(duration.Hours() / (24 * 30)) //
 
 	if finance.Type == "deposit" {
 		mounthPayment = finance.Sum * (finance.Percent / 100) / 12
