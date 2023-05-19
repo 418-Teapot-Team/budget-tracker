@@ -67,6 +67,6 @@ type ListsGetter struct {
 }
 
 type FinancialData struct {
-	Month     string
-	IncomeNet float64
+	Date  string
+	Value float64
 }

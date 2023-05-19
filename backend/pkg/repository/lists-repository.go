@@ -87,11 +87,11 @@ func (db *listsSql) GetCurrentMonthSavings(userId int) (result float64, err erro
 
 func (db *listsSql) GetSavingsStats(userId int) (data []budget.FinancialData, err error) {
 	query := db.db.Table("lists").
-		Select("DATE_FORMAT(created_at, '%Y-%m') AS month, SUM(CASE WHEN type = 'income' THEN amount ELSE -amount END) AS income_net").
+		Select("DATE_FORMAT(created_at, '%Y-%m') AS date, SUM(CASE WHEN type = 'income' THEN amount ELSE -amount END) AS value").
 		Where("created_at >= ?", time.Now().AddDate(-1, 0, 0)).
 		Where("user_id = ?", userId).
-		Group("month").
-		Order("month")
+		Group("date").
+		Order("STR_TO_DATE(date, \"%Y-%m\")")
 
 	err = query.Find(&data).Error
 
@@ -111,5 +111,19 @@ func (db *listsSql) GetTotalAmount(userId int, lType string, months int) (result
 		Where("type = ?", lType)
 
 	err = query.Scan(&result).Error
+	return
+}
+
+func (db *listsSql) GetStats(userId int, lType string, months int) (data []budget.FinancialData, err error) {
+	query := db.db.Table("lists").
+		Select("DATE_FORMAT(created_at, \"%d-%m-%y\") as date, sum(amount) as value").
+		//Where("MONTH(created_at) = ? AND YEAR(created_at) = ?", time.Now().Month(), time.Now().Year()).
+		Where("created_at >= DATE_SUB(CURDATE(), INTERVAL ? MONTH)", months).
+		Where("user_id = 19").
+		Where("type = ?", lType).
+		Group("DATE_FORMAT(created_at, \"%d-%m-%y\")").
+		Order("STR_TO_DATE(date, \"%d-%m-%y\")")
+
+	err = query.Find(&data).Error
 	return
 }

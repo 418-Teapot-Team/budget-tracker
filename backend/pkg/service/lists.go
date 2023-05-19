@@ -44,3 +44,7 @@ func (l *ListsService) GetSavingsStats(userId int) (data []budget.FinancialData,
 func (l *ListsService) GetTotalAmount(userId int, budgetType string, months int) (data float64, err error) {
 	return l.repo.GetTotalAmount(userId, budgetType, months)
 }
+
+func (l *ListsService) GetStats(userId int, budgetType string, months int) (data []budget.FinancialData, err error) {
+	return l.repo.GetStats(userId, budgetType, months)
+}
