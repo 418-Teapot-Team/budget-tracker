@@ -19,8 +19,8 @@
               new Date(item.createdAt?.Time).getDate() +
               '.' +
               (new Date(item.createdAt?.Time).getMonth() < 10
-                ? '0' + new Date(item.createdAt?.Time).getMonth()
-                : new Date(item.createdAt?.Time).getMonth()) +
+                ? '0' + (new Date(item.createdAt?.Time).getMonth() + 1)
+                : new Date(item.createdAt?.Time).getMonth() + 1) +
               '.' +
               new Date(item.createdAt?.Time).getFullYear()
             }}
