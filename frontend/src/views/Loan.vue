@@ -12,7 +12,10 @@
     </div>
     <!-- table -->
     <div class="pt-4 w-full">
-      <div class="w-full flex flex-col justify-start gap-4 overflow-y-auto pb-8 loan-list">
+      <div
+        class="w-full flex flex-col justify-start gap-4 overflow-y-auto pb-8 loan-list"
+        v-if="loans?.length"
+      >
         <loan-card
           v-for="item in loans"
           :key="item.id"
@@ -27,6 +30,7 @@
           </div>
         </div>
       </div>
+      <empty-list v-else class="mt-10" />
     </div>
 
     <!-- popup -->
@@ -47,6 +51,7 @@ import Filters from '@/components/Filters.vue';
 import LoanCard from '@/components/LoanCard.vue';
 import BankingPopup from '@/components/BankingPopup.vue';
 import useAccountsStore from '@/stores/accounts';
+import EmptyList from '@/components/EmptyList.vue';
 import { mapState, mapActions } from 'pinia';
 import { useToast } from 'vue-toastification';
 
@@ -58,6 +63,7 @@ export default {
     Filters,
     LoanCard,
     BankingPopup,
+    EmptyList,
   },
   data() {
     return {

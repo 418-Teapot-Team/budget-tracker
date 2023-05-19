@@ -19,8 +19,11 @@
         </div>
       </div>
       <div class="w-full">
-        <div class="w-full h-3 bg-black rounded-full bg-opacity-10 mb-3">
-          <div class="h-3 bg-black rounded-full" style="width: 30%"></div>
+        <div class="w-full h-3 bg-black rounded-full bg-opacity-10 mb-3 overflow-hidden">
+          <div
+            class="h-3 bg-black rounded-full"
+            :style="`width: ${(data?.payed / data?.goalSum) * 100}%;`"
+          ></div>
         </div>
         <div class="w-full flex flex-row justify-between items-start">
           <span class="text-black"> {{ data?.payed?.toFixed(2) }} UAH </span>

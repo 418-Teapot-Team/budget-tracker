@@ -17,7 +17,10 @@
     </div>
     <!-- table -->
     <div class="pt-4 w-full">
-      <div class="w-full flex flex-col justify-start gap-4 overflow-y-auto pb-8 deposit-list">
+      <div
+        class="w-full flex flex-col justify-start gap-4 overflow-y-auto pb-8 deposit-list"
+        v-if="deposits?.length"
+      >
         <deposit-card
           v-for="item in deposits"
           :key="item.id"
@@ -31,6 +34,7 @@
           </div>
         </div>
       </div>
+      <empty-list v-else class="mt-10" />
     </div>
 
     <!-- popup -->
@@ -50,6 +54,7 @@ import AddIcon from '@/components/Icons/AddIcon.vue';
 import Filters from '@/components/Filters.vue';
 import DepositCard from '@/components/DepositCard.vue';
 import BankingPopup from '@/components/BankingPopup.vue';
+import EmptyList from '@/components/EmptyList.vue';
 import useAccountsStore from '@/stores/accounts';
 import { mapState, mapActions } from 'pinia';
 import { useToast } from 'vue-toastification';
@@ -63,6 +68,7 @@ export default {
     Filters,
     DepositCard,
     BankingPopup,
+    EmptyList,
   },
   data() {
     return {
