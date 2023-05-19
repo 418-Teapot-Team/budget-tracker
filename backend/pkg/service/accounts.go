@@ -17,17 +17,16 @@ type AccountsService struct {
 func (as *AccountsService) CreateAccount(input *budget.Account) (err error) {
 	date, _ := time.Parse(layout, input.Date)
 
-	finishDateStr := date.Add(time.Hour * 24 * 30 * time.Duration(input.MonthAmount)).String()
-
 	currentDate, _ := time.Parse(layout, time.Now().Format(layout))
 
 	duration := currentDate.Sub(date)
 
 	currentMonthInt := int(duration.Hours() / (24 * 30))
 
+	finishDateStr := date.Add(time.Hour * 24 * 30 * time.Duration(input.MonthAmount)).String()
+
 	if currentMonthInt >= input.MonthAmount {
 		return errors.New(fmt.Sprintf("%s is already expired, impossible to create", input.Type))
-
 	}
 
 	var mounthPayment float64
@@ -42,18 +41,19 @@ func (as *AccountsService) CreateAccount(input *budget.Account) (err error) {
 
 	goalSum := mounthPayment*float64(input.MonthAmount) + input.Sum
 
-	input.CreatedAt = time.Now()
 	return as.repo.CreateAccount(&budget.Account{
 		ID:              input.ID,
+		Type:            input.Type,
 		UserID:          input.UserID,
 		Name:            input.Name,
 		MonthAmount:     input.MonthAmount,
 		Percent:         input.Percent,
 		Date:            input.Date,
+		Sum:             input.Sum,
+		CreatedAt:       time.Now(),
 		AlreadyReceived: float64(currentMonthInt) * mounthPayment,
 		FinishDate:      finishDateStr[:len(layout)],
 		MonthlyPayment:  mounthPayment,
-		Sum:             input.Sum,
 		GoalSum:         goalSum,
 	})
 }
@@ -108,6 +108,7 @@ func (as *AccountsService) GetAll(userId int, account, orderBy, sortedBy string)
 		as.repo.EditAccount(budget.Account{
 			ID:              finance.ID,
 			UserID:          finance.UserID,
+			Type:            finance.Type,
 			Name:            finance.Name,
 			MonthAmount:     finance.MonthAmount,
 			Percent:         finance.Percent,
@@ -117,6 +118,7 @@ func (as *AccountsService) GetAll(userId int, account, orderBy, sortedBy string)
 			MonthlyPayment:  mounthPayment,
 			Sum:             finance.Sum,
 			GoalSum:         goalSum,
+			CreatedAt:       finance.CreatedAt,
 		})
 
 		outputList = append(outputList, listOutput{
@@ -181,6 +183,7 @@ func (as *AccountsService) EditAccount(finance budget.Account) (err error) {
 
 	update := budget.Account{
 		ID:              finance.ID,
+		Type:            finance.Type,
 		UserID:          finance.UserID,
 		Name:            finance.Name,
 		MonthAmount:     finance.MonthAmount,
@@ -191,6 +194,7 @@ func (as *AccountsService) EditAccount(finance budget.Account) (err error) {
 		MonthlyPayment:  mounthPayment,
 		Sum:             finance.Sum,
 		GoalSum:         goalSum,
+		CreatedAt:       finance.CreatedAt,
 	}
 	return as.repo.EditAccount(update)
 }
