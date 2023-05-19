@@ -45,6 +45,9 @@ func (app *App) getAllAccounts(c *gin.Context) {
 	if orderBy == "" {
 		orderBy = "date"
 	}
+	if orderBy == "amount" {
+		orderBy = "sum"
+	}
 
 	account := c.Param("account")
 	if account != "deposit" && account != "credit" {
