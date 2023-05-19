@@ -96,7 +96,9 @@ export default {
           this.initialValues.name = values?.name ? values.name : '';
           this.initialValues.monthAmount = values?.monthAmount ? values.monthAmount : 0;
           this.initialValues.percent = values?.percent ? values.percent : 0;
-          this.initialValues.date = values?.date ? values.date : '2004-05-22';
+          this.initialValues.date = values?.startAccountDate
+            ? values.startAccountDate
+            : '2023-01-12';
           this.initialValues.sum = values?.sum ? values.sum : 0;
         }
       },
