@@ -102,6 +102,12 @@ func (as *AccountsService) EditAccount(finance budget.Account) (err error) {
 		return errors.New(fmt.Sprintf("wrong date range, impossible to update this %s", finance.Type))
 	}
 
+	date, _ := time.Parse(layout, finance.Date)
+
+	if date.After(time.Now()) {
+		return errors.New(fmt.Sprintf("Error occurred, %s time cannot be bigger than current time", finance.Type))
+	}
+
 	return as.repo.EditAccount(_str)
 }
 
