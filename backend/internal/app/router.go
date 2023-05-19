@@ -37,8 +37,11 @@ func Routers(app *App) *gin.Engine {
 			lists.GET("/get-stats", app.getStats)
 		}
 
+		api.GET("/account-total", app.getTotalDeposits)
+
 		accounts := api.Group("/accounts")
 		{
+
 			accounts.GET("/:account", app.getAllAccounts)
 			accounts.POST("/create", app.createAccount)
 			accounts.DELETE("/delete", app.deleteAccount)
