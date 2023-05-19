@@ -3,7 +3,6 @@ package service
 import (
 	budget "budget-tracker"
 	"budget-tracker/pkg/repository"
-	"errors"
 	"fmt"
 	"time"
 )
@@ -14,49 +13,11 @@ type AccountsService struct {
 	repo repository.Accounts
 }
 
-func (as *AccountsService) CreateAccount(input *budget.Account) (err error) {
-	date, _ := time.Parse(layout, input.Date)
+func (as *AccountsService) CreateAccount(input budget.Account) (err error) {
+	_struct, _ := getUpdatedStruct(input)
 
-	currentDate, _ := time.Parse(layout, time.Now().Format(layout))
 
-	duration := currentDate.Sub(date)
-
-	currentMonthInt := int(duration.Hours() / (24 * 30))
-
-	finishDateStr := date.Add(time.Hour * 24 * 30 * time.Duration(input.MonthAmount)).String()
-
-	if currentMonthInt >= input.MonthAmount {
-		return errors.New(fmt.Sprintf("%s is already expired, impossible to create", input.Type))
-	}
-
-	var mounthPayment float64
-
-	if input.Type == "deposit" {
-		mounthPayment = input.Sum * (input.Percent / 100) / 12
-	} else if input.Type == "credit" {
-		daysOfCredit := getDaysFromDate(input.Date) // 2023-01-11 // 127
-
-		mounthPayment = (input.Sum*(input.Percent/100)*float64(daysOfCredit)/365 + input.Sum) / float64(input.MonthAmount)
-	}
-
-	goalSum := mounthPayment*float64(input.MonthAmount) + input.Sum
-
-	return as.repo.CreateAccount(&budget.Account{
-		ID:              input.ID,
-		Type:            input.Type,
-		UserID:          input.UserID,
-		Name:            input.Name,
-		MonthAmount:     input.MonthAmount,
-		Percent:         input.Percent,
-		Date:            input.Date,
-		Sum:             input.Sum,
-		CreatedAt:       time.Now(),
-		AlreadyReceived: float64(currentMonthInt) * mounthPayment,
-		FinishDate:      finishDateStr[:len(layout)],
-		MonthlyPayment:  mounthPayment,
-		GoalSum:         goalSum,
-	})
-}
+	return as.repo.CreateAccount(&_struct)
 
 type listOutput struct {
 	Id           int        `json:"id"`
@@ -84,56 +45,23 @@ func (as *AccountsService) GetAll(userId int, account, orderBy, sortedBy string)
 
 	for _, finance := range list {
 
-		var mounthPayment float64
-		date, _ := time.Parse(layout, finance.Date)
 
-		finishDateStr := date.Add(time.Hour * 24 * 30 * time.Duration(finance.MonthAmount)).String()
+		_str, curMonth := getUpdatedStruct(finance)
 
-		currentDate, _ := time.Parse(layout, time.Now().Format(layout))
-
-		duration := currentDate.Sub(date)
-
-		currentMonthInt := int(duration.Hours() / (24 * 30))
-
-		if finance.Type == "deposit" {
-			mounthPayment = finance.Sum * (finance.Percent / 100) / 12
-		} else if finance.Type == "credit" {
-			daysOfCredit := getDaysFromDate(finance.Date) // 2023-01-11 // 127
-
-			mounthPayment = (finance.Sum*(finance.Percent/100)*float64(daysOfCredit)/365 + finance.Sum) / float64(finance.MonthAmount)
-		}
-
-		goalSum := mounthPayment*float64(finance.MonthAmount) + finance.Sum
-
-		as.repo.EditAccount(budget.Account{
-			ID:              finance.ID,
-			UserID:          finance.UserID,
-			Type:            finance.Type,
-			Name:            finance.Name,
-			MonthAmount:     finance.MonthAmount,
-			Percent:         finance.Percent,
-			Date:            finance.Date,
-			AlreadyReceived: float64(currentMonthInt) * mounthPayment,
-			FinishDate:      finishDateStr[:len(layout)],
-			MonthlyPayment:  mounthPayment,
-			Sum:             finance.Sum,
-			GoalSum:         goalSum,
-			CreatedAt:       finance.CreatedAt,
-		})
 
 		outputList = append(outputList, listOutput{
 			Id:           finance.ID,
 			Type:         finance.Type,
 			Name:         finance.Name,
 			MonthAmount:  finance.MonthAmount,
-			CurrentMonth: currentMonthInt,
+			CurrentMonth: curMonth,
 			Percent:      finance.Percent,
 			Sum:          finance.Sum,
-			MonthPayment: mounthPayment,
-			Payed:        float64(currentMonthInt) * mounthPayment,
+			MonthPayment: _str.MonthlyPayment,
+			Payed:        float64(curMonth) * _str.MonthlyPayment,
 			Date:         finance.Date,
-			FinishDate:   finishDateStr[:len(layout)],
-			GoalSum:      goalSum,
+			FinishDate:   _str.FinishDate,
+			GoalSum:      _str.GoalSum,
 			CreatedAt:    &finance.CreatedAt,
 		})
 	}
@@ -159,8 +87,14 @@ func (as *AccountsService) DeleteAccount(listId, userId int) (err error) {
 }
 
 func (as *AccountsService) EditAccount(finance budget.Account) (err error) {
-	date, _ := time.Parse(layout, finance.Date)
+	_str, _ := getUpdatedStruct(finance)
+	return as.repo.EditAccount(_str)
+}
 
+func getUpdatedStruct(finance budget.Account) (budget.Account, int) {
+	var mounthPayment float64
+
+	date, _ := time.Parse(layout, finance.Date)
 	finishDateStr := date.Add(time.Hour * 24 * 30 * time.Duration(finance.MonthAmount)).String()
 
 	currentDate, _ := time.Parse(layout, time.Now().Format(layout))
@@ -168,8 +102,6 @@ func (as *AccountsService) EditAccount(finance budget.Account) (err error) {
 	duration := currentDate.Sub(date)
 
 	currentMonthInt := int(duration.Hours() / (24 * 30))
-
-	var mounthPayment float64
 
 	if finance.Type == "deposit" {
 		mounthPayment = finance.Sum * (finance.Percent / 100) / 12
@@ -196,5 +128,5 @@ func (as *AccountsService) EditAccount(finance budget.Account) (err error) {
 		GoalSum:         goalSum,
 		CreatedAt:       finance.CreatedAt,
 	}
-	return as.repo.EditAccount(update)
+	return update, currentMonthInt
 }
