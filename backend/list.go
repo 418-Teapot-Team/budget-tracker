@@ -17,27 +17,6 @@ func (ListsGetter) TableName() string {
 	return listTable
 }
 
-type CustomTime struct {
-	sql.NullTime
-}
-
-func (ct *CustomTime) UnmarshalJSON(data []byte) error {
-	// Implement your custom unmarshaling logic here
-	// Parse the string value from `data` and set it in `ct.NullTime.Time`
-
-	// Example implementation assuming the string is in RFC3339 format
-	str := string(data)
-	t, err := time.Parse(`"2006-01-02T15:04:05Z"`, str)
-	if err != nil {
-		return err
-	}
-
-	ct.Time = t
-	ct.Valid = true
-
-	return nil
-}
-
 func (lt *List) UnmarshalJSON(data []byte) error {
 	type Alias List // Create an alias of the struct to avoid infinite recursion
 
@@ -63,7 +42,6 @@ func (lt *List) UnmarshalJSON(data []byte) error {
 	} else {
 		lt.CreatedAt.Valid = false
 	}
-
 	return nil
 }
 

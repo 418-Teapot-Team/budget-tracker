@@ -28,6 +28,8 @@ type listOutput struct {
 	Sum          float64    `json:"sum"`
 	MonthPayment float64    `json:"monthPayment"`
 	Payed        float64    `json:"payed"`
+	Date         string     `json:"startAccountDate"`
+	FinishDate   string     `json:"finishAccountDate"`
 	CreatedAt    *time.Time `json:"createdAt" binding:"required"`
 }
 
@@ -42,6 +44,9 @@ func (as *AccountsService) GetAll(userId int, account, orderBy, sortedBy string)
 	for _, finance := range list {
 		var mounthPayment float64
 		date, _ := time.Parse(layout, finance.Date)
+
+		finishDateStr := date.Add(time.Hour * 24 * 30 * time.Duration(finance.MonthAmount)).String()
+
 		currentDate, _ := time.Parse(layout, time.Now().Format(layout))
 
 		duration := currentDate.Sub(date)
@@ -66,6 +71,8 @@ func (as *AccountsService) GetAll(userId int, account, orderBy, sortedBy string)
 			Sum:          finance.Sum,
 			MonthPayment: mounthPayment,
 			Payed:        float64(currentMonthInt) * mounthPayment,
+			Date:         finance.Date,
+			FinishDate:   finishDateStr[:len(layout)],
 			CreatedAt:    &finance.CreatedAt,
 		})
 	}
