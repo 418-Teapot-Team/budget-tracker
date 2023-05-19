@@ -17,6 +17,13 @@ type AccountsService struct {
 func (as *AccountsService) CreateAccount(input budget.Account) (err error) {
 	_struct, currMonth := getUpdatedStruct(input)
 
+	date, _ := time.Parse(layout, input.Date)
+
+	if date.After(time.Now()) {
+		return errors.New(fmt.Sprintf("Error occurred, %s time cannot be bigger than current time", input.Type))
+
+	}
+
 	if currMonth > _struct.MonthAmount {
 		return errors.New(fmt.Sprintf("wrong date range, impossible to create this %s", input.Type))
 	}
