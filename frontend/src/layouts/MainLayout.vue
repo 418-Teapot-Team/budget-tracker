@@ -60,7 +60,7 @@ export default {
     LogoutIcon,
   },
   computed: {
-    ...mapState(useAuthStore, ['user', 'isAuthorized']),
+    ...mapState(useAuthStore, ['user']),
     ...mapState(useDashboardStore, ['courses']),
   },
   watch: {

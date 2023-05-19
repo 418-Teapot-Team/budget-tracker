@@ -2,7 +2,7 @@
   <div
     class="h-full bg-white p-2 shadow-sm rounded-2xl flex flex-col justify-center items-center gap-5"
   >
-    <span class="text-black text-3xl">{{ title }}</span>
+    <span class="text-black text-3xl first-letter:capitalize">{{ title }}</span>
     <Pie :options="options" :data="dataset" />
   </div>
 </template>
@@ -26,7 +26,7 @@ export default {
         labels: this.rightLabels,
         datasets: [
           {
-            backgroundColor: this.values.map((item) => item.color),
+            backgroundColor: this.values.map((item) => item.hash),
             data: this.values.map((item) => item.value),
           },
         ],

@@ -4,10 +4,13 @@ export default defineStore('accounts', {
   state: () => ({
     deposits: [],
     loans: [],
+    depositTotal: {},
   }),
   actions: {
-    async getAccounts({ type }) {
-      const { data } = await HttpClient.get(`api/accounts/${type}`);
+    async getAccounts({ type, orderBy = '', reverse = false }) {
+      const { data } = await HttpClient.get(
+        `api/accounts/${type}?orderBy=${orderBy}&reverse=${reverse}`
+      );
       if (type === 'deposit') {
         this.deposits = data.result;
       } else {
@@ -39,6 +42,10 @@ export default defineStore('accounts', {
       await HttpClient.delete('api/accounts/delete', {
         data: { id: payload.id },
       });
+    },
+    async getDepositTotal() {
+      const { data } = await HttpClient.get('api/account-total');
+      this.depositTotal = data;
     },
   },
 });

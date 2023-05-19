@@ -10,11 +10,13 @@ func Routers(app *App) *gin.Engine {
 	router.Use(CORSMiddleware())
 
 	auth := router.Group("/auth")
+	auth.Use(CORSMiddleware())
 	{
 		auth.POST("/sign-up", app.signUp)
 		auth.POST("/sign-in", app.signIn)
 	}
 	api := router.Group("/api", app.authMiddleware)
+	api.Use(CORSMiddleware())
 	{
 
 		api.GET("/get-courses", app.getCourses)
@@ -35,16 +37,16 @@ func Routers(app *App) *gin.Engine {
 			lists.GET("/get-stats", app.getStats)
 		}
 
+		api.GET("/account-total", app.getTotalDeposits)
+
 		accounts := api.Group("/accounts")
 		{
+
 			accounts.GET("/:account", app.getAllAccounts)
 			accounts.POST("/create", app.createAccount)
 			accounts.DELETE("/delete", app.deleteAccount)
 			accounts.PUT("/update", app.editAccount)
-
-			accounts.GET("/total", app.getTotalDeposits)
 		}
 	}
 	return router
-
 }
