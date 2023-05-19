@@ -4,7 +4,7 @@
     <div class="flex flex-row justify-between items-center">
       <div class="flex flex-row justify-start items-center gap-4">
         <span class="text-black text-4xl font-bold">Expense</span>
-        <div class="h-8 w-8 cursor-pointer">
+        <div class="h-8 w-8 cursor-pointer" @click="showExpensePopup = true">
           <add-icon />
         </div>
       </div>
@@ -13,28 +13,41 @@
     <!-- table -->
     <div class="pt-4 w-full">
       <finances-table
+        v-if="expenses?.length"
+        :data="expenses"
         :isIncome="false"
         @onDeleteItem="deleteItem"
         @onLoadMore="loadMore"
         @onEditItem="editItem"
       />
+      <empty-list v-else class="mt-10" />
     </div>
 
     <!-- popup -->
     <transaction-popup
-      v-if="showExpsensePopup"
-      :isEdit="true"
-      :defaltValues="obj"
-      @onClose="showExpsensePopup = false"
+      v-if="showExpensePopup"
+      :isEdit="isEdit"
+      @onClose="showExpensePopup = false"
+      :defaltValues="itemToEdit"
+      :categories="expensesCategories"
+      @onAdd="saveItem"
+      @onEdit="updateItem"
     />
   </section>
 </template>
 
 <script>
 import FinancesTable from '@/components/FinancesTable.vue';
+import EmptyList from '@/components/EmptyList.vue';
 import AddIcon from '@/components/Icons/AddIcon.vue';
 import Filters from '@/components/Filters.vue';
 import TransactionPopup from '@/components/TransactionPopup.vue';
+import useTransitionStore from '@/stores/transactions';
+import { mapActions, mapState } from 'pinia';
+import { useToast } from 'vue-toastification';
+
+const toast = useToast();
+
 export default {
   name: 'Expense',
   components: {
@@ -42,32 +55,75 @@ export default {
     AddIcon,
     Filters,
     TransactionPopup,
+    EmptyList,
   },
   data() {
     return {
-      showExpsensePopup: false,
-      selectedExpense: {},
-      obj: {
-        category: 'bsns',
-        amount: 340,
-        comment: 'Comment',
-      },
+      showExpensePopup: false,
+      itemToEdit: {},
+      isEdit: false,
     };
   },
+
+  loadMore() {
+    console.log('load more');
+  },
+  computed: {
+    ...mapState(useTransitionStore, ['expensesCategories', 'expenses']),
+  },
   methods: {
+    ...mapActions(useTransitionStore, [
+      'getTransactions',
+      'getCategories',
+      'createTransaction',
+      'editTransaction',
+      'deleteTransaction',
+    ]),
     loadMore() {
       console.log('load more');
     },
-    deleteItem(id) {
-      console.log(id);
+    async deleteItem(id) {
+      try {
+        await this.deleteTransaction({ id });
+        await this.getTransactions({ type: 'expenses' });
+      } catch (e) {
+        toast.error(e?.message);
+      }
+    },
+    async updateItem(values) {
+      try {
+        const payload = { ...values, type: 'expenses' };
+        await this.editTransaction(payload);
+        await this.getTransactions({ type: 'expenses' });
+        toast.success('Expense changed!');
+        this.showExpensePopup = false;
+      } catch (e) {
+        toast.error(e?.message);
+      }
+    },
+    async saveItem(values) {
+      try {
+        const payload = { ...values, type: 'expenses' };
+        await this.createTransaction(payload);
+        await this.getTransactions({ type: 'expenses' });
+        toast.success('New expense added!');
+        this.showExpensePopup = false;
+      } catch (e) {
+        toast.error(e?.message);
+      }
     },
     applyFilters({ category, filter }) {
       console.log(category, filter);
     },
     editItem(id) {
-      this.showExpsensePopup = true;
-      console.log(id);
+      this.itemToEdit = this.expenses?.find((item) => item.id === id);
+      this.isEdit = true;
+      this.showExpensePopup = true;
     },
+  },
+  mounted() {
+    this.getCategories().catch((err) => toast.error(err?.message));
+    this.getTransactions({ type: 'expenses' }).catch((err) => toast.error(err?.message));
   },
 };
 </script>

@@ -5,7 +5,7 @@
         <div class="flex flex-row justify-between items-center mb-4">
           <span class="text-black text-4xl font-bold">Dashboard</span>
         </div>
-        <current-month-banner :amount="10342" class="mb-6" />
+        <current-month-banner :amount="currentMonthSaving" class="mb-6" />
         <div class="flex flex-row justify-between mb-6">
           <popular-category-stats
             imageUrl="https://www.svgrepo.com/show/357712/exchange-alt.svg"
@@ -53,7 +53,7 @@ import PopularCategoryStats from '@/components/PopularCategoryStats.vue';
 import TransactionsChart from '@/components/TransactionsChart.vue';
 import LastTransactions from '@/components/LastTransactions.vue';
 import useDashboardStore from '@/stores/dashboard';
-import { mapActions } from 'pinia';
+import { mapActions, mapState } from 'pinia';
 export default {
   name: 'Dashboard',
   components: {
@@ -61,6 +61,9 @@ export default {
     PopularCategoryStats,
     TransactionsChart,
     LastTransactions,
+  },
+  computed: {
+    ...mapState(useDashboardStore, ['currentMonthSaving']),
   },
   data() {
     return {

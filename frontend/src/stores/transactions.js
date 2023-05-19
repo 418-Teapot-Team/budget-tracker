@@ -4,23 +4,53 @@ export default defineStore('transactions', {
   state: () => ({
     incomes: [],
     expenses: [],
-    categories: [],
+    incomesCtegories: [],
+    expensesCategories: [],
   }),
 
   actions: {
     async getTransactions({ type }) {
       const { data } = await HttpClient.get(`api/lists/${type}`);
-      console.log(data);
-      if (type === 'incomes') {
-        this.incomes = data;
+      if (type === 'income') {
+        this.incomes = data.result;
       } else {
-        this.expenses = data;
+        this.expenses = data.result;
       }
     },
     async getCategories() {
-      const { data } = await HttpClient.get(`api/categories `);
-      console.log(data);
-      this.categories = data;
+      const { data } = await HttpClient.get(`api/get-categories`);
+      this.incomesCtegories = [];
+      this.expensesCategories = [];
+      data?.result?.forEach((item) => {
+        if (item.type === 'income') {
+          this.incomesCtegories.push(item);
+        } else {
+          this.expensesCategories.push(item);
+        }
+      });
+    },
+    async createTransaction(payload) {
+      await HttpClient.post('api/lists/create', {
+        type: payload.type,
+        category: payload.category,
+        amount: Number(payload.amount),
+        comment: payload.comment,
+      });
+    },
+    async editTransaction(payload) {
+      await HttpClient.put('api/lists/update', {
+        id: payload.id,
+        category: payload.category,
+        amount: Number(payload.amount),
+        comment: payload.comment,
+        type: payload.type,
+        createdAt: payload.createdAt,
+      });
+    },
+    async deleteTransaction(payload) {
+      await HttpClient.delete('api/lists/delete', {
+        data: { id: payload.id },
+      });
     },
   },
 });

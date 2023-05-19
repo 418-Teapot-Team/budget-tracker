@@ -3,9 +3,12 @@ import { httpClient as HttpClient } from '../utils/HttpClient';
 export default defineStore('auth', {
   state: () => ({
     user: {},
-    isAuthorized: !!localStorage.getItem('tracker-auth-token'),
   }),
-
+  getters: {
+    isAuthorized() {
+      return !!localStorage.getItem('tracker-auth-token');
+    },
+  },
   actions: {
     async login(payload) {
       const { data } = await HttpClient.post('auth/sign-in', {

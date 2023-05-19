@@ -60,6 +60,7 @@ export default {
           password: values.password,
         });
         toast.success('Successfully registered. Please log in');
+        this.tab = 'login';
         resetForm();
       } catch (e) {
         toast.error(e.message);

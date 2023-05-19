@@ -4,6 +4,7 @@ export default defineStore('dashboard', {
   state: () => ({
     courses: [],
     categories: [],
+    currentMonthSaving: 0,
   }),
 
   actions: {
@@ -12,12 +13,12 @@ export default defineStore('dashboard', {
       this.courses = data;
     },
     async getTopCaregories() {
-      const { data } = await HttpClient.get('api/lists/get-top-expenses');
+      const { data } = await HttpClient.get(`api/lists/get-top-categories?type=expenses`);
       console.log(data);
     },
     async getCurrentMonthSavings() {
       const { data } = await HttpClient.get('api/lists/current-mon-saved');
-      console.log(data);
+      this.currentMonthSaving = data.result;
     },
   },
 });
