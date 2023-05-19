@@ -81,11 +81,18 @@ func (app *App) getBudgetList(c *gin.Context) {
 		return
 	}
 
+	categoryParam := c.Query("category")
+	category := -1
+
+	if categoryParam != "" {
+		var err error
+		category, err = strconv.Atoi(categoryParam)
+		if err != nil {
+			category = -1
+		}
+	}
+
 	budgetType := c.Param("type")
-	//if budgetType == "" {
-	//	app.newErrorResponse(c, http.StatusBadRequest, "please indicate the type of budget")
-	//	return
-	//}
 
 	if budgetType != "income" && budgetType != "expenses" && budgetType != "all" && budgetType != "" {
 		app.newErrorResponse(c, http.StatusNotFound, "possible types: income, expenses, all(\"\")")
@@ -122,7 +129,7 @@ func (app *App) getBudgetList(c *gin.Context) {
 		return
 	}
 
-	list, _ := app.s.ListsService.GetList(userId, budgetType, orderBy, sortedBy, takeAmount, skipAmount)
+	list, _ := app.s.ListsService.GetList(userId, budgetType, orderBy, sortedBy, takeAmount, skipAmount, category)
 
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"result": list,
