@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { httpClient as HttpClient } from '../utils/HttpClient';
-export default defineStore('dashboard', {
+export default defineStore('statistics', {
   state: () => ({
     expensesStats: [],
     expensesCategories: [],
@@ -14,7 +14,7 @@ export default defineStore('dashboard', {
       const { data } = await HttpClient.get(
         `api/lists/get-top-categories?type=${type}&monts=${months}`
       );
-      console.log(data);
+
       if (type === 'income') {
         this.incomeCategories = data.result;
       } else {
@@ -27,9 +27,14 @@ export default defineStore('dashboard', {
       );
       this.total = data.result;
     },
-    async getStats() {
-      const { data } = await HttpClient.get('api/lists/get-saving-stats');
-      this.savingStats = data.result;
+    async getStats({ type, month = 1 }) {
+      const { data } = await HttpClient.get(`api/lists/get-stats?type=${type}&months=${month}`);
+
+      if (type === 'income') {
+        this.incomeStats = data.result;
+      } else {
+        this.expensesStats = data.result;
+      }
     },
   },
 });

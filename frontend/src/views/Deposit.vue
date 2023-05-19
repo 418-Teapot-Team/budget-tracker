@@ -4,9 +4,13 @@
     <div class="flex flex-row justify-between items-end">
       <div class="flex flex-row justify-start items-end gap-4">
         <div class="flex flex-col gap-2">
-          <span class="text-black text-4xl font-bold">Desposits</span>
+          <span class="text-black text-4xl font-bold">Deposits</span>
           <span class="text-black text-3xl font-bold"
-            >Total: <span class="font-normal">10432 / 71343</span> UAH</span
+            >Total:
+            <span class="font-normal"
+              >{{ depositTotal?.payed?.toFixed(2) }} / {{ depositTotal?.goalSum?.toFixed(2) }}</span
+            >
+            UAH</span
           >
         </div>
         <div class="h-8 w-8 cursor-pointer mb-1" @click="showDepositPopup = true">
@@ -28,11 +32,11 @@
           @onDeleteDeposit="deleteItem"
           @onEditDeposit="editItem"
         />
-        <div class="w-full flex h-10 flex-row justify-center items-center">
+        <!-- <div class="w-full flex h-10 flex-row justify-center items-center">
           <div class="w-36 h-10">
             <app-button text="Load more" @click="loadMore" class="h-full" />
           </div>
-        </div>
+        </div> -->
       </div>
       <empty-list v-else class="mt-10" />
     </div>
@@ -56,6 +60,7 @@ import DepositCard from '@/components/DepositCard.vue';
 import BankingPopup from '@/components/BankingPopup.vue';
 import EmptyList from '@/components/EmptyList.vue';
 import useAccountsStore from '@/stores/accounts';
+import useFiltersStore from '@/stores/filters';
 import { mapState, mapActions } from 'pinia';
 import { useToast } from 'vue-toastification';
 
@@ -78,7 +83,8 @@ export default {
     };
   },
   computed: {
-    ...mapState(useAccountsStore, ['deposits']),
+    ...mapState(useAccountsStore, ['deposits', 'depositTotal']),
+    ...mapState(useFiltersStore, ['filters']),
   },
   methods: {
     ...mapActions(useAccountsStore, [
@@ -86,6 +92,7 @@ export default {
       'createAccount',
       'editAccount',
       'deleteAccount',
+      'getDepositTotal',
     ]),
     async saveItem(values) {
       try {
@@ -120,8 +127,18 @@ export default {
         toast.error(e?.message);
       }
     },
-    applyFilters({ category, filter }) {
-      console.log(category, filter);
+    applyFilters({ filter }) {
+      const filterToUrl = this.filters.find((item) => filter === item.value.id);
+
+      this.$router
+        .push({
+          query: {
+            orderBy: filterToUrl ? filterToUrl?.value?.orderBy : 'default',
+            reverse: filterToUrl ? filterToUrl?.value?.reverse : false,
+            filterId: filterToUrl ? filterToUrl?.value?.id : 'default',
+          },
+        })
+        .then(() => this.getInitialData());
     },
     editItem(id) {
       this.itemToEdit = this.deposits?.find((item) => item.id === id);
@@ -133,9 +150,14 @@ export default {
       this.itemToEdit = {};
     },
     async getInitialData() {
+      const orderBy =
+        this.$route.query?.orderBy && this.$route.query?.orderBy !== 'default'
+          ? this.$route.query?.orderBy
+          : '';
+      const reverse = this.$route.query?.reverse === 'true' ? true : false;
       try {
-        await this.getAccounts({ type: 'deposit' });
-        console.log(this.deposits);
+        await this.getAccounts({ type: 'deposit', orderBy, reverse });
+        await this.getDepositTotal();
       } catch (e) {
         toast.error(e?.message);
       }

@@ -24,7 +24,7 @@
         <span
           class="text-lg font-thin self-center justify-end"
           :class="item.type === 'expenses' ? 'text-red-500' : 'text-green-500'"
-          >{{ item.type === 'expenses' < 0 ? '-' : '+' }}{{ item.amount }}</span
+          >{{ item.type === 'expenses' ? '-' : '+' }}{{ item.amount }}</span
         >
       </div>
     </div>

@@ -10,21 +10,25 @@
               <app-button
                 text="Expenses"
                 :isOutline="tab !== 'expenses'"
-                @click="tab = 'expenses'"
+                @click="changeTab('expenses')"
               />
             </div>
             <div class="h-10 w-40">
-              <app-button text="Incomes" :isOutline="tab !== 'incomes'" @click="tab = 'incomes'" />
+              <app-button
+                text="Incomes"
+                :isOutline="tab !== 'income'"
+                @click="changeTab('income')"
+              />
             </div>
           </div>
         </div>
       </div>
-      <filters @onApplyFilters="applyFilters" :withCategory="false" />
+      <filters @onApplyFilters="applyFilters" :withCategory="false" :isStats="true" />
     </div>
     <!-- data -->
     <div class="pt-8 w-full flex flex-row gap-6 stats">
       <div class="flex flex-col justify-between gap-4 w-2/3">
-        <balance-card class="h-1/3" />
+        <balance-card class="h-1/3" :amount="total" />
         <transactions-chart
           :bottomLabels="labels"
           :values="data"
@@ -34,7 +38,7 @@
       </div>
       <categories-chart
         class="w-1/3"
-        :rightLabels="categoryLabels"
+        :rightLabels="categoriesLabels"
         :values="categoryDataset"
         :title="`${tab} by categories`"
       />
@@ -47,8 +51,13 @@ import Filters from '@/components/Filters.vue';
 import BalanceCard from '@/components/BalanceCard.vue';
 import CategoriesChart from '@/components/CategoriesChart.vue';
 import TransactionsChart from '@/components/TransactionsChart.vue';
+import useFiltersStore from '@/stores/filters';
 import useStatisticsStore from '@/stores/statistics';
 import { mapState, mapActions } from 'pinia';
+import { useToast } from 'vue-toastification';
+
+const toast = useToast();
+
 export default {
   name: 'Deposit',
   components: {
@@ -60,38 +69,88 @@ export default {
   data() {
     return {
       tab: 'expenses',
-      categoryLabels: ['Transactions', 'Travelling', 'Rent', 'Education'],
-      categoryDataset: [
-        {
-          value: 20,
-          color: '#ffefe2',
-        },
-        {
-          value: 30,
-          color: '#F0F5FF',
-        },
-        {
-          value: 45,
-          color: '#FEF8FC',
-        },
-        {
-          value: 25,
-          color: '#e8e8e8',
-        },
-      ],
-      labels: [
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
-        26, 27, 28, 29, 30,
-      ],
-      data: [
-        1500, 2200, 510, 1832, 2038, 1639, 5433, 1234, 2321, 3212, 1200, 1200, 1500, 1100, 1943,
-        1632, 4324, 3444, 932, 811, 7432, 5474, 2343, 2443, 1732, 1200, 1100, 1100, 1250, 6548,
-      ],
     };
   },
-  computed: {},
-  methods: {},
-  mounted() {},
+  computed: {
+    ...mapState(useStatisticsStore, [
+      'expensesStats',
+      'expensesCategories',
+      'total',
+      'incomeStats',
+      'incomeCategories',
+    ]),
+    ...mapState(useFiltersStore, ['filtersForStats']),
+    categoriesLabels() {
+      if (this.tab === 'income') {
+        return this.incomeCategories?.map((item) => item.category?.category);
+      } else {
+        return this.expensesCategories?.map((item) => item.category?.category);
+      }
+    },
+    categoryDataset() {
+      if (this.tab === 'income') {
+        return this.incomeCategories?.map((item) => ({
+          value: item?.amount,
+          hash: '#' + item?.category?.hash,
+        }));
+      } else {
+        return this.expensesCategories?.map((item) => ({
+          value: item?.amount,
+          hash: '#' + item?.category.hash,
+        }));
+      }
+    },
+    labels() {
+      if (this.tab === 'income') {
+        return this.incomeStats?.map((item) => item.Date);
+      } else {
+        return this.expensesStats?.map((item) => item.Date);
+      }
+    },
+    data() {
+      if (this.tab === 'income') {
+        return this.incomeStats?.map((item) => item.Value);
+      } else {
+        return this.expensesStats?.map((item) => item.Value);
+      }
+    },
+  },
+  methods: {
+    ...mapActions(useStatisticsStore, ['getTopCaregories', 'getTotalSum', 'getStats']),
+    changeTab(tabVal) {
+      this.tab = tabVal;
+      this.getInitialData(tabVal);
+    },
+    async getInitialData(tabValue) {
+      const months = this.$route.query?.months ? this.$route.query?.months : 1;
+      try {
+        await this.getTopCaregories({ type: tabValue, months });
+        await this.getTotalSum({ type: tabValue, months });
+        await this.getStats({ type: tabValue, months });
+        console.log(this.expensesStats);
+        console.log(this.incomeStats);
+      } catch (e) {
+        toast.error(e?.message);
+      }
+    },
+    applyFilters({ filter }) {
+      const filterToUrl = this.filtersForStats.find((item) => filter === item.value.id);
+
+      this.$router
+        .push({
+          query: {
+            months: filterToUrl ? filterToUrl?.value?.months : 1,
+            filterId: filterToUrl ? filterToUrl?.value?.id : 'default',
+          },
+        })
+        .then(() => {
+          this.getInitialData(this.tab);
+        });
+    },
+  },
+  mounted() {
+    this.getInitialData(this.tab);
+  },
 };
 </script>
 

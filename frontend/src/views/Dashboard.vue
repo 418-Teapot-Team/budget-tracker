@@ -19,7 +19,7 @@
         <transactions-chart
           :values="data"
           :bottomLabels="labels"
-          title="Incomes overview"
+          title="savings overview"
           class="h-full"
         />
       </div>
@@ -58,10 +58,10 @@ export default {
       'transactions',
     ]),
     labels() {
-      return this.savingStats?.map((item) => item.Month);
+      return this.savingStats?.map((item) => item.Date);
     },
     data() {
-      return this.savingStats?.map((item) => item.IncomeNet);
+      return this.savingStats?.map((item) => item.Value);
     },
   },
 

@@ -12,7 +12,7 @@
           <span class="text-black"
             >{{ data?.payed?.toFixed(2) }} / {{ data?.goalSum?.toFixed(2) }} UAH</span
           >
-          <span class="text-black">Ставка {{ data?.percent }}% річних</span>
+          <span class="text-black">Interest rate: {{ data?.percent }}%</span>
         </div>
       </div>
       <div class="w-full">

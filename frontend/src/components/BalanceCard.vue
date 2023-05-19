@@ -4,7 +4,7 @@
   >
     <div class="flex flex-col justify-center items-start gap-3">
       <span class="text-3xl font-bold">Total: </span>
-      <span class="text-4xl font-thin">5 342 UAH</span>
+      <span class="text-4xl font-thin">{{ amount }} UAH</span>
     </div>
   </div>
 </template>

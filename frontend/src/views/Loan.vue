@@ -24,11 +24,11 @@
           @onEditLoan="editItem"
         />
 
-        <div class="w-full flex h-10 flex-row justify-center items-center">
+        <!-- <div class="w-full flex h-10 flex-row justify-center items-center">
           <div class="w-36 h-10">
             <app-button text="Load more" @click="loadMore" class="h-full" />
           </div>
-        </div>
+        </div> -->
       </div>
       <empty-list v-else class="mt-10" />
     </div>
@@ -50,6 +50,7 @@ import AddIcon from '@/components/Icons/AddIcon.vue';
 import Filters from '@/components/Filters.vue';
 import LoanCard from '@/components/LoanCard.vue';
 import BankingPopup from '@/components/BankingPopup.vue';
+import useFiltersStore from '@/stores/filters';
 import useAccountsStore from '@/stores/accounts';
 import EmptyList from '@/components/EmptyList.vue';
 import { mapState, mapActions } from 'pinia';
@@ -74,6 +75,7 @@ export default {
   },
   computed: {
     ...mapState(useAccountsStore, ['loans']),
+    ...mapState(useFiltersStore, ['filters']),
   },
   methods: {
     ...mapActions(useAccountsStore, [
@@ -115,8 +117,18 @@ export default {
         toast.error(e?.message);
       }
     },
-    applyFilters({ category, filter }) {
-      console.log(category, filter);
+    applyFilters({ filter }) {
+      const filterToUrl = this.filters.find((item) => filter === item.value.id);
+
+      this.$router
+        .push({
+          query: {
+            orderBy: filterToUrl ? filterToUrl?.value?.orderBy : 'default',
+            reverse: filterToUrl ? filterToUrl?.value?.reverse : false,
+            filterId: filterToUrl ? filterToUrl?.value?.id : 'default',
+          },
+        })
+        .then(() => this.getInitialData());
     },
     editItem(id) {
       this.itemToEdit = this.loans?.find((item) => item.id === id);
@@ -128,9 +140,14 @@ export default {
       this.itemToEdit = {};
     },
     async getInitialData() {
+      const orderBy =
+        this.$route.query?.orderBy && this.$route.query?.orderBy !== 'default'
+          ? this.$route.query?.orderBy
+          : '';
+      const reverse = this.$route.query?.reverse === 'true' ? true : false;
+      console.log(reverse);
       try {
-        await this.getAccounts({ type: 'credit' });
-        console.log(this.loans);
+        await this.getAccounts({ type: 'credit', orderBy, reverse });
       } catch (e) {
         toast.error(e?.message);
       }
