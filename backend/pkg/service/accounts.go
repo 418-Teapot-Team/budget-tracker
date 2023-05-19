@@ -110,6 +110,9 @@ func getUpdatedStruct(finance budget.Account) (budget.Account, int) {
 	}
 
 	goalSum := mounthPayment*float64(finance.MonthAmount) + finance.Sum
+	if finance.Type == "credit" {
+		goalSum = -finance.Sum
+	}
 
 	update := budget.Account{
 		ID:              finance.ID,
