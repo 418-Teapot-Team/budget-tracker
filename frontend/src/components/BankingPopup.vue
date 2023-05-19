@@ -117,7 +117,7 @@ export default {
         monthAmount: 'required|min_value:1',
         percent: 'required|min_value:0|max_value:100',
         date: 'required',
-        sum: 'required|min_value:0',
+        sum: 'required|min_value:10',
       },
     };
   },
