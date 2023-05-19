@@ -24,7 +24,7 @@ func Routers(app *App) *gin.Engine {
 		lists := api.Group("/lists")
 		{
 			lists.GET("/:type", app.getBudgetList)
-			lists.POST("/", app.createList)
+			lists.POST("/create", app.createList)
 			lists.DELETE("/", app.deleteList)
 			lists.PUT("/", app.editBudgetList)
 
