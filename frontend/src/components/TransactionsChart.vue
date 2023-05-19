@@ -1,6 +1,6 @@
 <template>
   <div class="w-full bg-white rounded-2xl shadow-sm pt-3 p-6 relative flex flex-col">
-    <span class="xl:text-sm 2xl:text-xl self-center">{{ title }}</span>
+    <span class="xl:text-sm 2xl:text-xl self-center first-letter:capitalize">{{ title }}</span>
     <Line :data="dataset" :options="options" class="pb-2" />
   </div>
 </template>

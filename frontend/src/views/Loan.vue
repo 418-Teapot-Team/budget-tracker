@@ -24,11 +24,11 @@
           @onEditLoan="editItem"
         />
 
-        <div class="w-full flex h-10 flex-row justify-center items-center">
+        <!-- <div class="w-full flex h-10 flex-row justify-center items-center">
           <div class="w-36 h-10">
             <app-button text="Load more" @click="loadMore" class="h-full" />
           </div>
-        </div>
+        </div> -->
       </div>
       <empty-list v-else class="mt-10" />
     </div>

@@ -19,7 +19,7 @@
         <transactions-chart
           :values="data"
           :bottomLabels="labels"
-          title="Incomes overview"
+          title="savings overview"
           class="h-full"
         />
       </div>
