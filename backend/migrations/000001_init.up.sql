@@ -35,7 +35,7 @@ create table accounts
     user_id      BIGINT                    NOT NULL,
     name         varchar(255)              NOT NULL,
     month_amount tinyint                   NOT NULL,
-    percent      int                       NOT NULL,
+    percent      FLOAT                     NOT NULL,
     date         DATE                      NOT NULL,
     sum          FLOAT                     NOT NULL,
     created_at   DATETIME                  NOT NULL,

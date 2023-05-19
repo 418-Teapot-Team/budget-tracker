@@ -9,6 +9,8 @@ import (
 	"budget-tracker/pkg/service"
 	"context"
 	"github.com/BoryslavGlov/logrusx"
+	"github.com/subosito/gotenv"
+
 	// "github.com/subosito/gotenv"
 	"log"
 	"os"
@@ -18,9 +20,9 @@ import (
 
 func main() {
 
-	//if err := gotenv.Load(); err != nil {
-	//	log.Fatal(err)
-	//}
+	if err := gotenv.Load(); err != nil {
+		log.Fatal(err)
+	}
 
 	logg, err := logrusx.New("budget-tracker")
 	if err != nil {
