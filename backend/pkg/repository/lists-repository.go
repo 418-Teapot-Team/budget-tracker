@@ -101,3 +101,15 @@ func (db *listsSql) GetSavingsStats(userId int) (data []budget.FinancialData, er
 
 	return data, nil
 }
+
+func (db *listsSql) GetTotalAmount(userId int, lType string, months int) (result float64, err error) {
+	query := db.db.Table("lists").
+		Select("IFNULL(SUM(amount),0)").
+		//Where("MONTH(created_at) = ? AND YEAR(created_at) = ?", time.Now().Month(), time.Now().Year()).
+		Where("created_at >= DATE_SUB(CURDATE(), INTERVAL ? MONTH)", months).
+		Where("user_id = ?", userId).
+		Where("type = ?", lType)
+
+	err = query.Scan(&result).Error
+	return
+}

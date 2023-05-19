@@ -31,6 +31,7 @@ func Routers(app *App) *gin.Engine {
 			lists.GET("/get-top-categories", app.getTopCategories)
 			lists.GET("/current-mon-saved", app.getCurrentMonthSavings)
 			lists.GET("/get-saving-stats", app.getSavingsStats)
+			lists.GET("/get-total-amount", app.getTotalAmount)
 		}
 
 		accounts := api.Group("/accounts")
