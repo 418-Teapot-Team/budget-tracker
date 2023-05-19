@@ -130,7 +130,7 @@ func (app *App) getTopCategories(c *gin.Context) {
 
 	listType := c.Query("type")
 	if listType != "income" && listType != "expenses" {
-		app.newErrorResponse(c, http.StatusInternalServerError, "define a 'type' query value (income or expense)")
+		app.newErrorResponse(c, http.StatusInternalServerError, "define a 'type' query value (income or expenses)")
 		return
 
 	}
@@ -141,7 +141,7 @@ func (app *App) getTopCategories(c *gin.Context) {
 		return
 	}
 
-	list, err := app.s.ListsService.GetTopExpenses(userId, listType)
+	list, err := app.s.ListsService.GetTopListsCategories(userId, listType)
 	if err != nil {
 		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
