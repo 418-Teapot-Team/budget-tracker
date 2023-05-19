@@ -188,7 +188,18 @@ func (app *App) getTopCategories(c *gin.Context) {
 		}
 	}
 
-	list, err := app.s.ListsService.GetTopListsCategories(userId, listType, takeAmount)
+	monthsParam := c.Query("months")
+	months := 1
+
+	if monthsParam != "" {
+		var err error
+		months, err = strconv.Atoi(monthsParam)
+		if err != nil {
+			months = 1
+		}
+	}
+
+	list, err := app.s.ListsService.GetTopListsCategories(userId, listType, takeAmount, months)
 	if err != nil {
 		app.newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
